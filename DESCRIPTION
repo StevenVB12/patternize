@@ -11,7 +11,7 @@ Description: patternize is an R package that quantifies variation in color
 BugReports: https://github.com/StevenVB12/patternize/issues
 URL: https://github.com/StevenVB12/patternize
 Depends: R (>= 3.2.2)
-Imports: raster, rgdal, RNiftyReg, mmand, abind
+Imports: raster, rgdal, RNiftyReg, mmand, abind, Morpho
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

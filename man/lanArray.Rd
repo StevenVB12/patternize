@@ -4,12 +4,14 @@
 \alias{lanArray}
 \title{Build landmark array for Morpho.}
 \usage{
-lanArray(sampleList, adjustLandmarks = F)
+lanArray(sampleList, adjustCoords = FALSE, image = NULL)
 }
 \arguments{
 \item{sampleList}{List of landmark matrices.}
 
-\item{adjustLandmarks}{Adjust the coordinates of the lanmarks (default = FALSE).}
+\item{adjustCoords}{Adjust the coordinates of the landmarks if different (default = FALSE).}
+
+\item{image}{Image List.}
 }
 \value{
 X x Y x n array, where X and Y define the coordinates of the landmark points and n is the sample size.
@@ -18,8 +20,12 @@ X x Y x n array, where X and Y define the coordinates of the landmark points and
 Build landmark array for Morpho.
 }
 \examples{
-data(landmarks)
-landmarkArray <- lanArray(landmarks)
+IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+prepath <- system.file("extdata",  package = 'patternize')
+extension <- '_landmarks_LFW.txt'
+landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
+
+landmarkArray <- lanArray(landmarkList)
 
 }
 

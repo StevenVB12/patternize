@@ -5,7 +5,7 @@
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param useBlockPercentage Block percentage as used in NiftyReg.
-#' @param colOffset Color offset for color pattern extraction.
+#' @param colOffset Color offset for color pattern extraction (default = 0).
 #' @param removebg Whether to remove white background for image registration (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #'
@@ -64,10 +64,10 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
       }
 
       par(new=T)
-      plot(r, col=rgb(1,0,0,alpha=1/length(sampleList)),legend=F)
+      plot(r, col=rgb(1,0,0,alpha=1/length(sampleList)),legend = FALSE)
     }
 
-    rasterList <- c(rasterList, r)
+    rasterList[[names(sampleList)[n]]] <- patternRaster
   }
 
   #   # Sum raster list

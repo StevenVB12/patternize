@@ -2,7 +2,8 @@
 
 export(kImage)
 export(lanArray)
-export(lanList)
+export(makeList)
+export(patLanRGB)
 export(patRegK)
 export(patRegRGB)
 export(redRes)

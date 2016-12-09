@@ -19,7 +19,7 @@ patRegRGB(sampleList, target, RGB, resampleFactor = 1,
 
 \item{useBlockPercentage}{Block percentage as used in NiftyReg.}
 
-\item{colOffset}{Color offset for color pattern extraction.}
+\item{colOffset}{Color offset for color pattern extraction (default = 0).}
 
 \item{removebg}{Whether to remove white background for image registration (default = FALSE).}
 
