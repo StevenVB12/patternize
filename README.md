@@ -1,1 +1,1 @@
-# patternize - An R package for color pattern quantification
+# patternize - An R package for quantifying color pattern variation
