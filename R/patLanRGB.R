@@ -5,7 +5,9 @@
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param colOffset Color offset for color pattern extraction (default = 0).
-#' @param res Resolution for color pattern raster (default = 300).
+#' @param crop Whether to use the landmarks range to crop the image. This can significantly speed up the analysis (default = FALSE).
+#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).
+#' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
 #' @param transformType (default ='tps')
 #' @param adjustCoords Adjust coordinates.
@@ -23,12 +25,13 @@
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' RGB <- c(114,17,0)
-#' rasterList <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 5, colOffset = 0.15, res = 300, adjustCoords = TRUE, plot = TRUE)
+#' rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3, colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
+#' @import raster
 
 
-patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE){
+patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE){
 
   rasterList <- list()
 
@@ -66,8 +69,24 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
 
   for(n in 1:length(imageList)){
 
-    image <- redRes(imageList[[n]], resampleFactor)
+    image <- imageList[[n]]
     extRaster <- raster::extent(image)
+
+    if(crop){
+
+      landm <- lanArray[,,n]
+      extRaster <- raster::extent(min(landm[,1]), max(landm[,1]), min(landm[,2]), max(landm[,2]))
+
+      if(!is.null(cropOffset)){
+
+        extRaster <- raster::extent(min(landm[,1])-cropOffset[1], max(landm[,1])+cropOffset[2], min(landm[,2])-cropOffset[3], max(landm[,2])+cropOffset[4])
+
+      }
+
+      image <- raster::crop(image, extRaster)
+    }
+
+    image <- redRes(image, resampleFactor)
 
     map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 

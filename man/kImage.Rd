@@ -4,7 +4,7 @@
 \alias{kImage}
 \title{kmeans clustering of image.}
 \usage{
-kImage(image, k = 3, startCenter = NULL)
+kImage(image, k = 5, startCenter = NULL)
 }
 \arguments{
 \item{image}{Image for kmeans clustering.}

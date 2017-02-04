@@ -5,7 +5,7 @@
 \title{Image registration with RGB color extraction.}
 \usage{
 patRegRGB(sampleList, target, RGB, resampleFactor = 1,
-  useBlockPercentage = 75, colOffset = 0, removebg = FALSE,
+  useBlockPercentage = 75, colOffset = 0, crop = NULL, removebg = FALSE,
   plot = FALSE)
 }
 \arguments{
@@ -21,6 +21,8 @@ patRegRGB(sampleList, target, RGB, resampleFactor = 1,
 
 \item{colOffset}{Color offset for color pattern extraction (default = 0).}
 
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.}
+
 \item{removebg}{Whether to remove white background for image registration (default = FALSE).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
@@ -32,10 +34,13 @@ List of raster objects.
 Image registration with RGB color extraction.
 }
 \examples{
-data(pictures)
-target <- pictures[[1]]
+IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+prepath <- system.file("extdata",  package = 'patternize')
+extension <- '.jpg'
+imageList <- makeList(IDlist, 'image', prepath, extension)
+target <- imageList[[1]]
 RGB <- c(114,17,0)
-rasterList <- patReg(pictures, target, RGB, colOffset= 0.15, removebg = TRUE, plot = TRUE)
+rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
 
 }
 

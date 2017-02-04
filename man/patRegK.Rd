@@ -2,10 +2,10 @@
 % Please edit documentation in R/patRegK.R
 \name{patRegK}
 \alias{patRegK}
-\title{Image registration with k-means clustering.}
+\title{Image registration with k-means clustering for color extraction.}
 \usage{
 patRegK(sampleList, target, k = 3, resampleFactor = 1,
-  useBlockPercentage = 75, removebg = FALSE, plot = FALSE)
+  useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -18,7 +18,9 @@ patRegK(sampleList, target, k = 3, resampleFactor = 1,
 
 \item{useBlockPercentage}{Block percentage as used in NiftyReg.}
 
-\item{removebg}{Whether to remove white background rasterList (default = FALSE).}
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.}
+
+\item{removebg}{Whether to remove white background rasterList (default = FALSE) for registration and k-means analysis.}
 
 \item{plot}{Whether to plot k-means clustered image while processing (default = FALSE).}
 }
@@ -26,12 +28,15 @@ patRegK(sampleList, target, k = 3, resampleFactor = 1,
 List of summed raster for each k-means cluster objects.
 }
 \description{
-Image registration with k-means clustering.
+Image registration with k-means clustering for color extraction.
 }
 \examples{
-data(pictures)
-target <- pictures[[1]]
-rasterList <- patRegK(pictures, target, k = 6, removebg = TRUE, plot = TRUE)
+IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+prepath <- system.file("extdata",  package = 'patternize')
+extension <- '.jpg'
+imageList <- makeList(IDlist, 'image', prepath, extension)
+target <- imageList[[1]]
+rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
 
 }
 

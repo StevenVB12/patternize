@@ -12,7 +12,7 @@
 #'
 #' @export
 
-kImage <- function(image, k = 3, startCenter = NULL){
+kImage <- function(image, k = 5, startCenter = NULL){
 
   if(class(image) == "RasterStack"){
     image <- raster::as.array(image)
