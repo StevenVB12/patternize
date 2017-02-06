@@ -4,7 +4,9 @@
 \alias{plotHeat}
 \title{Plot heatmap from summed rasterList}
 \usage{
-plotHeat(summedRaster, IDlist, colpalette = NULL)
+plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
+  type = NULL, outline = NULL, lines = NULL, crop = NULL,
+  flipRaster = NULL, flipOutline = NULL, imageList = NULL)
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -12,6 +14,22 @@ plotHeat(summedRaster, IDlist, colpalette = NULL)
 \item{IDlist}{List of sample IDs.}
 
 \item{colpalette}{Vector of colors for color palette (default = c("white","lightblue","blue","green", "yellow","red"))}
+
+\item{plotCartoon}{Whether to plot a cartoon. This cartoon should be drawn on one of the samples used in the analysis.}
+
+\item{type}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)}
+
+\item{outline}{xy coordinates that define outline.}
+
+\item{lines}{list of files with xy coordinates of line objects to be added to cartoon.}
+
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.}
+
+\item{flipRaster}{Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).}
+
+\item{flipOutline}{Whether to flip plot along x, y or xy axis.}
+
+\item{imageList}{List of image should be given if one wants to flip the outline.}
 }
 \description{
 Plot heatmap from summed rasterList
@@ -19,17 +37,28 @@ Plot heatmap from summed rasterList
 \examples{
 data(rasterList_lanRGB)
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
-summedRaster <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
+outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+lines_BC0077 <- list.files(path=paste(system.file("extdata",  package = 'patternize')), pattern='vein', full.names = T)
 
-plotHeat(summedRaster, IDlist)
+summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
+plotHeat(summedRaster_lanRGB, IDlist)
+
+summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
+data(imageList)
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList)
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList)
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList)
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList)
 
 data(rasterList_lanK)
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
-
 plotHeat(summedRasterList, IDlist)
 
-plotHeat(summedRasterList[[2]], IDlist)
+summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
+plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList)
+
+plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList)
 
 }
 
