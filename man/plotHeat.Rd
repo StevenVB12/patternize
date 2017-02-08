@@ -6,7 +6,10 @@
 \usage{
 plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   type = NULL, outline = NULL, lines = NULL, crop = NULL,
-  flipRaster = NULL, flipOutline = NULL, imageList = NULL)
+  flipRaster = NULL, flipOutline = NULL, imageList = NULL,
+  cartoonOrder = "above", lineOrder = "above", cartoonCol = "gray",
+  cartoonFill = NULL, legend.title = "Proportion", xlab = "", ylab = "",
+  main = "")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -30,6 +33,22 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 \item{flipOutline}{Whether to flip plot along x, y or xy axis.}
 
 \item{imageList}{List of image should be given if one wants to flip the outline.}
+
+\item{cartoonOrder}{Whether to plot the cartoon outline 'above' or 'under' the pattern raster (default = 'above'). Set to 'under' for filled outlines.}
+
+\item{lineOrder}{Whether to plot the cartoon lines 'above' or 'under' the pattern raster (default = 'above').}
+
+\item{cartoonCol}{Outline and line color for cartoon (deafault = 'gray').}
+
+\item{cartoonFill}{Fill color for outline of cartoon (default = NULL).}
+
+\item{legend.title}{Title of the raster legend (default = 'Proportion')}
+
+\item{xlab}{Optional x-axis label.}
+
+\item{ylab}{Optional y-axis label.}
+
+\item{main}{Optional mean title.}
 }
 \description{
 Plot heatmap from summed rasterList
@@ -45,10 +64,10 @@ plotHeat(summedRaster_lanRGB, IDlist)
 
 summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 data(imageList)
-plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList)
-plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList)
-plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList)
-plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList)
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
 
 data(rasterList_lanK)
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
@@ -56,9 +75,9 @@ summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
 plotHeat(summedRasterList, IDlist)
 
 summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
-plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList)
+plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
 
-plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList)
+plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
 
 }
 
