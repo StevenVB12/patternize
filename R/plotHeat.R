@@ -7,10 +7,13 @@
 #' @param type This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)
 #' @param outline xy coordinates that define outline.
 #' @param lines list of files with xy coordinates of line objects to be added to cartoon.
+#' @param landmarkList Landmark landmarkList.
+#' @param adjustCoords Adjust landmark coordinates.
+#' @param cartoonID ID of the sample for which the cartoon was drawn.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
 #' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
-#' @param imageList List of image should be given if one wants to flip the outline.
+#' @param imageList List of image should be given if one wants to flip the outline or adjust landmark coordinates.
 #' @param cartoonOrder Whether to plot the cartoon outline 'above' or 'under' the pattern raster (default = 'above'). Set to 'under' for filled outlines.
 #' @param lineOrder Whether to plot the cartoon lines 'above' or 'under' the pattern raster (default = 'above').
 #' @param cartoonCol Outline and line color for cartoon (deafault = 'gray').
@@ -18,7 +21,7 @@
 #' @param legend.title Title of the raster legend (default = 'Proportion')
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
-#' @param main Optional mean title.
+#' @param main Optional main title.
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -26,30 +29,51 @@
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
 #' lines_BC0077 <- list.files(path=paste(system.file("extdata",  package = 'patternize')), pattern='vein', full.names = T)
 #'
-#' summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
-#' plotHeat(summedRaster_lanRGB, IDlist)
 #'
 #' summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 #' data(imageList)
 #' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
 #'
-#' data(rasterList_lanK)
-#' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
-#' summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
-#' plotHeat(summedRasterList, IDlist)
+#' #data(rasterList_lanK)
+#' #IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+#' #summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
+#' #plotHeat(summedRasterList, IDlist)
 #'
-#' summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
-#' plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
+#' #summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
+#' #plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
 #'
-#' plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
+#' #plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
+#'
+#'
+#' prepath <- system.file("extdata", package = 'patternize')
+#' extension <- '_landmarks_LFW.txt'
+#' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
+#' summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
+#' plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, type = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+#'
+#' summedRaster_lanK <- sumRaster(rasterList_lanK, IDlist, type = 'k')
+#' plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, type = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+#' plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, type = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 #'
 #' @export
 #' @import raster
 
-plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, type = NULL, outline = NULL, lines = NULL, crop = NULL, flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, legend.title = 'Proportion', xlab='', ylab='', main=''){
+plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, type = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, crop = NULL, flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, legend.title = 'Proportion', xlab='', ylab='', main=''){
+
+  if(!is.list(summedRaster)){
+
+    rasterEx <- raster::extent(summedRaster)
+
+  }
+
+  else{
+
+    rasterEx <- raster::extent(summedRaster[[1]])
+
+  }
 
   if(is.null(colpalette)){
 
@@ -74,95 +98,194 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     lineList <- list()
 
     for(e in 1:length(lines)){
-      lineList[[e]] <- read.table(lines[e], h= FALSE)
-    }
 
+      lineList[[e]] <- read.table(lines[e], h= FALSE)
+
+    }
   }
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){
 
     imageEx <- raster::extent(imageList[[1]])
-    outline[,2] <- outline[,2] - crop[3]
 
-    for(e in 1:length(lineList)){
+    if(type != 'mean'){
 
-      lineList[[e]][[2]] <- lineList[[e]][[2]] - crop[3]
-    }
+      outline[,2] <- outline[,2] - crop[3]
 
-  }
-
-  if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
-
-    outline[,2] <- outline[,2] + crop[3]
-
-    for(e in 1:length(lineList)){
-
-      lineList[[e]][[2]] <- lineList[[e]][[2]] + crop[3]
-    }
-
-  }
-
-  if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
-
-    outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
-
-    for(e in 1:length(lineList)){
-
-      lineList[[e]][[2]] <- lineList[[e]][[2]] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
-    }
-
-  }
-
-  if(!is.null(flipOutline)){
-
-    if(flipOutline == 'x'){
-
-        outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+      if(!is.null(lineList)){
 
         for(e in 1:length(lineList)){
 
-          lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+          lineList[[e]][[2]] <- lineList[[e]][[2]] - crop[3]
         }
-
-    }
-
-    if(flipOutline == 'y'){
-
-        outline[,2] <- imageEx[4] - outline[,2]
-
-
-        for(e in 1:length(lineList)){
-
-          lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
-
-        }
-    }
-
-    if(flipOutline == 'xy'){
-
-        outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
-        outline[,2] <- imageEx[4] - outline[,2]
-
-        for(e in 1:length(lineList)){
-
-          lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
-          lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
-
-        }
+      }
     }
   }
+
+  if(type != 'mean'){
+
+    if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
+
+      outline[,2] <- outline[,2] + crop[3]
+
+      for(e in 1:length(lineList)){
+
+        lineList[[e]][[2]] <- lineList[[e]][[2]] + crop[3]
+      }
+
+    }
+
+    if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
+
+      outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
+
+      if(!is.null(lineList)){
+
+        for(e in 1:length(lineList)){
+
+          lineList[[e]][[2]] <- lineList[[e]][[2]] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
+        }
+      }
+    }
+
+    if(!is.null(flipOutline)){
+
+      if(flipOutline == 'x'){
+
+          outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+
+          if(!is.null(lineList)){
+
+            for(e in 1:length(lineList)){
+
+              lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+            }
+          }
+
+      }
+
+      if(flipOutline == 'y'){
+
+          outline[,2] <- imageEx[4] - outline[,2]
+
+          if(!is.null(lineList)){
+
+            for(e in 1:length(lineList)){
+
+              lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
+
+            }
+          }
+      }
+
+      if(flipOutline == 'xy'){
+
+          outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+          outline[,2] <- imageEx[4] - outline[,2]
+
+          if(!is.null(lineList)){
+
+            for(e in 1:length(lineList)){
+
+              lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+              lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
+
+            }
+          }
+      }
+    }
+  }
+
+  if(plotCartoon && type == 'mean'){
+
+    indx <- which(IDlist == cartoonID)
+    invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
+
+    if(adjustCoords){
+
+      extPicture <- extent(imageList[[indx]])
+      outline[,2] <- extPicture[4]-outline[,2]
+
+      if(!is.null(lineList)){
+
+        for(e in 1:length(lineList)){
+
+          extPicture <- extent(imageList[[indx]])
+          lineList[[e]][,2] <- extPicture[4]-lineList[[e]][,2]
+
+        }
+      }
+    }
+
+    invisible(capture.output(transformed <- Morpho::procSym(landArray)))
+
+
+    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape, as.matrix(landArray[,,indx]), type="tps")))
+    outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
+
+
+    if(!is.null(lineList)){
+
+      cartoonLinesTrans <- list()
+      for(e in 1:length(lineList)){
+
+        cartoonLinesTrans[[e]] <- Morpho::applyTransform(as.matrix(lineList[[e]]), cartoonLandTrans)
+      }
+    }
+
+    if(!is.null(flipOutline)){
+
+      if(flipOutline == 'x'){
+        outlineTrans[,1] = rasterEx[2] - outlineTrans[,1] + rasterEx[1]
+
+        if(!is.null(cartoonLinesTrans)){
+          for(e in 1:length(cartoonLinesTrans)){
+            cartoonLinesTrans[[e]][,1] <- rasterEx[2] - cartoonLinesTrans[[e]][,1] + rasterEx[1]
+          }
+        }
+      }
+
+      if(flipOutline == 'y'){
+        outlineTrans[,2] = rasterEx[4] - outlineTrans[,2] + rasterEx[3]
+
+        if(!is.null(cartoonLinesTrans)){
+          for(e in 1:length(cartoonLinesTrans)){
+            cartoonLinesTrans[[e]][,2] <- rasterEx[4] - cartoonLinesTrans[[e]][,2] + rasterEx[3]
+          }
+        }
+      }
+      if(flipOutline == 'xy'){
+        outlineTrans[,1] = rasterEx[2] - outlineTrans[,1] + rasterEx[1]
+        outlineTrans[,2] = rasterEx[4] - outlineTrans[,2] + rasterEx[3]
+
+        if(!is.null(cartoonLinesTrans)){
+          for(e in 1:length(cartoonLinesTrans)){
+            cartoonLinesTrans[[e]][,1] <- rasterEx[2] - cartoonLinesTrans[[e]][,1] + rasterEx[1]
+            cartoonLinesTrans[[e]][,2] <- rasterEx[4] - cartoonLinesTrans[[e]][,2] + rasterEx[3]
+          }
+        }
+
+      }
+    }
+
+    XLIM <- c(min(outlineTrans[,1]),max(outlineTrans[,1]))
+    YLIM <- c(min(outlineTrans[,2]),max(outlineTrans[,2]))
+  }
+
+
+
 
   if(!is.list(summedRaster)){
-
-    rasterEx <- raster::extent(summedRaster)
 
     if(is.null(outline) && is.null(lines)){
       XLIM <- c(rasterEx[1],rasterEx[2])
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      XLIM <- c(min(outline[,1]),max(outline[,1]))
-      YLIM <- c(min(outline[,2]),max(outline[,2]))
+      if(type == 'target'){
+        XLIM <- c(min(outline[,1]),max(outline[,1]))
+        YLIM <- c(min(outline[,2]),max(outline[,2]))
+      }
     }
 
     if(!is.null(flipRaster)){
@@ -180,9 +303,9 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     par(mfrow=c(1,1), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
 
-    plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
-    mtext(side = 1, text = xlab, line = 0)
-    mtext(side = 2, text = ylab, line = 0)
+    if(is.null(type) || type == 'target'){
+      plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
+    }
 
     if(plotCartoon){
 
@@ -202,6 +325,14 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
         polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
       }
+
+      if(type == 'mean'){
+
+        plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
+
+        polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
+
+      }
     }
 
     if(plotCartoon && lineOrder == 'under'){
@@ -217,16 +348,34 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
           }
         }
       }
+
+      if(type =='mean'){
+
+        if(!is.null(lineList)){
+
+          for(e in 1:length(cartoonLinesTrans)){
+
+            lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
+          }
+        }
+      }
     }
 
-    # par(new = TRUE)
     plot(summedRaster/length(IDlist), col=colfunc(20), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=c(0,1), legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+    mtext(side = 1, text = xlab, line = 0)
+    mtext(side = 2, text = ylab, line = 0)
 
     if(plotCartoon && cartoonOrder == 'above'){
 
       if(type == 'target'){
 
         polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
+
+      }
+
+      if(type == 'mean'){
+
+        polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
       }
     }
@@ -244,20 +393,30 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
           }
         }
       }
+      if(type =='mean'){
+
+        if(!is.null(lineList)){
+
+          for(e in 1:length(cartoonLinesTrans)){
+
+            lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
+          }
+        }
+      }
     }
   }
 
   else{
-
-    rasterEx <- raster::extent(summedRaster[[1]])
 
     if(is.null(outline)){
       XLIM <- c(rasterEx[1],rasterEx[2])
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      XLIM <- c(min(outline[,1]),max(outline[,1]))
-      YLIM <- c(min(outline[,2]),max(outline[,2]))
+      if(type == 'target'){
+        XLIM <- c(min(outline[,1]),max(outline[,1]))
+        YLIM <- c(min(outline[,2]),max(outline[,2]))
+      }
     }
 
     par(mfrow=c(2,round((length(summedRaster)+1)/2)), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
@@ -277,9 +436,9 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
         }
       }
 
-      plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main)
-      mtext(side = 1, text = xlab, line = 0)
-      mtext(side = 2, text = ylab, line = 0)
+      if(is.null(type) || type == 'target'){
+        plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main)
+      }
 
       if(plotCartoon){
 
@@ -299,6 +458,14 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
           polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
         }
+
+        if(type == 'mean'){
+
+          plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
+
+          polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
+
+        }
       }
 
       if(plotCartoon && lineOrder == 'under'){
@@ -314,16 +481,34 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
             }
           }
         }
+
+        if(type =='mean'){
+
+          if(!is.null(lineList)){
+
+            for(e in 1:length(cartoonLinesTrans)){
+
+              lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
+            }
+          }
+        }
       }
 
-      # par(new = TRUE)
       plot(summedRaster[[k]]/length(IDlist), col=colfunc(20), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=c(0,1), legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+      mtext(side = 1, text = xlab, line = 0)
+      mtext(side = 2, text = ylab, line = 0)
 
       if(plotCartoon && cartoonOrder == 'above'){
 
         if(type == 'target'){
 
           polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
+
+        }
+
+        if(type == 'mean'){
+
+          polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
         }
       }
@@ -338,6 +523,17 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
               lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
 
+            }
+          }
+        }
+
+        if(type =='mean'){
+
+          if(!is.null(lineList)){
+
+            for(e in 1:length(cartoonLinesTrans)){
+
+              lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
             }
           }
         }

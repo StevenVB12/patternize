@@ -12,6 +12,8 @@ patLanRGB(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0,
 \arguments{
 \item{imageList}{List of RasterStack objects.}
 
+\item{landmarkList}{Landmark landmarkList.}
+
 \item{RGB}{RGB values for color pattern extraction specified as vector.}
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
@@ -28,11 +30,9 @@ patLanRGB(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0,
 
 \item{transformType}{(default ='tps')}
 
-\item{adjustCoords}{Adjust coordinates.}
+\item{adjustCoords}{Adjust landmark coordinates.}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
-
-\item{lanArray}{Landmark array.}
 }
 \value{
 List of raster objects.

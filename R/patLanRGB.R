@@ -1,7 +1,7 @@
 #' Color pattern quantification using landmarks and RGB color extraction.
 #'
 #' @param imageList List of RasterStack objects.
-#' @param lanArray Landmark array.
+#' @param landmarkList Landmark landmarkList.
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param colOffset Color offset for color pattern extraction (default = 0).
@@ -10,7 +10,7 @@
 #' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
 #' @param transformType (default ='tps')
-#' @param adjustCoords Adjust coordinates.
+#' @param adjustCoords Adjust landmark coordinates.
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #'
 #' @return  List of raster objects.
