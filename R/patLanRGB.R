@@ -47,23 +47,28 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
 
   lanArray <- lanArray(landmarkList, adjustCoords, imageList)
 
-  if(transformRef == 'meanshape'){
-
-    invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
+  if(is.matrix(transformRef)){
     refShape <- transformed$mshape
-
   }
-
   else{
+    if(transformRef == 'meanshape'){
 
-    if(exists(landmarkList[[transformRef]])){
+      invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
+      refShape <- transformed$mshape
 
-      e <- which(names(landmarks) == transformRef)
-      refShape <- lanArray[e]
     }
 
     else{
-      stop("specified ID for reference shape does not exist")
+
+      if(exists(landmarkList[[transformRef]])){
+
+        e <- which(names(landmarks) == transformRef)
+        refShape <- lanArray[e]
+      }
+
+      else{
+        stop("specified ID for reference shape does not exist")
+      }
     }
   }
 
