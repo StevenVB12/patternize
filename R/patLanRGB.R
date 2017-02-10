@@ -48,8 +48,11 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
   lanArray <- lanArray(landmarkList, adjustCoords, imageList)
 
   if(is.matrix(transformRef)){
+
     refShape <- transformed$mshape
+
   }
+
   else{
     if(transformRef == 'meanshape'){
 
