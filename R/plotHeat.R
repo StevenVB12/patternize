@@ -4,10 +4,10 @@
 #' @param IDlist List of sample IDs.
 #' @param colpalette Vector of colors for color palette (default = c("white","lightblue","blue","green", "yellow","red"))
 #' @param plotCartoon Whether to plot a cartoon. This cartoon should be drawn on one of the samples used in the analysis.
-#' @param type This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)
+#' @param refShape This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)
 #' @param outline xy coordinates that define outline.
 #' @param lines list of files with xy coordinates of line objects to be added to cartoon.
-#' @param landmarkList Landmark landmarkList.
+#' @param landList Landmark landmarkList.
 #' @param adjustCoords Adjust landmark coordinates.
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
@@ -32,18 +32,18 @@
 #'
 #' summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 #' data(imageList)
-#' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
+#' #plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
 #'
 #' #data(rasterList_lanK)
 #' #IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' #summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
 #' #plotHeat(summedRasterList, IDlist)
 #'
-#' #summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
-#' #plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
+#' #summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, refShape = 'k')
+#' #plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
 #'
 #' #plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
 #'
@@ -52,16 +52,16 @@
 #' extension <- '_landmarks_LFW.txt'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #' summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
-#' plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, type = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+#' plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 #'
 #' summedRaster_lanK <- sumRaster(rasterList_lanK, IDlist, type = 'k')
-#' plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, type = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
-#' plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, type = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+#' plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+#' plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 #'
 #' @export
 #' @import raster
 
-plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, type = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, crop = NULL, flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, legend.title = 'Proportion', xlab='', ylab='', main=''){
+plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, crop = NULL, flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, legend.title = 'Proportion', xlab='', ylab='', main=''){
 
   if(!is.list(summedRaster)){
 
@@ -108,7 +108,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     imageEx <- raster::extent(imageList[[1]])
 
-    if(type != 'mean'){
+    if(refShape != 'mean'){
 
       outline[,2] <- outline[,2] - crop[3]
 
@@ -122,7 +122,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     }
   }
 
-  if(type != 'mean'){
+  if(refShape != 'mean'){
 
     if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
 
@@ -196,7 +196,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     }
   }
 
-  if(plotCartoon && type == 'mean'){
+  if(plotCartoon && refShape == 'mean'){
 
     indx <- which(IDlist == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
@@ -282,7 +282,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(type == 'target'){
+      if(refShape == 'target'){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -303,13 +303,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     par(mfrow=c(1,1), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
 
-    if(is.null(type) || type == 'target'){
+    if(is.null(refShape) || refShape == 'target'){
       plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
     }
 
     if(plotCartoon){
 
-      if(is.null(type) || is.null(outline)){
+      if(is.null(refShape) || is.null(outline)){
 
         stop('Not all paramters are set to plot the cartoon.')
 
@@ -320,13 +320,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
       summedRaster[summedRaster == 0] <- NA
 
-      if(type == 'target'){
+      if(refShape == 'target'){
 
         polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
       }
 
-      if(type == 'mean'){
+      if(refShape == 'mean'){
 
         plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
 
@@ -337,7 +337,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     if(plotCartoon && lineOrder == 'under'){
 
-      if(type == 'target'){
+      if(refShape == 'target'){
 
         if(!is.null(lines)){
 
@@ -349,7 +349,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
         }
       }
 
-      if(type =='mean'){
+      if(refShape =='mean'){
 
         if(!is.null(lineList)){
 
@@ -367,13 +367,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     if(plotCartoon && cartoonOrder == 'above'){
 
-      if(type == 'target'){
+      if(refShape == 'target'){
 
         polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
       }
 
-      if(type == 'mean'){
+      if(refShape == 'mean'){
 
         polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
@@ -382,7 +382,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     if(plotCartoon && lineOrder == 'above'){
 
-      if(type == 'target'){
+      if(refShape == 'target'){
 
         if(!is.null(lines)){
 
@@ -393,7 +393,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
           }
         }
       }
-      if(type =='mean'){
+      if(refShape =='mean'){
 
         if(!is.null(lineList)){
 
@@ -413,7 +413,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(type == 'target'){
+      if(refShape == 'target'){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -436,13 +436,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
         }
       }
 
-      if(is.null(type) || type == 'target'){
+      if(is.null(refShape) || refShape == 'target'){
         plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main)
       }
 
       if(plotCartoon){
 
-        if(is.null(type) || is.null(outline)){
+        if(is.null(refShape) || is.null(outline)){
 
           stop('Not all paramters are set to plot the cartoon.')
 
@@ -453,13 +453,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
         summedRaster[[k]][summedRaster[[k]] == 0] <- NA
 
-        if(type == 'target'){
+        if(refShape == 'target'){
 
           polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
         }
 
-        if(type == 'mean'){
+        if(refShape == 'mean'){
 
           plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
 
@@ -470,7 +470,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
       if(plotCartoon && lineOrder == 'under'){
 
-        if(type == 'target'){
+        if(refShape == 'target'){
 
           if(!is.null(lines)){
 
@@ -482,7 +482,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
           }
         }
 
-        if(type =='mean'){
+        if(refShape =='mean'){
 
           if(!is.null(lineList)){
 
@@ -500,13 +500,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
       if(plotCartoon && cartoonOrder == 'above'){
 
-        if(type == 'target'){
+        if(refShape == 'target'){
 
           polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
         }
 
-        if(type == 'mean'){
+        if(refShape == 'mean'){
 
           polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
@@ -515,7 +515,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
       if(plotCartoon && lineOrder == 'above'){
 
-        if(type == 'target'){
+        if(refShape == 'target'){
 
           if(!is.null(lines)){
 
@@ -527,7 +527,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
           }
         }
 
-        if(type =='mean'){
+        if(refShape =='mean'){
 
           if(!is.null(lineList)){
 

@@ -11,7 +11,7 @@ sumRaster(rList, IDlist, type)
 
 \item{IDlist}{List of sample IDs.}
 
-\item{type}{Type of rasterlist; simple or nested (result from RGB or k-means analysis, respectively)}
+\item{type}{Type of rasterlist; simple (RGB) or nested (k) (result from RGB or k-means analysis, respectively)}
 }
 \description{
 sum rasterlist for set of samples

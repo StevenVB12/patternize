@@ -2,7 +2,7 @@
 #'
 #' @param rList List of raster objects.
 #' @param IDlist List of sample IDs.
-#' @param type Type of rasterlist; simple or nested (result from RGB or k-means analysis, respectively)
+#' @param type Type of rasterlist; simple (RGB) or nested (k) (result from RGB or k-means analysis, respectively)
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -36,7 +36,7 @@ sumRaster <- function(rList, IDlist, type){
 
   }
 
-  if(type == 'k'){ ## this doesn't work correctly yet!
+  if(type == 'k'){
 
     rasterListList <- list()
 
