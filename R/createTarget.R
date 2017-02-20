@@ -9,10 +9,14 @@
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
 #' data(imageList)
 #' target <- createTarget(outline_BC0077, imageList[[1]], plot =  TRUE)
+#'
+#' @export
 
 createTarget <- function(outline, image, color = 'black', plot = FALSE){
 
   rasterEx <- raster::extent(image)
+
+  outline[,2] <- rasterEx[4] - outline[,2]
 
   poly <- sp::Polygons(list(Polygon(outline)),paste("r"))
 
