@@ -29,4 +29,3 @@ comp <- prcomp(pcaOut[[1]])
 plot(comp$rotation, col=pcaOut[[2]]$col, pch=19)
 
 }
-

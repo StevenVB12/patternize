@@ -43,4 +43,3 @@ RGB <- c(114,17,0)
 rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
 
 }
-

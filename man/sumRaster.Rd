@@ -26,4 +26,3 @@ IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
 
 }
-

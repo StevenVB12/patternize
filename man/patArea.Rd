@@ -55,4 +55,3 @@ patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k', outline = outlin
 patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k', outline = outline_BC0077,  crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
 
 }
-

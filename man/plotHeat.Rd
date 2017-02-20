@@ -96,4 +96,3 @@ plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, refShape = 'mean', outli
 plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 
 }
-
