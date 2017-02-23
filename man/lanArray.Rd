@@ -28,3 +28,4 @@ landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 landmarkArray <- lanArray(landmarkList)
 
 }
+

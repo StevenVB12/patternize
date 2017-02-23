@@ -21,7 +21,7 @@
 #' extension <- '_landmarks_LFW.txt'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
-#' extension <- '.jpg'
+#' extension <- '.JPG'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' RGB <- c(114,17,0)
@@ -63,10 +63,10 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
 
     else{
 
-      if(exists(landmarkList[[transformRef]])){
+      if(transformRef %in% names(landmarkList)){
 
-        e <- which(names(landmarks) == transformRef)
-        refShape <- lanArray[e]
+        e <- which(names(landmarkList) == transformRef)
+        refShape <- lanArray[,,e]
       }
 
       else{

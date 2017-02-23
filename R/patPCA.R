@@ -34,20 +34,14 @@ patPCA <- function(rList, popList, colList){
       rasDF <- cbind(rasDF, ras)
     }
   }
+  groupCol <- c()
 
   for(p in 1:length(popList)){
 
-    for(ind in length(popList[[p]])){
-
-      if(p == 1){
-
-        groupCol <- c(popList[[p]][ind], colList[p])
-      }
-
-      else{
+    for(ind in 1:length(popList[[p]])){
 
         groupCol <- rbind(groupCol, c(popList[[p]][ind], colList[p]))
-      }
+
     }
   }
 

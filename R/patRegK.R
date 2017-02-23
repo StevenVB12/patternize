@@ -23,6 +23,8 @@
 
 patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE){
 
+  imageList <- sampleList
+
   rasterList <- list()
 
   if(!is.null(crop)){

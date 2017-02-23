@@ -39,3 +39,4 @@ target <- imageList[[1]]
 rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
 
 }
+

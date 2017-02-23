@@ -18,6 +18,7 @@
 #' @param lineOrder Whether to plot the cartoon lines 'above' or 'under' the pattern raster (default = 'above').
 #' @param cartoonCol Outline and line color for cartoon (deafault = 'gray').
 #' @param cartoonFill Fill color for outline of cartoon (default = NULL).
+#' @param zlim z-axis limit (default = c(0,1))
 #' @param legend.title Title of the raster legend (default = 'Proportion')
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
@@ -61,7 +62,7 @@
 #' @export
 #' @import raster
 
-plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, crop = NULL, flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, legend.title = 'Proportion', xlab='', ylab='', main=''){
+plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, zlim = c(0,1), legend.title = 'Proportion', xlab='', ylab='', main=''){
 
   if(!is.list(summedRaster)){
 
@@ -112,7 +113,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
       outline[,2] <- outline[,2] - crop[3]
 
-      if(!is.null(lineList)){
+      if(!is.null(lines)){
 
         for(e in 1:length(lineList)){
 
@@ -122,76 +123,82 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     }
   }
 
-  if(refShape != 'mean'){
+  if(!identical(crop, c(0,0,0,0))){
+    if(refShape != 'mean'){
 
-    if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
+      if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
 
-      outline[,2] <- outline[,2] + crop[3]
+        outline[,2] <- outline[,2] + crop[3]
 
-      for(e in 1:length(lineList)){
+        if(!is.null(lines)){
 
-        lineList[[e]][[2]] <- lineList[[e]][[2]] + crop[3]
+          for(e in 1:length(lineList)){
+
+            lineList[[e]][[2]] <- lineList[[e]][[2]] + crop[3]
+          }
+        }
+
       }
 
-    }
+      if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
 
-    if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
+        outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
 
-      outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
+        if(!is.null(lines)){
 
-      if(!is.null(lineList)){
+          for(e in 1:length(lineList)){
 
-        for(e in 1:length(lineList)){
-
-          lineList[[e]][[2]] <- lineList[[e]][[2]] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
+            lineList[[e]][[2]] <- lineList[[e]][[2]] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
+          }
         }
       }
+
     }
 
     if(!is.null(flipOutline)){
 
       if(flipOutline == 'x'){
 
-          outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+        outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
 
-          if(!is.null(lineList)){
+        if(!is.null(lines)){
 
-            for(e in 1:length(lineList)){
+          for(e in 1:length(lineList)){
 
-              lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
-            }
+            lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
           }
+        }
 
       }
 
       if(flipOutline == 'y'){
 
-          outline[,2] <- imageEx[4] - outline[,2]
+        outline[,2] <- imageEx[4] - outline[,2]
 
-          if(!is.null(lineList)){
+        if(!is.null(lines)){
 
-            for(e in 1:length(lineList)){
+          for(e in 1:length(lineList)){
 
-              lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
+            lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
 
-            }
           }
+        }
       }
 
       if(flipOutline == 'xy'){
 
-          outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
-          outline[,2] <- imageEx[4] - outline[,2]
+        outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+        outline[,2] <- imageEx[4] - outline[,2]
 
-          if(!is.null(lineList)){
+        if(!is.null(lines)){
 
-            for(e in 1:length(lineList)){
+          for(e in 1:length(lineList)){
 
-              lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
-              lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
+            lineList[[e]][[1]] <- imageEx[2] - lineList[[e]][[1]] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+            lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
 
-            }
           }
+        }
       }
     }
   }
@@ -206,7 +213,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       extPicture <- extent(imageList[[indx]])
       outline[,2] <- extPicture[4]-outline[,2]
 
-      if(!is.null(lineList)){
+      if(!is.null(lines)){
 
         for(e in 1:length(lineList)){
 
@@ -224,7 +231,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
 
 
-    if(!is.null(lineList)){
+    if(!is.null(lines)){
 
       cartoonLinesTrans <- list()
       for(e in 1:length(lineList)){
@@ -290,14 +297,14 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     if(!is.null(flipRaster)){
       if(flipRaster == 'x'){
-          summedRaster <- raster::flip(summedRaster,'x')
+        summedRaster <- raster::flip(summedRaster,'x')
       }
       if(flipRaster == 'y'){
-          summedRaster <- raster::flip(summedRaster,'y')
+        summedRaster <- raster::flip(summedRaster,'y')
       }
       if(flipRaster == 'xy'){
-          summedRaster <- raster::flip(summedRaster,'x')
-          summedRaster <- raster::flip(summedRaster,'y')
+        summedRaster <- raster::flip(summedRaster,'x')
+        summedRaster <- raster::flip(summedRaster,'y')
       }
     }
 
@@ -351,7 +358,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
       if(refShape =='mean'){
 
-        if(!is.null(lineList)){
+        if(!is.null(lines)){
 
           for(e in 1:length(cartoonLinesTrans)){
 
@@ -361,7 +368,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       }
     }
 
-    plot(summedRaster/length(IDlist), col=colfunc(20), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=c(0,1), legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+    plot(summedRaster/length(IDlist), col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)
 
@@ -395,7 +402,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       }
       if(refShape =='mean'){
 
-        if(!is.null(lineList)){
+        if(!is.null(lines)){
 
           for(e in 1:length(cartoonLinesTrans)){
 
@@ -419,20 +426,20 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       }
     }
 
-    par(mfrow=c(2,round((length(summedRaster)+1)/2)), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
+    par(mfrow=c(2,trunc((length(summedRaster)+1)/2)), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
 
     for(k in 1:length(summedRaster)){
 
       if(!is.null(flipRaster)){
         if(flipRaster == 'x'){
-            summedRaster[[k]] <- raster::flip(summedRaster[[k]],'x')
+          summedRaster[[k]] <- raster::flip(summedRaster[[k]],'x')
         }
         if(flipRaster == 'y'){
-            summedRaster[[k]] <- raster::flip(summedRaster[[k]],'y')
+          summedRaster[[k]] <- raster::flip(summedRaster[[k]],'y')
         }
         if(flipRaster == 'xy'){
-            summedRaster[[k]] <- raster::flip(summedRaster[[k]],'x')
-            summedRaster[[k]] <- raster::flip(summedRaster[[k]],'y')
+          summedRaster[[k]] <- raster::flip(summedRaster[[k]],'x')
+          summedRaster[[k]] <- raster::flip(summedRaster[[k]],'y')
         }
       }
 
@@ -494,7 +501,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
         }
       }
 
-      plot(summedRaster[[k]]/length(IDlist), col=colfunc(20), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=c(0,1), legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+      plot(summedRaster[[k]]/length(IDlist), col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
       mtext(side = 1, text = xlab, line = 0)
       mtext(side = 2, text = ylab, line = 0)
 
@@ -529,7 +536,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
         if(refShape =='mean'){
 
-          if(!is.null(lineList)){
+          if(!is.null(lines)){
 
             for(e in 1:length(cartoonLinesTrans)){
 

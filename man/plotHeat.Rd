@@ -6,11 +6,11 @@
 \usage{
 plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   refShape = NULL, outline = NULL, lines = NULL, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, crop = NULL,
+  adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
   flipRaster = NULL, flipOutline = NULL, imageList = NULL,
   cartoonOrder = "above", lineOrder = "above", cartoonCol = "gray",
-  cartoonFill = NULL, legend.title = "Proportion", xlab = "", ylab = "",
-  main = "")
+  cartoonFill = NULL, zlim = c(0, 1), legend.title = "Proportion",
+  xlab = "", ylab = "", main = "")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -48,6 +48,8 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 \item{cartoonCol}{Outline and line color for cartoon (deafault = 'gray').}
 
 \item{cartoonFill}{Fill color for outline of cartoon (default = NULL).}
+
+\item{zlim}{z-axis limit (default = c(0,1))}
 
 \item{legend.title}{Title of the raster legend (default = 'Proportion')}
 
@@ -96,3 +98,4 @@ plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, refShape = 'mean', outli
 plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 
 }
+

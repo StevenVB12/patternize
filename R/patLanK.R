@@ -21,7 +21,7 @@
 #' extension <- '_landmarks_LFW.txt'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
-#' extension <- '.jpg'
+#' extension <- '.JPG'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebg = TRUE, adjustCoords = TRUE, plot = TRUE)

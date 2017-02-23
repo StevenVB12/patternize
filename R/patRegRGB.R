@@ -63,7 +63,7 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
       sourceR <- apply(sourceR, 1:2, function(x) ifelse(x>100,0, x))
     }
 
-    result <- RNiftyReg::niftyreg(sourceR, target, useBlockPercentage=useBlockPercentage)
+    result <- RNiftyReg::niftyreg(sourceR, target, useBlockPercentage=useBlockPercentage, estimateOnly = TRUE)
 
     map <- apply(source, 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 

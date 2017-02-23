@@ -4,7 +4,7 @@
 \alias{createTarget}
 \title{Create a target image (raster stack) from a polygon.}
 \usage{
-createTarget(outline, image, color = "black", plot = FALSE)
+createTarget(outline, image, color = "black", sigma = 10, plot = FALSE)
 }
 \arguments{
 \item{outline}{xy coordinates that define outline.}
@@ -12,6 +12,8 @@ createTarget(outline, image, color = "black", plot = FALSE)
 \item{image}{Image used in the analysis. This us used to extract the extant and dimensions for the raster layers.}
 
 \item{color}{Color for the fill of the polygon (default = 'black'.}
+
+\item{sigma}{Size of sigma for Gaussian blurring (default = 10).}
 
 \item{plot}{Zhether to plot the created target image.}
 }
@@ -22,4 +24,6 @@ Create a target image (raster stack) from a polygon.
 outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
 data(imageList)
 target <- createTarget(outline_BC0077, imageList[[1]], plot =  TRUE)
+
 }
+
