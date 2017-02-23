@@ -12,6 +12,9 @@
 #' @param transformType (default ='tps')
 #' @param adjustCoords Adjust landmark coordinates.
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
+#' @param focal Whether to perform Gaussian blurring (default = FALSE).
+#' @param sigma Size of sigma for Gaussian blurring (default = 3).
+#' @param iterations Number of iterations for recalculating average color.
 #'
 #' @return  List of raster objects.
 #'
@@ -31,7 +34,7 @@
 #' @import raster
 
 
-patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE){
+patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
 
   rasterList <- list()
 
@@ -96,8 +99,35 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
 
     image <- redRes(image, resampleFactor)
 
+    if(focal){
+      gf <- focalWeight(image, sigma, "Gauss")
+
+      rrr1 <- raster::focal(image[[1]], gf)
+      rrr2 <- raster::focal(image[[2]], gf)
+      rrr3 <- raster::focal(image[[3]], gf)
+
+      image <- raster::stack(rrr1, rrr2, rrr3)
+    }
+
     map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
+    x <- 1
+    while(x <= iterations){
+      x <- x + 1
+
+      mapRaster <- raster::raster(as.matrix(map))
+      extent(mapRaster) <- extRaster
+      mapRaster[mapRaster == 0] <- NA
+
+      mapMASK<-raster::mask(raster::as.array(image), mapRaster)
+
+      RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
+               mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
+               mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
+
+      map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+
+    }
 
     mapR <- raster::raster(map)
     raster::extent(mapR) <- extRaster

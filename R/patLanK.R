@@ -12,6 +12,8 @@
 #' @param removebg Whether to remove white background rasterList (default = FALSE) for k-means analysis.
 #' @param adjustCoords Adjust coordinates.
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
+#' @param focal Whether to perform Gaussian blurring (default = FALSE).
+#' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #'
 #' @return  List of summed raster for each k-means cluster objects.
 #'
@@ -29,7 +31,7 @@
 #' @export
 #' @import raster
 #'
-patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebg = FALSE, adjustCoords = FALSE, plot = FALSE){
+patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebg = FALSE, adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
 
   rasterList <- list()
 
@@ -85,6 +87,17 @@ patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = F
     }
 
     imageRaster <- redRes(image, resampleFactor)
+
+    if(focal){
+      gf <- focalWeight(imageRaster, sigma, "Gauss")
+
+      rrr1 <- raster::focal(imageRaster[[1]], gf)
+      rrr2 <- raster::focal(imageRaster[[2]], gf)
+      rrr3 <- raster::focal(imageRaster[[3]], gf)
+
+      imageRaster <- raster::stack(rrr1, rrr2, rrr3)
+    }
+
     image <- raster::as.array(imageRaster)
 
     if(removebg){

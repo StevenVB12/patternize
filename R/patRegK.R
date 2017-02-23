@@ -8,6 +8,8 @@
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.
 #' @param removebg Whether to remove white background rasterList (default = FALSE) for registration and k-means analysis.
 #' @param plot Whether to plot k-means clustered image while processing (default = FALSE).
+#' @param focal Whether to perform Gaussian blurring (default = FALSE).
+#' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #'
 #' @return List of summed raster for each k-means cluster objects.
 #'
@@ -21,7 +23,7 @@
 #'
 #' @export
 
-patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE){
+patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
 
   imageList <- sampleList
 
@@ -55,6 +57,17 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
     }
 
     sourceRaster <- redRes(sStack, resampleFactor)
+
+    if(focal){
+      gf <- focalWeight(sourceRaster, sigma, "Gauss")
+
+      rrr1 <- raster::focal(sourceRaster[[1]], gf)
+      rrr2 <- raster::focal(sourceRaster[[2]], gf)
+      rrr3 <- raster::focal(sourceRaster[[3]], gf)
+
+      sourceRaster <- raster::stack(rrr1, rrr2, rrr3)
+    }
+
     source <- raster::as.array(sourceRaster)
     sourceR <- apply(source,1:2,mean)
 

@@ -4,7 +4,7 @@
 #' @param image Image used in the analysis. This us used to extract the extant and dimensions for the raster layers.
 #' @param color Color for the fill of the polygon (default = 'black'.
 #' @param sigma Size of sigma for Gaussian blurring (default = 10).
-#' @param plot Zhether to plot the created target image.
+#' @param plot Whether to plot the created target image.
 #'
 #' @examples
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)

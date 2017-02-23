@@ -9,6 +9,9 @@
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.
 #' @param removebg Whether to remove white background for image registration (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
+#' @param focal Whether to perform Gaussian blurring (default = FALSE).
+#' @param sigma Size of sigma for Gaussian blurring (default = 3).
+#' @param iterations Number of iterations for recalculating average color.
 #'
 #' @return List of raster objects.
 #'
@@ -24,7 +27,7 @@
 #' @export
 #' @import raster
 
-patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPercentage = 75, colOffset=0, crop = NULL, removebg = FALSE, plot = FALSE){
+patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPercentage = 75, colOffset=0, crop = NULL, removebg = FALSE, plot = FALSE, focal =  FALSE, sigma = 3, iterations = 0){
 
   rasterList <- list()
 
@@ -55,8 +58,19 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
 
     }
 
-    source <- redRes(sStack, resampleFactor)
-    source <- raster::as.array(source)
+    sourceRaster <- redRes(sStack, resampleFactor)
+
+    if(focal){
+      gf <- focalWeight(sourceRaster, sigma, "Gauss")
+
+      rrr1 <- raster::focal(sourceRaster[[1]], gf)
+      rrr2 <- raster::focal(sourceRaster[[2]], gf)
+      rrr3 <- raster::focal(sourceRaster[[3]], gf)
+
+      sourceRaster <- raster::stack(rrr1, rrr2, rrr3)
+    }
+
+    source <- raster::as.array(sourceRaster)
     sourceR <- apply(source,1:2,mean)
 
     if(removebg){
@@ -66,6 +80,24 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
     result <- RNiftyReg::niftyreg(sourceR, target, useBlockPercentage=useBlockPercentage, estimateOnly = TRUE)
 
     map <- apply(source, 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+
+    x <- 1
+    while(x <= iterations){
+      x <- x + 1
+
+      mapRaster <- raster::raster(as.matrix(map))
+      extent(mapRaster) <- extRaster
+      mapRaster[mapRaster == 0] <- NA
+
+      mapMASK<-raster::mask(sourceRaster, mapRaster)
+
+      RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
+               mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
+               mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
+
+      map <- apply(source, 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+
+    }
 
     transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), map, interpolation=0)
     transformedMapMatrix <- transformedMap[1:nrow(transformedMap),ncol(transformedMap):1]
