@@ -7,7 +7,7 @@
 patLanK(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE,
   cropOffset = NULL, res = 300, transformRef = "meanshape",
   transformType = "tps", removebg = FALSE, adjustCoords = FALSE,
-  plot = FALSE)
+  plot = FALSE, focal = FALSE, sigma = 3)
 }
 \arguments{
 \item{imageList}{List of RasterStack objects.}
@@ -31,6 +31,10 @@ patLanK(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE,
 \item{adjustCoords}{Adjust coordinates.}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
+
+\item{focal}{Whether to perform Gaussian blurring (default = FALSE).}
+
+\item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 
 \item{lanArray}{Landmark array.}
 }

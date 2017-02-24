@@ -203,6 +203,8 @@ patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NUL
 
     outDf <- as.data.frame(outDf)
     colnames(outDf) <- c('SampleId','Area')
+    outDf$Area <- as.numeric(as.character(outDf$Area))
+
     return(outDf)
   }
 
@@ -246,6 +248,7 @@ patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NUL
     for(i in 1:length(kList)){
       kList[[i]] <- as.data.frame(kList[[i]])
       colnames(kList[[i]]) <- c('SampleId','Area')
+      kList[[i]]$Area <- as.numeric(as.character(kList[[i]]$Area))
     }
     return(kList)
   }

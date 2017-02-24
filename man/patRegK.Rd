@@ -5,7 +5,8 @@
 \title{Image registration with k-means clustering for color extraction.}
 \usage{
 patRegK(sampleList, target, k = 3, resampleFactor = 1,
-  useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE)
+  useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE,
+  focal = FALSE, sigma = 3)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -23,6 +24,10 @@ patRegK(sampleList, target, k = 3, resampleFactor = 1,
 \item{removebg}{Whether to remove white background rasterList (default = FALSE) for registration and k-means analysis.}
 
 \item{plot}{Whether to plot k-means clustered image while processing (default = FALSE).}
+
+\item{focal}{Whether to perform Gaussian blurring (default = FALSE).}
+
+\item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 }
 \value{
 List of summed raster for each k-means cluster objects.

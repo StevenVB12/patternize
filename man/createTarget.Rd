@@ -15,7 +15,7 @@ createTarget(outline, image, color = "black", sigma = 10, plot = FALSE)
 
 \item{sigma}{Size of sigma for Gaussian blurring (default = 10).}
 
-\item{plot}{Zhether to plot the created target image.}
+\item{plot}{Whether to plot the created target image.}
 }
 \description{
 Create a target image (raster stack) from a polygon.

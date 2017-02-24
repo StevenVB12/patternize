@@ -10,6 +10,7 @@
 #' @param landList Landmark landmarkList.
 #' @param adjustCoords Adjust landmark coordinates.
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
+#' @param normalized Set this to true in case the summed rasters are already devided by the sample number.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
 #' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
@@ -62,7 +63,7 @@
 #' @export
 #' @import raster
 
-plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, zlim = c(0,1), legend.title = 'Proportion', xlab='', ylab='', main=''){
+plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, zlim = c(0,1), legend.title = 'Proportion', xlab='', ylab='', main=''){
 
   if(!is.list(summedRaster)){
 
@@ -103,6 +104,13 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       lineList[[e]] <- read.table(lines[e], h= FALSE)
 
     }
+  }
+
+  if(normalized){
+    divide <- 1
+  }
+  else{
+    divide <- length(IDlist)
   }
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){
@@ -368,7 +376,8 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       }
     }
 
-    plot(summedRaster/length(IDlist), col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+
+    plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)
 
@@ -501,7 +510,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
         }
       }
 
-      plot(summedRaster[[k]]/length(IDlist), col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+      plot(summedRaster[[k]]/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
       mtext(side = 1, text = xlab, line = 0)
       mtext(side = 2, text = ylab, line = 0)
 

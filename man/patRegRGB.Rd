@@ -6,7 +6,7 @@
 \usage{
 patRegRGB(sampleList, target, RGB, resampleFactor = 1,
   useBlockPercentage = 75, colOffset = 0, crop = NULL, removebg = FALSE,
-  plot = FALSE)
+  plot = FALSE, focal = FALSE, sigma = 3, iterations = 0)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -26,6 +26,12 @@ patRegRGB(sampleList, target, RGB, resampleFactor = 1,
 \item{removebg}{Whether to remove white background for image registration (default = FALSE).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
+
+\item{focal}{Whether to perform Gaussian blurring (default = FALSE).}
+
+\item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
+
+\item{iterations}{Number of iterations for recalculating average color.}
 }
 \value{
 List of raster objects.
