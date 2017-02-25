@@ -6,11 +6,11 @@
 \usage{
 plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   refShape = NULL, outline = NULL, lines = NULL, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
-  flipRaster = NULL, flipOutline = NULL, imageList = NULL,
-  cartoonOrder = "above", lineOrder = "above", cartoonCol = "gray",
-  cartoonFill = NULL, zlim = c(0, 1), legend.title = "Proportion",
-  xlab = "", ylab = "", main = "")
+  adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE,
+  crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
+  imageList = NULL, cartoonOrder = "above", lineOrder = "above",
+  cartoonCol = "gray", cartoonFill = NULL, zlim = c(0, 1),
+  legend.title = "Proportion", xlab = "", ylab = "", main = "")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -32,6 +32,8 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 \item{adjustCoords}{Adjust landmark coordinates.}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn.}
+
+\item{normalized}{Set this to true in case the summed rasters are already devided by the sample number.}
 
 \item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.}
 
