@@ -2,27 +2,29 @@
 % Please edit documentation in R/lanArray.R
 \name{lanArray}
 \alias{lanArray}
-\title{Build landmark array for Morpho.}
+\title{Build landmark array for \code{\link[Morpho]{Morpho}}.}
 \usage{
-lanArray(sampleList, adjustCoords = FALSE, image = NULL)
+lanArray(sampleList, adjustCoords = FALSE, imageList = NULL)
 }
 \arguments{
-\item{sampleList}{List of landmark matrices.}
+\item{sampleList}{List of landmark matrices as returned by \code{\link{makeList}}.}
 
-\item{adjustCoords}{Adjust the coordinates of the landmarks if different (default = FALSE).}
+\item{adjustCoords}{Adjust the coordinates of the landmarks if the image has different pixel coordinates (default = FALSE).}
 
-\item{image}{Image List.}
+\item{imageList}{List of RasterStacks as returned by \code{\link{makeList}} should be given when \code{adjustCoords = TRUE}.}
 }
 \value{
 X x Y x n array, where X and Y define the coordinates of the landmark points and n is the sample size.
 }
 \description{
-Build landmark array for Morpho.
+Build landmark array for \code{\link[Morpho]{Morpho}}.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+
 prepath <- system.file("extdata",  package = 'patternize')
 extension <- '_landmarks_LFW.txt'
+
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
 landmarkArray <- lanArray(landmarkList)

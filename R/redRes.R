@@ -1,16 +1,16 @@
-#' Reduce the resolution of an iamge by downsampling.
+#' Reduce the resolution of an image imported as a RasterStack by downsampling.
 #'
-#' @param image Image for downsampling.
+#' @param image RasterStack for downsampling.
 #' @param resampleFactor Integer for downsampling.
 #'
-#' @return Downsampled \code{image}.
+#' @return Downsampled RasterStack
 #'
 #' @examples
 #' image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))
-#' image.reduced <- redRes(image, 5)
+#' image_reduced <- redRes(image, 5)
 #'
 #' @export
-#' @import rgdal
+#' @import raster
 
 redRes <- function(image, resampleFactor){
 
@@ -21,7 +21,7 @@ redRes <- function(image, resampleFactor){
 
   raster::extent(resampledRaster) <- raster::extent(image)
 
-  resampled <- raster::resample(image,resampledRaster)
+  resampled <- raster::resample(image, resampledRaster)
 
   return(resampled)
 

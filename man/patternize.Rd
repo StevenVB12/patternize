@@ -66,4 +66,7 @@ The input for the main patternize functions are \code{\link[raster]{RasterStack}
 \code{createTarget} \cr
    Creates an artificial target images using a provided outline that can be used for image registration (experimantal).
 }
+\author{
+Steven M. Van Belleghem
+}
 

@@ -11,7 +11,7 @@
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #'
-#' @return List of summed raster for each k-means cluster objects.
+#' @return List of rasters for each k-means cluster objects.
 #'
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
@@ -73,8 +73,8 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
 
     if(removebg){
 
-      sourceR <- apply(sourceR, 1:2, function(x) ifelse(x>100,0, x))
-      sourceRna <- apply(source, 1:2, function(x) ifelse(all(x>100),NA, x))
+      sourceR <- apply(sourceR, 1:2, function(x) ifelse(x > 100, 0, x))
+      sourceRna <- apply(source, 1:2, function(x) ifelse(all(x > 100), NA, x))
       sourceRnar <- raster::raster(as.matrix(sourceRna))
       extent(sourceRnar)<-extent(sourceRaster)
 
@@ -114,7 +114,6 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
 
     # Transform images and add to rasterList
 
-
     e=0
 
     rasterListInd <- list()
@@ -134,13 +133,8 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
       r <- raster::raster(transformedMapMatrix)
       raster::extent(r) <- extRaster
 
-      # if(n==1){
-      #   rasterList <- c(rasterList, r)
-      # }
-      #
-      # else{
       rasterListInd[[e]] <- r
-      # }
+
     }
     rasterList[[names(imageList)[n]]] <- rasterListInd
   }

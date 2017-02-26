@@ -1,16 +1,18 @@
-#' Build list of landmarks or picture stacks using filepath and file extension.
+#' Build list of landmarks or RasterStacks from images using filepath and file extension.
 #'
 #' @param IDlist List of sample IDs.
-#' @param type 'landmark' or 'image'
+#' @param type 'landmark' or 'image' depending on what type of list to make.
 #' @param prepath Prepath (default = NULL).
 #' @param extension Extension (default = NULL).
 #'
-#' @return Landmark or image list.
+#' @return Landmark or RasterStack list.
 #'
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+#'
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '_landmarks_LFW.txt'
+#'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
 #' extension <- '.jpg'

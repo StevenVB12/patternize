@@ -30,7 +30,7 @@ patRegK(sampleList, target, k = 3, resampleFactor = 1,
 \item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 }
 \value{
-List of summed raster for each k-means cluster objects.
+List of rasters for each k-means cluster objects.
 }
 \description{
 Image registration with k-means clustering for color extraction.

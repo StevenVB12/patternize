@@ -2,22 +2,22 @@
 % Please edit documentation in R/kImage.R
 \name{kImage}
 \alias{kImage}
-\title{kmeans clustering of image.}
+\title{\code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is used by \code{patLanK} and \code{patRegK}.}
 \usage{
 kImage(image, k = 5, startCenter = NULL)
 }
 \arguments{
-\item{image}{Image for kmeans clustering.}
+\item{image}{Image imported as a RasterStack for k-means clustering.}
 
-\item{k}{Integer for number of kmeans clusters (default = 3).}
+\item{k}{Integer for number of k-means clusters (default = 3).}
 
-\item{startCenter}{A matrix of cluster centres to start kmeans clustering from (default = NULL).}
+\item{startCenter}{A matrix of cluster centres to start k-means clustering from (default = NULL).}
 }
 \value{
-List with kmeans clustered \code{image} and object of class "kmeans".
+List including the k-means clustered \code{RasterSatck} returned as an array and object of class "\code{kmeans}".
 }
 \description{
-kmeans clustering of image.
+\code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is used by \code{patLanK} and \code{patRegK}.
 }
 \examples{
 image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))

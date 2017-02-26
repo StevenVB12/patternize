@@ -2,23 +2,31 @@
 % Please edit documentation in R/createTarget.R
 \name{createTarget}
 \alias{createTarget}
-\title{Create a target image (raster stack) from a polygon.}
+\title{Create a target image (RasterStack) from a polygon.}
 \usage{
-createTarget(outline, image, color = "black", sigma = 10, plot = FALSE)
+createTarget(outline, image, res = 300, colorFill = "black",
+  colorBG = "white", sigma = 10, plot = FALSE)
 }
 \arguments{
 \item{outline}{xy coordinates that define outline.}
 
-\item{image}{Image used in the analysis. This us used to extract the extant and dimensions for the raster layers.}
+\item{image}{Image used in the analysis. This is used to extract the extent and dimensions for the raster layers.}
 
-\item{color}{Color for the fill of the polygon (default = 'black'.}
+\item{res}{Resolution for RasterStack (default = 300).}
+
+\item{colorFill}{Color for the fill of the polygon (default = 'black').}
 
 \item{sigma}{Size of sigma for Gaussian blurring (default = 10).}
 
-\item{plot}{Whether to plot the created target image.}
+\item{plot}{Whether to plot the created target image (default = FALSE).}
+
+\item{ColorBG}{Color for the background (default = 'white').}
+}
+\value{
+RasterStack
 }
 \description{
-Create a target image (raster stack) from a polygon.
+Create a target image (RasterStack) from a polygon.
 }
 \examples{
 outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)

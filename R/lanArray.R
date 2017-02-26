@@ -1,15 +1,17 @@
-#' Build landmark array for Morpho.
+#' Build landmark array for \code{\link[Morpho]{Morpho}}.
 #'
-#' @param sampleList List of landmark matrices.
-#' @param adjustCoords Adjust the coordinates of the landmarks if different (default = FALSE).
-#' @param image Image List.
+#' @param sampleList List of landmark matrices as returned by \code{\link{makeList}}.
+#' @param adjustCoords Adjust the coordinates of the landmarks if the image has different pixel coordinates (default = FALSE).
+#' @param imageList List of RasterStacks as returned by \code{\link{makeList}} should be given when \code{adjustCoords = TRUE}.
 #'
 #' @return  X x Y x n array, where X and Y define the coordinates of the landmark points and n is the sample size.
 #'
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+#'
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '_landmarks_LFW.txt'
+#'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
 #' landmarkArray <- lanArray(landmarkList)
@@ -17,7 +19,7 @@
 #' @export
 
 
-lanArray <- function(sampleList, adjustCoords = FALSE, image = NULL){
+lanArray <- function(sampleList, adjustCoords = FALSE, imageList = NULL){
 
   # Make datastructure for Generailzed Procrustis Analysis
   for(n in 1:length(sampleList)){
@@ -29,10 +31,10 @@ lanArray <- function(sampleList, adjustCoords = FALSE, image = NULL){
 
 
     if(adjustCoords){
-      if(is.null(image)){
+      if(is.null(imageList)){
         stop('For adjusting landmarkcoordinates, you should supply the image list')
       }
-      extPicture <- extent(image[[n]])
+      extPicture <- extent(imageList[[n]])
 
       landmarks[,2] <- (extPicture[4]-landmarks[,2])
     }

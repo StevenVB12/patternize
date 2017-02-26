@@ -2,24 +2,24 @@
 % Please edit documentation in R/redRes.R
 \name{redRes}
 \alias{redRes}
-\title{Reduce the resolution of an iamge by downsampling.}
+\title{Reduce the resolution of an image imported as a RasterStack by downsampling.}
 \usage{
 redRes(image, resampleFactor)
 }
 \arguments{
-\item{image}{Image for downsampling.}
+\item{image}{RasterStack for downsampling.}
 
 \item{resampleFactor}{Integer for downsampling.}
 }
 \value{
-Downsampled \code{image}.
+Downsampled RasterStack
 }
 \description{
-Reduce the resolution of an iamge by downsampling.
+Reduce the resolution of an image imported as a RasterStack by downsampling.
 }
 \examples{
 image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))
-image.reduced <- redRes(image, 5)
+image_reduced <- redRes(image, 5)
 
 }
 
