@@ -61,6 +61,8 @@
 #' \code{createTarget} \cr
 #'    Creates an artificial target images using a provided outline that can be used for image registration (experimantal).
 #'
+#' \code{maskOutline} \cr
+#'    Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.
 #'
 #' @docType package
 #' @name patternize

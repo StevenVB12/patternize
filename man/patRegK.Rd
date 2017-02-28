@@ -5,8 +5,9 @@
 \title{Image registration with k-means clustering for color extraction.}
 \usage{
 patRegK(sampleList, target, k = 3, resampleFactor = 1,
-  useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE,
-  focal = FALSE, sigma = 3)
+  useBlockPercentage = 75, crop = c(0, 0, 0, 0), removebgR = NULL,
+  removebgK = NULL, maskOutline = NULL, plot = FALSE, focal = FALSE,
+  sigma = 3)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -21,7 +22,11 @@ patRegK(sampleList, target, k = 3, resampleFactor = 1,
 
 \item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.}
 
-\item{removebg}{Whether to remove white background rasterList (default = FALSE) for registration and k-means analysis.}
+\item{removebgR}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.}
+
+\item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.}
+
+\item{maskOutline}{When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).}
 
 \item{plot}{Whether to plot k-means clustered image while processing (default = FALSE).}
 
@@ -41,7 +46,7 @@ prepath <- system.file("extdata",  package = 'patternize')
 extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 target <- imageList[[1]]
-rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
+rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = c(100,255), plot = TRUE)
 
 }
 

@@ -1,0 +1,170 @@
+#' Mask everything in RasterStack that is outside of the outline.
+#'
+#' @param RasterStack RasterStack to be masked.
+#' @param outline xy coordinates that define outline.
+#' @param refShape This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)
+#' @param landList landmark list to be given when type = 'mean'.
+#' @param adjustCoords Adjust landmark coordinates.
+#' @param cartoonID ID of the sample for which the cartoon was drawn.
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
+#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
+#' @param flipOutline Whether to flip plot along x, y or xy axis.
+#' @param imageList List of image should be given if one wants to flip the outline or adjust landmark coordinates.
+#'
+#' @examples
+#'
+#' data(imageList)
+#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+#'
+#' masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipOutline = 'y')
+#'
+#' @export
+#' @import raster
+
+maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL){
+
+  imageEx <- raster::extent(RasterStack)
+
+  if(!is.null(flipOutline) || !is.null(flipRaster)){
+
+    if(refShape != 'mean'){
+
+      outline[,2] <- outline[,2] - crop[3]
+
+    }
+  }
+
+  if(refShape != 'mean'){
+
+
+    if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
+
+      outline[,2] <- outline[,2] + crop[3]
+
+    }
+
+    if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
+
+      outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
+
+    }
+
+    if(!is.null(flipOutline)){
+
+      if(flipOutline == 'x'){
+
+        outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+
+      }
+
+      if(flipOutline == 'y'){
+
+        outline[,2] <- imageEx[4] - outline[,2]
+
+      }
+
+      if(flipOutline == 'xy'){
+
+        outline[,1] <- imageEx[2] - outline[,1] + (crop[1] - imageEx[1]) - (imageEx[2] - crop[2])
+        outline[,2] <- imageEx[4] - outline[,2]
+
+      }
+    }
+  }
+
+  if(refShape == 'mean'){
+
+    indx <- which(IDlist == cartoonID)
+    invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
+
+    if(adjustCoords){
+
+      extPicture <- extent(imageList[[indx]])
+      outline[,2] <- extPicture[4]-outline[,2]
+    }
+
+    invisible(capture.output(transformed <- Morpho::procSym(landArray)))
+
+
+    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape, as.matrix(landArray[,,indx]), type="tps")))
+    outline <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
+
+
+    if(!is.null(flipOutline)){
+
+      if(flipOutline == 'x'){
+        outline[,1] = rasterEx[2] - outline[,1] + rasterEx[1]
+
+
+      }
+
+      if(flipOutline == 'y'){
+        outlineTrans[,2] = rasterEx[4] - outlineTrans[,2] + rasterEx[3]
+
+      }
+    }
+  }
+
+
+  poly <- sp::Polygons(list(Polygon(outline)),paste("r"))
+
+  polyList  <- c(poly)
+  polyNames <- c(paste("r"))
+  sr=sp::SpatialPolygons(polyList)
+  srdf=sp::SpatialPolygonsDataFrame(sr, data.frame(1:length(polyNames), row.names=polyNames))
+
+  r <- raster::raster(imageEx, nrow=dim(RasterStack)[1], ncol=dim(RasterStack)[2])
+  rr <-raster::rasterize(srdf, r)
+
+
+  # nrCellsOutline  <- raster::freq(rr, value=1)
+
+
+  # outDf <-c()
+
+
+
+  # for(n in 1:length(IDlist)){
+
+    # rast <- rList[[IDlist[[n]]]]
+
+  if(!is.null(flipRaster)){
+    if(flipRaster == 'x'){
+      RasterStack <- raster::flip(RasterStack,'x')
+    }
+    if(flipRaster == 'y'){
+      RasterStack <- raster::flip(RasterStack,'y')
+    }
+    if(flipRaster == 'xy'){
+      RasterStack <- raster::flip(RasterStack,'x')
+      RasterStack <- raster::flip(RasterStack,'y')
+    }
+  }
+
+  RasterStack <- raster::mask(RasterStack, rr)
+  RasterStack[is.na(RasterStack)] <- 0
+
+  return(RasterStack)
+
+
+#
+#     rast[rast == 0] <- NA
+#     rast <- raster::resample(rast,rr, method='ngb')
+#
+#     nrCells  <- raster::freq(rast, value=1)
+#
+#     outDf <- rbind(outDf, c(IDlist[[n]], nrCells/nrCellsOutline))
+#   }
+#
+#   outDf <- as.data.frame(outDf)
+#   colnames(outDf) <- c('SampleId','Area')
+#   outDf$Area <- as.numeric(as.character(outDf$Area))
+#
+#   return(outDf)
+}
+
+
+
+
+
+

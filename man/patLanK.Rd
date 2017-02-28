@@ -6,7 +6,7 @@
 \usage{
 patLanK(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE,
   cropOffset = NULL, res = 300, transformRef = "meanshape",
-  transformType = "tps", removebg = FALSE, adjustCoords = FALSE,
+  transformType = "tps", removebgK = NULL, adjustCoords = FALSE,
   plot = FALSE, focal = FALSE, sigma = 3)
 }
 \arguments{
@@ -26,7 +26,7 @@ patLanK(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE,
 
 \item{transformType}{(default ='tps')}
 
-\item{removebg}{Whether to remove white background rasterList (default = FALSE) for k-means analysis.}
+\item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.}
 
 \item{adjustCoords}{Adjust coordinates.}
 
@@ -53,7 +53,7 @@ landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 extension <- '.JPG'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
-rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebg = TRUE, adjustCoords = TRUE, plot = TRUE)
+rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebgK = TRUE, adjustCoords = TRUE, plot = TRUE)
 
 }
 

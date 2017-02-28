@@ -5,8 +5,9 @@
 \title{Image registration with RGB color extraction.}
 \usage{
 patRegRGB(sampleList, target, RGB, resampleFactor = 1,
-  useBlockPercentage = 75, colOffset = 0, crop = NULL, removebg = FALSE,
-  plot = FALSE, focal = FALSE, sigma = 3, iterations = 0)
+  useBlockPercentage = 75, colOffset = 0, crop = c(0, 0, 0, 0),
+  removebgR = NULL, maskOutline = NULL, plot = FALSE, focal = FALSE,
+  sigma = 3, iterations = 0)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -23,7 +24,9 @@ patRegRGB(sampleList, target, RGB, resampleFactor = 1,
 
 \item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.}
 
-\item{removebg}{Whether to remove white background for image registration (default = FALSE).}
+\item{removebgR}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.}
+
+\item{maskOutline}{When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
 

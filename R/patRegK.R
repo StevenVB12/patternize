@@ -6,7 +6,9 @@
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param useBlockPercentage Block percentage as used in NiftyReg.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.
-#' @param removebg Whether to remove white background rasterList (default = FALSE) for registration and k-means analysis.
+#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.
+#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.
+#' @param maskOutline When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).
 #' @param plot Whether to plot k-means clustered image while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -19,29 +21,28 @@
 #' extension <- '.jpg'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #' target <- imageList[[1]]
-#' rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
+#' rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = c(100,255), plot = TRUE)
 #'
 #' @export
 
-patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPercentage = 75, crop = NULL, removebg = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
+patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPercentage = 75, crop = c(0,0,0,0), removebgR = NULL, removebgK = NULL, maskOutline = NULL, plot = FALSE, focal =  FALSE, sigma = 3){
 
   imageList <- sampleList
 
   rasterList <- list()
 
-  if(!is.null(crop)){
+  if(!identical(crop, c(0,0,0,0))){
 
     targetExtRaster <- crop
     target <- raster::crop(target, targetExtRaster)
-
   }
 
   target <- redRes(target, resampleFactor)
-  target <- raster::as.array(target)
-  target <- apply(target,1:2,mean)
+  target <- apply(raster::as.array(target),1:2,mean)
 
-  if(removebg){
-    target <- apply(target, 1:2, function(x) ifelse(x>100,0, x))
+  if(is.numeric(removebgR)){
+    
+    target <- apply(target, 1:2, function(x) ifelse(x > removebgR,0, x))
   }
 
   for(n in 1:length(sampleList)){
@@ -49,16 +50,16 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
     sStack <- sampleList[[n]]
     extRaster <- raster::extent(sStack)
 
-    if(!is.null(crop)){
+    if(!identical(crop, c(0,0,0,0))){
 
       extRaster <- crop
       sStack <- crop(sStack, extRaster)
-
     }
 
     sourceRaster <- redRes(sStack, resampleFactor)
 
     if(focal){
+      
       gf <- focalWeight(sourceRaster, sigma, "Gauss")
 
       rrr1 <- raster::focal(sourceRaster[[1]], gf)
@@ -68,24 +69,33 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
       sourceRaster <- raster::stack(rrr1, rrr2, rrr3)
     }
 
-    source <- raster::as.array(sourceRaster)
-    sourceR <- apply(source,1:2,mean)
+    sourceRasterK <- sourceRaster
 
-    if(removebg){
-
-      sourceR <- apply(sourceR, 1:2, function(x) ifelse(x > 100, 0, x))
-      sourceRna <- apply(source, 1:2, function(x) ifelse(all(x > 100), NA, x))
-      sourceRnar <- raster::raster(as.matrix(sourceRna))
-      extent(sourceRnar)<-extent(sourceRaster)
-
-      sourceMASK<-raster::mask(sourceRaster, sourceRnar)
-      sourceMASK[is.na(sourceMASK)] <- 0
-      source <- raster::as.array(sourceMASK)
+    sourceRaster <- apply(raster::as.array(sourceRaster),1:2,mean)
+    
+    if(is.numeric(removebgR)){
+      
+      sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR,0, x))
     }
 
-    result <- RNiftyReg::niftyreg(sourceR, target, useBlockPercentage=useBlockPercentage)
+    result <- RNiftyReg::niftyreg(sourceRaster, target, useBlockPercentage=useBlockPercentage)
 
-
+    transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), raster::as.array(sourceRasterK), interpolation=0)
+    
+    r1 <- raster::raster(transformedMap[1:nrow(transformedMap),ncol(transformedMap):1,1])
+    r2 <- raster::raster(transformedMap[1:nrow(transformedMap),ncol(transformedMap):1,2])
+    r3 <- raster::raster(transformedMap[1:nrow(transformedMap),ncol(transformedMap):1,3])
+    
+    
+    transRaster <-raster::stack(r1,r2,r3)
+    transRaster <- raster::flip(transRaster,'x')
+    
+    raster::extent(transRaster) <- raster::extent(sourceRasterK)
+    
+    if(!is.null(maskOutline)){
+      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop)
+    }
+    
     # k-means clustering of image
 
     if(n==1){
@@ -96,7 +106,23 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
       startCenter <- K$centers
     }
 
-    imageKmeans <- kImage(source, k, startCenter)
+    if(is.null(removebgK)){
+      imageKmeans <- kImage(raster::as.array(transRaster), k, startCenter)
+    }
+    
+    if(is.numeric(removebgK)){
+      
+      transRasterMean <- apply(raster::as.array(transRaster),1:2,mean)
+      toMask <- apply(raster::as.array(transRasterMean), 1:2, function(x) ifelse(x > removebgK, NA, x))
+      
+      toMaskR <- raster::raster(as.matrix(toMask))
+      raster::extent(toMaskR) <- raster::extent(transRaster)
+      
+      transRaster<-raster::mask(transRaster, toMaskR)
+      transRaster[is.na(transRaster)] <- 0
+      
+      imageKmeans <- kImage(raster::as.array(transRaster), k, startCenter)
+    }
 
     image.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]
@@ -109,8 +135,8 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
       dim(x2) <- dim(x)[1:2]
       raster::image(t(apply(x2,2,rev)), col=uniqueCols,yaxt='n', xaxt='n')
     }
-
-
+    
+    print(names(sampleList)[n])
 
     # Transform images and add to rasterList
 
@@ -126,11 +152,9 @@ patRegK <- function(sampleList, target, k = 3, resampleFactor = 1, useBlockPerce
 
       map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
 
-      transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), map, interpolation=0)
-      transformedMapMatrix <- transformedMap[1:nrow(transformedMap),ncol(transformedMap):1]
-      transformedMapMatrix[transformedMapMatrix == 0] <- NA
+      map[map == 0] <- NA
 
-      r <- raster::raster(transformedMapMatrix)
+      r <- raster::raster(map)
       raster::extent(r) <- extRaster
 
       rasterListInd[[e]] <- r

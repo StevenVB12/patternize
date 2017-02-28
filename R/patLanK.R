@@ -9,7 +9,7 @@
 #' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
 #' @param transformType (default ='tps')
-#' @param removebg Whether to remove white background rasterList (default = FALSE) for k-means analysis.
+#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.
 #' @param adjustCoords Adjust coordinates.
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
@@ -26,12 +26,12 @@
 #' extension <- '.JPG'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
-#' rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebg = TRUE, adjustCoords = TRUE, plot = TRUE)
+#' rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebgK = TRUE, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
 #' @import raster
 #'
-patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebg = FALSE, adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
+patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebgK = NULL, adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
 
   rasterList <- list()
 
@@ -98,17 +98,28 @@ patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = F
       imageRaster <- raster::stack(rrr1, rrr2, rrr3)
     }
 
-    image <- raster::as.array(imageRaster)
+    # image <- raster::as.array(imageRaster)
 
-    if(removebg){
+    if(is.vector(removebgK)){
+      
+      toMask <- apply(raster::as.array(imageRaster), 1:2, function(x) all(x > removebgK))
+      
+      toMaskR <- raster::raster(as.matrix(toMask))
+      raster::extent(toMaskR) <- raster::extent(imageRaster)
+      toMaskR[toMaskR == 0] <- NA
+      
+      imageRaster<-raster::mask(imageRaster, toMaskR, inverse = T)
+      imageRaster[is.na(imageRaster)] <- 0
+      
+      
 
-      imagena <- apply(image, 1:2, function(x) ifelse(all(x>100),NA, x))
-      imagenar <- raster::raster(as.matrix(imagena))
-      extent(imagenar)<-extent(imageRaster)
-
-      imageMASK<-raster::mask(imageRaster, imagenar)
-      imageMASK[is.na(imageMASK)] <- 0
-      image <- raster::as.array(imageMASK)
+      # imagena <- apply(image, 1:2, function(x) ifelse(all(x>100),NA, x))
+      # imagenar <- raster::raster(as.matrix(imagena))
+      # extent(imagenar)<-extent(imageRaster)
+      # 
+      # imageMASK<-raster::mask(imageRaster, imagenar)
+      # imageMASK[is.na(imageMASK)] <- 0
+      # image <- raster::as.array(imageMASK)
     }
 
     # k-means clustering of image
@@ -121,7 +132,7 @@ patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = F
       startCenter <- K$centers
     }
 
-    imageKmeans <- kImage(image, k, startCenter)
+    imageKmeans <- kImage(raster::as.array(imageRaster), k, startCenter)
 
     image.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]

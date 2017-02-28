@@ -5,7 +5,7 @@
 \title{Calculate relative area of color pattern}
 \usage{
 patArea(rList, IDlist, refShape, type, outline = NULL, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, crop = NULL,
+  adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
   flipRaster = NULL, flipOutline = NULL, imageList = NULL)
 }
 \arguments{

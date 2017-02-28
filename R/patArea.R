@@ -35,7 +35,7 @@
 #' @export
 
 
-patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, crop = NULL, flipRaster = NULL, flipOutline = NULL, imageList = NULL){
+patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL){
 
 
 
@@ -109,12 +109,6 @@ patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NUL
 
       if(flipOutline == 'x'){
         outlineTrans[,1] = rasterEx[2] - outlineTrans[,1] + rasterEx[1]
-
-        if(!is.null(cartoonLinesTrans)){
-          for(e in 1:length(cartoonLinesTrans)){
-            cartoonLinesTrans[[e]][,1] <- rasterEx[2] - cartoonLinesTrans[[e]][,1] + rasterEx[1]
-          }
-        }
       }
 
       if(flipOutline == 'y'){

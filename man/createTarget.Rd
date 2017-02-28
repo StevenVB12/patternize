@@ -10,7 +10,7 @@ createTarget(outline, image, res = 300, colorFill = "black",
 \arguments{
 \item{outline}{xy coordinates that define outline.}
 
-\item{image}{Image used in the analysis. This is used to extract the extent and dimensions for the raster layers.}
+\item{image}{Image imported as RasterStack used in the analysis. This is used to extract the extent and dimensions for the raster layers.}
 
 \item{res}{Resolution for RasterStack (default = 300).}
 

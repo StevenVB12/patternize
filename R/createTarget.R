@@ -1,7 +1,7 @@
 #' Create a target image (RasterStack) from a polygon.
 #'
 #' @param outline xy coordinates that define outline.
-#' @param image Image used in the analysis. This is used to extract the extent and dimensions for the raster layers.
+#' @param image Image imported as RasterStack used in the analysis. This is used to extract the extent and dimensions for the raster layers.
 #' @param res Resolution for RasterStack (default = 300).
 #' @param colorFill Color for the fill of the polygon (default = 'black').
 #' @param ColorBG Color for the background (default = 'white').
