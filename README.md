@@ -10,5 +10,4 @@ Installation of the R-package patternize from GitHub using devtools:
 install.packages("devtools")
 library(devtools)
 install_github("StevenVB12/patternize"
-
 ```
