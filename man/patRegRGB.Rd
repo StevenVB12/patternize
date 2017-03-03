@@ -2,7 +2,7 @@
 % Please edit documentation in R/patRegRGB.R
 \name{patRegRGB}
 \alias{patRegRGB}
-\title{Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.}
+\title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.}
 \usage{
 patRegRGB(sampleList, target, RGB, resampleFactor = NULL,
   useBlockPercentage = 75, colOffset = 0, crop = c(0, 0, 0, 0),
@@ -40,16 +40,21 @@ patRegRGB(sampleList, target, RGB, resampleFactor = NULL,
 List of raster objects.
 }
 \description{
-Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
+Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
 extension <- '.jpg'
+
 imageList <- makeList(IDlist, 'image', prepath, extension)
+
 target <- imageList[[1]]
+
 RGB <- c(114,17,0)
-rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
+
+rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10,
+colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 
 }
 

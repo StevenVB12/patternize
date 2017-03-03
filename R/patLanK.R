@@ -56,9 +56,9 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
 
   else{
 
-    if(exists(landmarkList[[transformRef]])){
+    if(exists(landList[[transformRef]])){
 
-      e <- which(names(landmarks) == transformRef)
+      e <- which(names(landList) == transformRef)
       refShape <- lanArray[e]
     }
 
@@ -167,7 +167,7 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
 
       mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
-      mapDFs <- subset(mapDF, layer == TRUE)
+      mapDFs <- raster::subset(mapDF, layer == TRUE)
 
       invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, lanArray[,,n], type = transformType)))
 
@@ -187,7 +187,7 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
       rasterListInd[[e]] <- patternRaster
     # }
 
-    rasterList[[names(landmarkList)[n]]] <- rasterListInd
+    rasterList[[names(landList)[n]]] <- rasterListInd
     }
   }
 

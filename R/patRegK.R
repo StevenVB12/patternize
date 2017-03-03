@@ -1,4 +1,4 @@
-#' Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using k-means clustering.
+#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.
 #'
 #' @param sampleList List of RasterStack objects.
 #' @param target Image imported as RasterStack used as target for registration.
@@ -19,9 +19,13 @@
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '.jpg'
+#'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
+#'
 #' target <- imageList[[1]]
-#' rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = 100, plot = TRUE)
+#'
+#' rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10,
+#' crop = c(1000,4000,400,2500), removebg = 100, plot = TRUE)
 #'
 #' @export
 

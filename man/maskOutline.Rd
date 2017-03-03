@@ -5,8 +5,8 @@
 \title{Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.}
 \usage{
 maskOutline(RasterStack, outline, refShape, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
-  flipRaster = NULL, flipOutline = NULL, imageList = NULL)
+  adjustCoords = FALSE, cartoonID = NULL, IDlist = NULL, crop = c(0, 0,
+  0, 0), flipRaster = NULL, flipOutline = NULL, imageList = NULL)
 }
 \arguments{
 \item{RasterStack}{RasterStack to be masked.}
@@ -20,6 +20,8 @@ maskOutline(RasterStack, outline, refShape, landList = NULL,
 \item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn.}
+
+\item{IDlist}{List of sample IDs should be specified when refShape is 'mean'.}
 
 \item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.}
 
@@ -35,7 +37,8 @@ Intersects a RasterStack with an outline. Everything outside of the outline will
 \examples{
 
 data(imageList)
-outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+'/BC0077_outline.txt', sep=''), h= F)
 
 masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipOutline = 'y')
 

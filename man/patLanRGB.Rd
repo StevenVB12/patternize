@@ -7,7 +7,7 @@
 patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
   crop = FALSE, cropOffset = NULL, res = 300,
   transformRef = "meanshape", transformType = "tps", adjustCoords = FALSE,
-  plot = FALSE, focal = FALSE, sigma = 3)
+  plot = FALSE, focal = FALSE, sigma = 3, iterations = 0)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -50,13 +50,15 @@ Aligns images usings transformations obtained from fixed landmarks and extracts 
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
 extension <- '_landmarks_LFW.txt'
+
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
 extension <- '.JPG'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
 RGB <- c(114,17,0)
-rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3, colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
+rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3,
+colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
 
 }
 

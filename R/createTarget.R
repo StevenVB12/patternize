@@ -4,15 +4,18 @@
 #' @param image Image imported as RasterStack used in the analysis. This is used to extract the extent and dimensions for the raster layers.
 #' @param res Resolution for RasterStack (default = 300).
 #' @param colorFill Color for the fill of the polygon (default = 'black').
-#' @param ColorBG Color for the background (default = 'white').
+#' @param colorBG Color for the background (default = 'white').
 #' @param sigma Size of sigma for Gaussian blurring (default = 10).
 #' @param plot Whether to plot the created target image (default = FALSE).
 #'
 #' @return RasterStack
 #'
 #' @examples
-#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+#' '/BC0077_outline.txt', sep=''), h= F)
+#'
 #' data(imageList)
+#'
 #' target <- createTarget(outline_BC0077, imageList[[1]], plot =  TRUE)
 #'
 #' @export
@@ -32,7 +35,7 @@ createTarget <- function(outline, image, res = 300, colorFill = 'black', colorBG
 
   outline[,2] <- rasterEx[4] - outline[,2]
 
-  poly <- sp::Polygons(list(Polygon(outline)),paste("r"))
+  poly <- sp::Polygons(list(sp::Polygon(outline)),paste("r"))
 
   polyList  <- c(poly)
   polyNames <- c(paste("r"))

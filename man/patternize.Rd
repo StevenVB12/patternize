@@ -20,16 +20,16 @@ The package has four main functions depending on how you want the alignment of t
    Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.
 
 \code{patRegRGB} \cr
-   Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
+   Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
 
 \code{patRegK} \cr
-   Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using k-means clustering.
+   Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.
 }
 
 \section{patternize preprocessing functions}{
 
 
-The input for the main patternize functions are \code{\link[raster]{RasterStack}} objects and when landmark transformation is used, landmark arrays.
+The input for the main patternize functions are \code{RasterStack} objects and when landmark transformation is used, landmark arrays.
 
 \code{makeList} \cr
    This function returns a list of RasterStacks or a list of landmarks depending on the input provided.
@@ -58,7 +58,7 @@ The input for the main patternize functions are \code{\link[raster]{RasterStack}
 
 
 \code{redRes} \cr
-   Reduces the resolution of the \code{\link[raster]{RasterStack}} objects to speed up analysis.
+   Reduces the resolution of the \code{RasterStack} objects to speed up analysis.
 
 \code{kImage} \cr
    Performs k-means clustering of images.
@@ -71,5 +71,8 @@ The input for the main patternize functions are \code{\link[raster]{RasterStack}
 }
 \author{
 Steven M. Van Belleghem
+}
+\seealso{
+\code{\link[raster]{raster}}, \code{\link[raster]{stack}}, \code{\link[Morpho]{procSym}}, \code{\link[Morpho]{computeTransform}}, \code{\link[RNiftyReg]{niftyreg}}
 }
 

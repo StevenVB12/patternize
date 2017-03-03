@@ -1,4 +1,4 @@
-#' Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
+#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
 #'
 #' @param sampleList List of RasterStack objects.
 #' @param target Image imported as RasterStack used as target for registration.
@@ -20,10 +20,15 @@
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '.jpg'
+#'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
+#'
 #' target <- imageList[[1]]
+#'
 #' RGB <- c(114,17,0)
-#' rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
+#'
+#' rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10,
+#' colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 #'
 #' @export
 #' @import raster

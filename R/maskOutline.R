@@ -6,6 +6,7 @@
 #' @param landList Landmark list to be given when type = 'mean'.
 #' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
+#' @param IDlist List of sample IDs should be specified when refShape is 'mean'.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
 #' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
@@ -14,14 +15,15 @@
 #' @examples
 #'
 #' data(imageList)
-#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+#' '/BC0077_outline.txt', sep=''), h= F)
 #'
 #' masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipOutline = 'y')
 #'
 #' @export
 #' @import raster
 
-maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL){
+maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, IDlist = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL){
 
   imageEx <- raster::extent(RasterStack)
 
@@ -93,20 +95,20 @@ maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCo
     if(!is.null(flipOutline)){
 
       if(flipOutline == 'x'){
-        outline[,1] = rasterEx[2] - outline[,1] + rasterEx[1]
+        outline[,1] = imageEx[2] - outline[,1] + imageEx[1]
 
 
       }
 
       if(flipOutline == 'y'){
-        outlineTrans[,2] = rasterEx[4] - outlineTrans[,2] + rasterEx[3]
+        outlineTrans[,2] = imageEx[4] - outlineTrans[,2] + imageEx[3]
 
       }
     }
   }
 
 
-  poly <- sp::Polygons(list(Polygon(outline)),paste("r"))
+  poly <- sp::Polygons(list(sp::Polygon(outline)),paste("r"))
 
   polyList  <- c(poly)
   polyNames <- c(paste("r"))
@@ -115,18 +117,6 @@ maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCo
 
   r <- raster::raster(imageEx, nrow=dim(RasterStack)[1], ncol=dim(RasterStack)[2])
   rr <-raster::rasterize(srdf, r)
-
-
-  # nrCellsOutline  <- raster::freq(rr, value=1)
-
-
-  # outDf <-c()
-
-
-
-  # for(n in 1:length(IDlist)){
-
-    # rast <- rList[[IDlist[[n]]]]
 
   if(!is.null(flipRaster)){
     if(flipRaster == 'x'){
@@ -145,22 +135,6 @@ maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCo
   RasterStack[is.na(RasterStack)] <- 0
 
   return(RasterStack)
-
-
-#
-#     rast[rast == 0] <- NA
-#     rast <- raster::resample(rast,rr, method='ngb')
-#
-#     nrCells  <- raster::freq(rast, value=1)
-#
-#     outDf <- rbind(outDf, c(IDlist[[n]], nrCells/nrCellsOutline))
-#   }
-#
-#   outDf <- as.data.frame(outDf)
-#   colnames(outDf) <- c('SampleId','Area')
-#   outDf$Area <- as.numeric(as.character(outDf$Area))
-#
-#   return(outDf)
 }
 
 

@@ -16,11 +16,11 @@ createTarget(outline, image, res = 300, colorFill = "black",
 
 \item{colorFill}{Color for the fill of the polygon (default = 'black').}
 
+\item{colorBG}{Color for the background (default = 'white').}
+
 \item{sigma}{Size of sigma for Gaussian blurring (default = 10).}
 
 \item{plot}{Whether to plot the created target image (default = FALSE).}
-
-\item{ColorBG}{Color for the background (default = 'white').}
 }
 \value{
 RasterStack
@@ -29,8 +29,11 @@ RasterStack
 Create a target image (RasterStack) from a polygon.
 }
 \examples{
-outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+'/BC0077_outline.txt', sep=''), h= F)
+
 data(imageList)
+
 target <- createTarget(outline_BC0077, imageList[[1]], plot =  TRUE)
 
 }

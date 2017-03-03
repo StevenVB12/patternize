@@ -22,19 +22,21 @@
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '_landmarks_LFW.txt'
+#'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
 #' extension <- '.JPG'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' RGB <- c(114,17,0)
-#' rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3, colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
+#' rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3,
+#' colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
 #' @import raster
 
 
-patLanRGB <- function(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
+patLanRGB <- function(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3, iterations = 0){
 
   rasterList <- list()
 
@@ -136,7 +138,7 @@ patLanRGB <- function(sampleList, landList, RGB, resampleFactor = NULL, colOffse
 
     mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
-    mapDFs <- subset(mapDF, layer == TRUE)
+    mapDFs <- raster::subset(mapDF, layer == TRUE)
 
     invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, lanArray[,,n], type = transformType)))
 

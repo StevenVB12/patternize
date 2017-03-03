@@ -2,11 +2,11 @@ Package: patternize
 Title: An R package for quantifying color pattern variation
 Version: 0.0.0.9000
 Authors@R: person("Steven", "Van Belleghem", email = "vanbelleghemsteven@hotmail.com", role = c("aut", "cre"))
-Description: patternize is an R package that quantifies variation in color
-    patterns as obtained from image data. patternize defines homology between
-    pattern positions across specimens either through fixed landmarks or image
+Description: Patternize is an R package that quantifies variation in color
+    patterns as obtained from image data. Patternize defines homology between
+    pattern positions across images either through fixed landmarks or image
     registration. Pattern identification is performed by categorizing the
-    distribution of colors using either an RGB threshold or an unsupervised image
+    distribution of colors using either an RGB threshold or unsupervised image
     segmentation.
 BugReports: https://github.com/StevenVB12/patternize/issues
 URL: https://github.com/StevenVB12/patternize
@@ -14,9 +14,8 @@ Depends:
     R (>= 3.2.2)
 Imports:
     raster,
-    rgdal,
+    sp,
     RNiftyReg,
-    mmand,
     abind,
     Morpho
 License: GPL-3

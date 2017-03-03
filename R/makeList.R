@@ -30,10 +30,10 @@ makeList <- function(IDlist, type, prepath = NULL, extension = NULL){
     if(type == 'landmark'){
 
       if(is.null(prepath)){
-        landmarks <- read.table(paste(IDlist[n], extension, sep=''), h= F)
+        landmarks <- read.table(paste(IDlist[n], extension, sep=''), header = FALSE)
       }
       else{
-        landmarks <- read.table(paste(prepath,'/',IDlist[n], extension, sep=''), h= F)
+        landmarks <- read.table(paste(prepath,'/',IDlist[n], extension, sep=''), header = FALSE)
       }
 
       landmarks <- as.matrix(landmarks)

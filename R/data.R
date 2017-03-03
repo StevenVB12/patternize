@@ -1,6 +1,6 @@
 #' @title imageList
 #' @description List of RasterStacks as returned by \code{makeList}.
-#' @format A list of 5 \code{\link[raster]{RasterStack}} of Heliconius erato hydara dorsal forewings.
+#' @format A list of 5 \code{RasterStack} objects of Heliconius erato hydara dorsal forewings.
 #' @examples
 #' \dontrun{
 #' data(imageList)

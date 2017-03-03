@@ -15,6 +15,8 @@ patArea(rList, IDlist, refShape, type, outline = NULL, landList = NULL,
 
 \item{refShape}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape using landmark transformation.}
 
+\item{type}{Type of rasterlist; 'RGB' or 'k' (result from RGB or k-means analysis, respectively).}
+
 \item{outline}{xy coordinates that define outline.}
 
 \item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
@@ -43,16 +45,28 @@ data(rasterList_regK)
 data(imageList)
 
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
-outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+'/BC0077_outline.txt', sep=''), h= F)
 prepath <- system.file("extdata", package = 'patternize')
 extension <- '_landmarks_LFW.txt'
+
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
+
 summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
 
-patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB', outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
-patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB', outline = outline_BC0077,  crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
-patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k', outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
-patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k', outline = outline_BC0077,  crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
+patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB', outline = outline_BC0077,
+landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
+
+patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB', outline = outline_BC0077,
+crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+flipRaster = 'xy')
+
+patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k', outline = outline_BC0077,
+landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
+
+patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k', outline = outline_BC0077,
+crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+flipRaster = 'xy')
 
 }
 

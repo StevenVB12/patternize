@@ -72,37 +72,58 @@ Plots the color pattern heatmaps from \code{sumRaster} output.
 \examples{
 data(rasterList_lanRGB)
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
-outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
-lines_BC0077 <- list.files(path=paste(system.file("extdata",  package = 'patternize')), pattern='vein', full.names = T)
-
+outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+'/BC0077_outline.txt', sep=''), header = FALSE)
+lines_BC0077 <- list.files(path=paste(system.file("extdata",  package = 'patternize')),
+pattern='vein', full.names = T)
 
 summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 data(imageList)
-plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'x', flipOutline = 'y', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'y', flipOutline = 'x', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
-#plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipOutline = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'registration_example')
 
-#data(rasterList_lanK)
-#IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
-#summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
-#plotHeat(summedRasterList, IDlist)
+plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target',
+outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
+flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
+cartoonFill = 'black', main = 'registration_example')
 
-#summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, refShape = 'k')
-#plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
+data(rasterList_lanK)
+IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
+plotHeat(summedRasterList, IDlist)
 
-#plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target', outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500), flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonFill = 'black', main = 'kmeans_example')
+summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, refShape = 'k')
+plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, refShape = 'target',
+outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
+flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
+cartoonFill = 'black', main = 'kmeans_example')
+
+plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target',
+outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
+flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
+cartoonFill = 'black', main = 'kmeans_example')
 
 
 prepath <- system.file("extdata", package = 'patternize')
 extension <- '_landmarks_LFW.txt'
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
+
 summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
-plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+
+plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, refShape = 'mean',
+outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList,
+adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 
 summedRaster_lanK <- sumRaster(rasterList_lanK, IDlist, type = 'k')
-plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
-plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, refShape = 'mean', outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+
+plotHeat(summedRaster_lanK, IDlist, plotCartoon = TRUE, refShape = 'mean',
+outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList,
+adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
+
+plotHeat(summedRaster_lanK[[2]], IDlist, plotCartoon = TRUE, refShape = 'mean',
+outline = outline_BC0077, lines = lines_BC0077, landList = landmarkList,
+adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/patRegK.R
 \name{patRegK}
 \alias{patRegK}
-\title{Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using k-means clustering.}
+\title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.}
 \usage{
 patRegK(sampleList, target, k = 3, resampleFactor = NULL,
   useBlockPercentage = 75, crop = c(0, 0, 0, 0), removebgR = NULL,
@@ -38,15 +38,19 @@ patRegK(sampleList, target, k = 3, resampleFactor = NULL,
 List of rasters for each k-means cluster objects.
 }
 \description{
-Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using k-means clustering.
+Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
 extension <- '.jpg'
+
 imageList <- makeList(IDlist, 'image', prepath, extension)
+
 target <- imageList[[1]]
-rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10, crop = c(1000,4000,400,2500), removebg = 100, plot = TRUE)
+
+rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10,
+crop = c(1000,4000,400,2500), removebg = 100, plot = TRUE)
 
 }
 

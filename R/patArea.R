@@ -3,6 +3,7 @@
 #' @param rList List of RasterLayers as obtained from the main patternize functions.
 #' @param IDlist List of sample IDs.
 #' @param refShape This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape using landmark transformation.
+#' @param type Type of rasterlist; 'RGB' or 'k' (result from RGB or k-means analysis, respectively).
 #' @param outline xy coordinates that define outline.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
@@ -21,16 +22,28 @@
 #' data(imageList)
 #'
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
-#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'), '/BC0077_outline.txt', sep=''), h= F)
+#' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
+#' '/BC0077_outline.txt', sep=''), h= F)
 #' prepath <- system.file("extdata", package = 'patternize')
 #' extension <- '_landmarks_LFW.txt'
+#'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
+#'
 #' summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
 #'
-#' patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB', outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
-#' patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB', outline = outline_BC0077,  crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
-#' patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k', outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
-#' patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k', outline = outline_BC0077,  crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
+#' patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB', outline = outline_BC0077,
+#' landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
+#'
+#' patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB', outline = outline_BC0077,
+#' crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+#' flipRaster = 'xy')
+#'
+#' patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k', outline = outline_BC0077,
+#' landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
+#'
+#' patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k', outline = outline_BC0077,
+#' crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
+#' flipRaster = 'xy')
 #'
 #' @export
 
@@ -131,7 +144,7 @@ patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NUL
     if(type == 'k'){
       newRaster <- raster::resample(rList[[IDlist[[1]]]][[1]], rRe)
     }
-    poly <- sp::Polygons(list(Polygon(outlineTrans)),paste("r"))
+    poly <- sp::Polygons(list(sp::Polygon(outlineTrans)),paste("r"))
 
   }
 
@@ -150,7 +163,7 @@ patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NUL
       newRaster <- raster::resample(rList[[IDlist[[1]]]][[1]], rRe)
     }
 
-    poly <- sp::Polygons(list(Polygon(outline)),paste("r"))
+    poly <- sp::Polygons(list(sp::Polygon(outline)),paste("r"))
 
   }
 
