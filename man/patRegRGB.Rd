@@ -2,9 +2,9 @@
 % Please edit documentation in R/patRegRGB.R
 \name{patRegRGB}
 \alias{patRegRGB}
-\title{Image registration with RGB color extraction.}
+\title{Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.}
 \usage{
-patRegRGB(sampleList, target, RGB, resampleFactor = 1,
+patRegRGB(sampleList, target, RGB, resampleFactor = NULL,
   useBlockPercentage = 75, colOffset = 0, crop = c(0, 0, 0, 0),
   removebgR = NULL, maskOutline = NULL, plot = FALSE, focal = FALSE,
   sigma = 3, iterations = 0)
@@ -12,13 +12,13 @@ patRegRGB(sampleList, target, RGB, resampleFactor = 1,
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
 
-\item{target}{Image used as target for registration.}
+\item{target}{Image imported as RasterStack used as target for registration.}
 
-\item{RGB}{RGB values for color pattern extraction specified as vector.}
+\item{RGB}{Values for color pattern extraction specified as RGB vector.}
 
-\item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
+\item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}} (default = NULL).}
 
-\item{useBlockPercentage}{Block percentage as used in NiftyReg.}
+\item{useBlockPercentage}{Block percentage as used in \code{\link[RNiftyReg]{niftyreg}} (default = 75).}
 
 \item{colOffset}{Color offset for color pattern extraction (default = 0).}
 
@@ -34,13 +34,13 @@ patRegRGB(sampleList, target, RGB, resampleFactor = 1,
 
 \item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 
-\item{iterations}{Number of iterations for recalculating average color.}
+\item{iterations}{Number of iterations for recalculating average color (default = 0). If set the RGB value for pattern extraction will be iteratively recalculated to be the average of the extracted area. This may improve extraction of distinct color pattern, but fail for more gradually distributed (in color space) patterns.}
 }
 \value{
 List of raster objects.
 }
 \description{
-Image registration with RGB color extraction.
+Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
@@ -49,7 +49,7 @@ extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 target <- imageList[[1]]
 RGB <- c(114,17,0)
-rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
+rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 
 }
 

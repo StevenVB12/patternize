@@ -2,15 +2,17 @@
 % Please edit documentation in R/patLanK.R
 \name{patLanK}
 \alias{patLanK}
-\title{Color pattern quantification using landmarks and k-means clustering for color extraction.}
+\title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.}
 \usage{
-patLanK(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE,
+patLanK(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE,
   cropOffset = NULL, res = 300, transformRef = "meanshape",
   transformType = "tps", removebgK = NULL, adjustCoords = FALSE,
   plot = FALSE, focal = FALSE, sigma = 3)
 }
 \arguments{
-\item{imageList}{List of RasterStack objects.}
+\item{sampleList}{List of RasterStack objects.}
+
+\item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
 
 \item{k}{Integere for defining number of k-means clusters (default = 3).}
 
@@ -24,25 +26,23 @@ patLanK(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE,
 
 \item{transformRef}{ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
 
-\item{transformType}{(default ='tps')}
+\item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').}
 
 \item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.}
 
-\item{adjustCoords}{Adjust coordinates.}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
 
 \item{focal}{Whether to perform Gaussian blurring (default = FALSE).}
 
 \item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
-
-\item{lanArray}{Landmark array.}
 }
 \value{
 List of summed raster for each k-means cluster objects.
 }
 \description{
-Color pattern quantification using landmarks and k-means clustering for color extraction.
+Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')

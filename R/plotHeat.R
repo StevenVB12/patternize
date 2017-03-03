@@ -1,4 +1,4 @@
-#' Plot heatmap from summed rasterList
+#' Plots the color pattern heatmaps from \code{sumRaster} output.
 #'
 #' @param summedRaster Summed raster or summedRasterList.
 #' @param IDlist List of sample IDs.
@@ -19,8 +19,10 @@
 #' @param lineOrder Whether to plot the cartoon lines 'above' or 'under' the pattern raster (default = 'above').
 #' @param cartoonCol Outline and line color for cartoon (deafault = 'gray').
 #' @param cartoonFill Fill color for outline of cartoon (default = NULL).
+#' @param plotLandmarks Whether to plot the landmarks from the target image or mean shape landmarks (default = FALSE).
+#' @param landCol Color for ploting landmarks (default = 'black').
 #' @param zlim z-axis limit (default = c(0,1))
-#' @param legend.title Title of the raster legend (default = 'Proportion')
+#' @param legendTitle Title of the raster legend (default = 'Proportion')
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
 #' @param main Optional main title.
@@ -63,7 +65,7 @@
 #' @export
 #' @import raster
 
-plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, zlim = c(0,1), legend.title = 'Proportion', xlab='', ylab='', main=''){
+plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, plotLandmarks = FALSE, landCol = 'black', zlim = c(0,1), legendTitle = 'Proportion', xlab='', ylab='', main=''){
 
   if(!is.list(summedRaster)){
 
@@ -377,7 +379,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     }
 
 
-    plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legend.title, side=4, line=3), add= TRUE)
+    plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3), add= TRUE)
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)
 
@@ -418,6 +420,15 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
             lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
           }
         }
+      }
+    }
+
+    if(plotLandmarks){
+      if(refShape == 'target'){
+        points(as.matrix(landArray[,,indx]), pch = 19, col = landCol)
+      }
+      if(refShape =='mean'){
+        points(transformed$mshape, pch = 19, col = landCol)
       }
     }
   }
@@ -552,6 +563,20 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
               lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM)
             }
           }
+
+          if(plotLandmarks){
+
+            points(transformed$mshape, pch = 19, col = landCol)
+          }
+        }
+      }
+
+      if(plotLandmarks){
+        if(refShape == 'target'){
+          points(as.matrix(landArray[,,indx]), pch = 19, col = landCol)
+        }
+        if(refShape =='mean'){
+          points(transformed$mshape, pch = 19, col = landCol)
         }
       }
     }

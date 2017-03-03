@@ -9,7 +9,7 @@ lanArray(sampleList, adjustCoords = FALSE, imageList = NULL)
 \arguments{
 \item{sampleList}{List of landmark matrices as returned by \code{\link{makeList}}.}
 
-\item{adjustCoords}{Adjust the coordinates of the landmarks if the image has different pixel coordinates (default = FALSE).}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
 
 \item{imageList}{List of RasterStacks as returned by \code{\link{makeList}} should be given when \code{adjustCoords = TRUE}.}
 }

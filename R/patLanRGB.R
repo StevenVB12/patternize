@@ -1,7 +1,7 @@
-#' Color pattern quantification using landmarks and RGB color extraction.
+#' Aligns images usings transformations obtained from fixed landmarks and extracts colors using a predefined RGB values and cutoff value.
 #'
-#' @param imageList List of RasterStack objects.
-#' @param landmarkList Landmark landmarkList.
+#' @param sampleList List of RasterStack objects.
+#' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param colOffset Color offset for color pattern extraction (default = 0).
@@ -9,8 +9,8 @@
 #' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).
 #' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
-#' @param transformType (default ='tps')
-#' @param adjustCoords Adjust landmark coordinates.
+#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -34,21 +34,21 @@
 #' @import raster
 
 
-patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
+patLanRGB <- function(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
 
   rasterList <- list()
 
-  if(length(imageList) != length(landmarkList)){
-    stop("imageList is not of the same length as lanArray")
+  if(length(sampleList) != length(landList)){
+    stop("sampleList is not of the same length as lanArray")
   }
 
-  for(n in 1:length(imageList)){
-    if(names(imageList)[n] != names(landmarkList)[n]){
-      stop("samples are not in the same order in imageList and lanArray")
+  for(n in 1:length(sampleList)){
+    if(names(sampleList)[n] != names(landList)[n]){
+      stop("samples are not in the same order in sampleList and lanArray")
     }
   }
 
-  lanArray <- lanArray(landmarkList, adjustCoords, imageList)
+  lanArray <- lanArray(landList, adjustCoords, sampleList)
 
   if(is.matrix(transformRef)){
 
@@ -66,9 +66,9 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
 
     else{
 
-      if(transformRef %in% names(landmarkList)){
+      if(transformRef %in% names(landList)){
 
-        e <- which(names(landmarkList) == transformRef)
+        e <- which(names(landList) == transformRef)
         refShape <- lanArray[,,e]
       }
 
@@ -78,9 +78,9 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
     }
   }
 
-  for(n in 1:length(imageList)){
+  for(n in 1:length(sampleList)){
 
-    image <- imageList[[n]]
+    image <- sampleList[[n]]
     extRaster <- raster::extent(image)
 
     if(crop){
@@ -97,7 +97,9 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
       image <- raster::crop(image, extRaster)
     }
 
-    image <- redRes(image, resampleFactor)
+    if(!is.null(resampleFactor)){
+      image <- redRes(image, resampleFactor)
+    }
 
     if(focal){
       gf <- focalWeight(image, sigma, "Gauss")
@@ -152,11 +154,11 @@ patLanRGB <- function(imageList, landmarkList, RGB, resampleFactor = 1, colOffse
       }
 
       par(new=T)
-      plot(patternRaster, col=rgb(1,0,0,alpha=1/length(imageList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+      plot(patternRaster, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
     }
 
 
-    rasterList[[names(landmarkList)[n]]] <- patternRaster
+    rasterList[[names(landList)[n]]] <- patternRaster
   }
 
 

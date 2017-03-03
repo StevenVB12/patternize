@@ -1,8 +1,8 @@
-#' sum rasterlist for set of samples
+#' This function sums the individual color pattern RasterLayes as obtained by the main patternize functions.
 #'
-#' @param rList List of raster objects.
+#' @param rList List of RasterLayers or list of RasterLayers for each k-means cluster.
 #' @param IDlist List of sample IDs.
-#' @param type Type of rasterlist; simple (RGB) or nested (k) (result from RGB or k-means analysis, respectively)
+#' @param type Type of rasterlist; 'RGB' or 'k' (result from RGB or k-means analysis, respectively).
 #'
 #' @examples
 #' data(rasterList_lanRGB)

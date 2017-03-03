@@ -2,7 +2,7 @@
 % Please edit documentation in R/maskOutline.R
 \name{maskOutline}
 \alias{maskOutline}
-\title{Mask everything in RasterStack that is outside of the outline.}
+\title{Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.}
 \usage{
 maskOutline(RasterStack, outline, refShape, landList = NULL,
   adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
@@ -15,9 +15,9 @@ maskOutline(RasterStack, outline, refShape, landList = NULL,
 
 \item{refShape}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)}
 
-\item{landList}{landmark list to be given when type = 'mean'.}
+\item{landList}{Landmark list to be given when type = 'mean'.}
 
-\item{adjustCoords}{Adjust landmark coordinates.}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn.}
 
@@ -27,10 +27,10 @@ maskOutline(RasterStack, outline, refShape, landList = NULL,
 
 \item{flipOutline}{Whether to flip plot along x, y or xy axis.}
 
-\item{imageList}{List of image should be given if one wants to flip the outline or adjust landmark coordinates.}
+\item{imageList}{List of image as obtained from \code{\link[patternize]{makeList}} should be given if one wants to flip the outline or adjust landmark coordinates.}
 }
 \description{
-Mask everything in RasterStack that is outside of the outline.
+Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.
 }
 \examples{
 

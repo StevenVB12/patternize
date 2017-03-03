@@ -1,17 +1,18 @@
-#' Image registration with RGB color extraction.
+#' Aligns images using \code{\link[RNiftyReg]{RNiftyReg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
 #'
 #' @param sampleList List of RasterStack objects.
-#' @param target Image used as target for registration.
-#' @param RGB RGB values for color pattern extraction specified as vector.
-#' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
-#' @param useBlockPercentage Block percentage as used in NiftyReg.
+#' @param target Image imported as RasterStack used as target for registration.
+#' @param RGB Values for color pattern extraction specified as RGB vector.
+#' @param resampleFactor Integer for downsampling used by \code{\link{redRes}} (default = NULL).
+#' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}} (default = 75).
 #' @param colOffset Color offset for color pattern extraction (default = 0).
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.
-#' @param removebg Whether to remove white background for image registration (default = FALSE).
+#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.
+#' @param maskOutline When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
-#' @param iterations Number of iterations for recalculating average color.
+#' @param iterations Number of iterations for recalculating average color (default = 0). If set the RGB value for pattern extraction will be iteratively recalculated to be the average of the extracted area. This may improve extraction of distinct color pattern, but fail for more gradually distributed (in color space) patterns.
 #'
 #' @return List of raster objects.
 #'
@@ -22,28 +23,30 @@
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #' target <- imageList[[1]]
 #' RGB <- c(114,17,0)
-#' rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebg = TRUE, plot = TRUE)
+#' rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10, colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 #'
 #' @export
 #' @import raster
 
-patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPercentage = 75, colOffset=0, crop = NULL, removebg = FALSE, plot = FALSE, focal =  FALSE, sigma = 3, iterations = 0){
+patRegRGB <- function(sampleList, target, RGB, resampleFactor = NULL, useBlockPercentage = 75, colOffset=0, crop = c(0,0,0,0), removebgR = NULL, maskOutline = NULL, plot = FALSE, focal =  FALSE, sigma = 3, iterations = 0){
 
   rasterList <- list()
 
-  if(!is.null(crop)){
+  if(!identical(crop, c(0,0,0,0))){
 
     targetExtRaster <- crop
     target <- raster::crop(target, targetExtRaster)
-
   }
 
-  target <- redRes(target, resampleFactor)
-  target <- raster::as.array(target)
-  target <- apply(target,1:2,mean)
+  if(!is.null(resampleFactor)){
+    target <- redRes(target, resampleFactor)
+  }
 
-  if(removebg){
-    target <- apply(target, 1:2, function(x) ifelse(x>100,0, x))
+  target <- apply(raster::as.array(target),1:2,mean)
+
+  if(is.numeric(removebgR)){
+
+    target <- apply(target, 1:2, function(x) ifelse(x > removebgR,0, x))
   }
 
   for(n in 1:length(sampleList)){
@@ -51,7 +54,7 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
     sStack <- sampleList[[n]]
     extRaster <- raster::extent(sStack)
 
-    if(!is.null(crop)){
+    if(!identical(crop, c(0,0,0,0))){
 
       extRaster <- crop
       sStack <- crop(sStack, extRaster)
@@ -70,16 +73,18 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
       sourceRaster <- raster::stack(rrr1, rrr2, rrr3)
     }
 
-    source <- raster::as.array(sourceRaster)
-    sourceR <- apply(source,1:2,mean)
+    sourceRasterK <- sourceRaster
 
-    if(removebg){
-      sourceR <- apply(sourceR, 1:2, function(x) ifelse(x>100,0, x))
+    sourceRaster <- apply(raster::as.array(sourceRaster),1:2,mean)
+
+    if(is.numeric(removebgR)){
+
+      sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR,0, x))
     }
 
-    result <- RNiftyReg::niftyreg(sourceR, target, useBlockPercentage=useBlockPercentage, estimateOnly = TRUE)
+    result <- RNiftyReg::niftyreg(sourceRaster, target, useBlockPercentage=useBlockPercentage)
 
-    map <- apply(source, 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+    map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
     x <- 1
     while(x <= iterations){
@@ -89,23 +94,27 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
       extent(mapRaster) <- extRaster
       mapRaster[mapRaster == 0] <- NA
 
-      mapMASK<-raster::mask(sourceRaster, mapRaster)
+      mapMASK<-raster::mask(sourceRasterK, mapRaster)
 
       RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
                mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
                mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
 
-      map <- apply(source, 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+      map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
     }
 
     transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), map, interpolation=0)
     transformedMapMatrix <- transformedMap[1:nrow(transformedMap),ncol(transformedMap):1]
-    transformedMapMatrix[transformedMapMatrix == 0] <- NA
 
-    r <- raster::raster(transformedMapMatrix)
-    # extRaster <- extent(sourcePicture)etPicture[,,1]
-    raster::extent(r) <- extRaster
+    transRaster <- raster::raster(transformedMapMatrix)
+    raster::extent(transRaster) <- extRaster
+
+    if(!is.null(maskOutline)){
+
+      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop)
+    }
+    transRaster[transRaster == 0] <- NA
 
     if(plot){
 
@@ -114,16 +123,13 @@ patRegRGB <- function(sampleList, target, RGB, resampleFactor = 1, useBlockPerce
       }
 
       par(new=T)
-      plot(r, col=rgb(1,0,0,alpha=1/length(sampleList)),legend = FALSE)
+      raster::plot(transRaster, col=rgb(1,0,0,alpha=1/length(sampleList)),legend = FALSE)
     }
 
-    rasterList[[names(sampleList)[n]]] <- r
-  }
+    print(names(sampleList)[n])
 
-  #   # Sum raster list
-  #   rasterList$fun <- sum
-  #   rasterList$na.rm <- TRUE
-  #   rrr <- do.call(mosaic,rasterList)
+    rasterList[[names(sampleList)[n]]] <- transRaster
+  }
 
   return(rasterList)
 }

@@ -2,15 +2,16 @@
 % Please edit documentation in R/plotHeat.R
 \name{plotHeat}
 \alias{plotHeat}
-\title{Plot heatmap from summed rasterList}
+\title{Plots the color pattern heatmaps from \code{sumRaster} output.}
 \usage{
 plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   refShape = NULL, outline = NULL, lines = NULL, landList = NULL,
   adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE,
   crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
   imageList = NULL, cartoonOrder = "above", lineOrder = "above",
-  cartoonCol = "gray", cartoonFill = NULL, zlim = c(0, 1),
-  legend.title = "Proportion", xlab = "", ylab = "", main = "")
+  cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
+  landCol = "black", zlim = c(0, 1), legendTitle = "Proportion",
+  xlab = "", ylab = "", main = "")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -51,9 +52,13 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 
 \item{cartoonFill}{Fill color for outline of cartoon (default = NULL).}
 
+\item{plotLandmarks}{Whether to plot the landmarks from the target image or mean shape landmarks (default = FALSE).}
+
+\item{landCol}{Color for ploting landmarks (default = 'black').}
+
 \item{zlim}{z-axis limit (default = c(0,1))}
 
-\item{legend.title}{Title of the raster legend (default = 'Proportion')}
+\item{legendTitle}{Title of the raster legend (default = 'Proportion')}
 
 \item{xlab}{Optional x-axis label.}
 
@@ -62,7 +67,7 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 \item{main}{Optional main title.}
 }
 \description{
-Plot heatmap from summed rasterList
+Plots the color pattern heatmaps from \code{sumRaster} output.
 }
 \examples{
 data(rasterList_lanRGB)

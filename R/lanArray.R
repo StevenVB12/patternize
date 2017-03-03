@@ -1,7 +1,7 @@
 #' Build landmark array for \code{\link[Morpho]{Morpho}}.
 #'
 #' @param sampleList List of landmark matrices as returned by \code{\link{makeList}}.
-#' @param adjustCoords Adjust the coordinates of the landmarks if the image has different pixel coordinates (default = FALSE).
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
 #' @param imageList List of RasterStacks as returned by \code{\link{makeList}} should be given when \code{adjustCoords = TRUE}.
 #'
 #' @return  X x Y x n array, where X and Y define the coordinates of the landmark points and n is the sample size.

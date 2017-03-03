@@ -2,17 +2,17 @@
 % Please edit documentation in R/patLanRGB.R
 \name{patLanRGB}
 \alias{patLanRGB}
-\title{Color pattern quantification using landmarks and RGB color extraction.}
+\title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using a predefined RGB values and cutoff value.}
 \usage{
-patLanRGB(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0,
+patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
   crop = FALSE, cropOffset = NULL, res = 300,
   transformRef = "meanshape", transformType = "tps", adjustCoords = FALSE,
   plot = FALSE, focal = FALSE, sigma = 3)
 }
 \arguments{
-\item{imageList}{List of RasterStack objects.}
+\item{sampleList}{List of RasterStack objects.}
 
-\item{landmarkList}{Landmark landmarkList.}
+\item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
 
 \item{RGB}{RGB values for color pattern extraction specified as vector.}
 
@@ -28,9 +28,9 @@ patLanRGB(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0,
 
 \item{transformRef}{ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
 
-\item{transformType}{(default ='tps')}
+\item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').}
 
-\item{adjustCoords}{Adjust landmark coordinates.}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
 
@@ -44,7 +44,7 @@ patLanRGB(imageList, landmarkList, RGB, resampleFactor = 1, colOffset = 0,
 List of raster objects.
 }
 \description{
-Color pattern quantification using landmarks and RGB color extraction.
+Aligns images usings transformations obtained from fixed landmarks and extracts colors using a predefined RGB values and cutoff value.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')

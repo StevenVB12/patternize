@@ -1,16 +1,16 @@
-#' Color pattern quantification using landmarks and k-means clustering for color extraction.
+#' Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.
 #'
-#' @param imageList List of RasterStack objects.
-#' @param lanArray Landmark array.
+#' @param sampleList List of RasterStack objects.
+#' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param k Integere for defining number of k-means clusters (default = 3).
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param crop Whether to use the landmarks range to crop the image. This can significantly speed up the analysis (default = FALSE).
 #' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).
 #' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
-#' @param transformType (default ='tps')
+#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').
 #' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.
-#' @param adjustCoords Adjust coordinates.
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -31,21 +31,21 @@
 #' @export
 #' @import raster
 #'
-patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebgK = NULL, adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
+patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebgK = NULL, adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
 
   rasterList <- list()
 
-  if(length(imageList) != length(landmarkList)){
+  if(length(sampleList) != length(landList)){
     stop("imageList is not of the same length as lanArray")
   }
 
-  for(n in 1:length(imageList)){
-    if(names(imageList)[n] != names(landmarkList)[n]){
-      stop("samples are not in the same order in imageList and lanArray")
+  for(n in 1:length(sampleList)){
+    if(names(sampleList)[n] != names(landList)[n]){
+      stop("samples are not in the same order in sampleList and lanArray")
     }
   }
 
-  lanArray <- lanArray(landmarkList, adjustCoords, imageList)
+  lanArray <- lanArray(landList, adjustCoords, sampleList)
 
   if(transformRef == 'meanshape'){
 
@@ -67,9 +67,9 @@ patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = F
     }
   }
 
-  for(n in 1:length(imageList)){
+  for(n in 1:length(sampleList)){
 
-    image <- imageList[[n]]
+    image <- sampleList[[n]]
     extRaster <- raster::extent(image)
 
     if(crop){
@@ -86,7 +86,9 @@ patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = F
       image <- raster::crop(image, extRaster)
     }
 
-    imageRaster <- redRes(image, resampleFactor)
+    if(!is.null(resampleFactor)){
+      imageRaster <- redRes(image, resampleFactor)
+    }
 
     if(focal){
       gf <- focalWeight(imageRaster, sigma, "Gauss")
@@ -101,22 +103,22 @@ patLanK <- function(imageList, landmarkList, k = 3, resampleFactor = 1, crop = F
     # image <- raster::as.array(imageRaster)
 
     if(is.vector(removebgK)){
-      
+
       toMask <- apply(raster::as.array(imageRaster), 1:2, function(x) all(x > removebgK))
-      
+
       toMaskR <- raster::raster(as.matrix(toMask))
       raster::extent(toMaskR) <- raster::extent(imageRaster)
       toMaskR[toMaskR == 0] <- NA
-      
+
       imageRaster<-raster::mask(imageRaster, toMaskR, inverse = T)
       imageRaster[is.na(imageRaster)] <- 0
-      
-      
+
+
 
       # imagena <- apply(image, 1:2, function(x) ifelse(all(x>100),NA, x))
       # imagenar <- raster::raster(as.matrix(imagena))
       # extent(imagenar)<-extent(imageRaster)
-      # 
+      #
       # imageMASK<-raster::mask(imageRaster, imagenar)
       # imageMASK[is.na(imageMASK)] <- 0
       # image <- raster::as.array(imageMASK)

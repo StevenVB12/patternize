@@ -45,7 +45,7 @@ The input for the main patternize functions are \code{\link[raster]{RasterStack}
    This function sums the individual color pattern rasters as obtained by the main patternize functions.
 
 \code{plotHeat} \cr
-   Plots the color pattern heatmaps. Uses \code{sumRaster} output.
+   Plots the color pattern heatmaps from \code{sumRaster} output.
 
 \code{patPCA} \cr
    This function transforms the individual color pattern rasters as obtained by the main patternize functions to a dataframe of 0 and 1 values that can be used for Principal Component Analysis (\code{\link[stats]{prcomp}}).

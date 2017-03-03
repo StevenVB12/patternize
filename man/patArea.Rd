@@ -2,24 +2,24 @@
 % Please edit documentation in R/patArea.R
 \name{patArea}
 \alias{patArea}
-\title{Calculate relative area of color pattern}
+\title{This fucntion calculates the area in which the color pattern is expressed in each sample as the relative proportion using the provided outline of the considered trait or structure.}
 \usage{
 patArea(rList, IDlist, refShape, type, outline = NULL, landList = NULL,
   adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
   flipRaster = NULL, flipOutline = NULL, imageList = NULL)
 }
 \arguments{
-\item{rList}{List of raster objects.}
+\item{rList}{List of RasterLayers as obtained from the main patternize functions.}
 
 \item{IDlist}{List of sample IDs.}
 
-\item{refShape}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)}
+\item{refShape}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape using landmark transformation.}
 
 \item{outline}{xy coordinates that define outline.}
 
-\item{landList}{Landmark landmarkList.}
+\item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
 
-\item{adjustCoords}{Adjust landmark coordinates.}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn.}
 
@@ -29,10 +29,10 @@ patArea(rList, IDlist, refShape, type, outline = NULL, landList = NULL,
 
 \item{flipOutline}{Whether to flip plot along x, y or xy axis.}
 
-\item{imageList}{List of image should be given if one wants to flip the outline or adjust landmark coordinates.}
+\item{imageList}{List of images as obtained from \code{\link[patternize]{makeList}} should be given if one wants to flip the outline or adjust landmark coordinates.}
 }
 \description{
-Calculate relative area of color pattern
+This fucntion calculates the area in which the color pattern is expressed in each sample as the relative proportion using the provided outline of the considered trait or structure.
 }
 \examples{
 data(rasterList_lanRGB)

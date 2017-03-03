@@ -2,19 +2,19 @@
 % Please edit documentation in R/sumRaster.R
 \name{sumRaster}
 \alias{sumRaster}
-\title{sum rasterlist for set of samples}
+\title{This function sums the individual color pattern RasterLayes as obtained by the main patternize functions.}
 \usage{
 sumRaster(rList, IDlist, type)
 }
 \arguments{
-\item{rList}{List of raster objects.}
+\item{rList}{List of RasterLayers or list of RasterLayers for each k-means cluster.}
 
 \item{IDlist}{List of sample IDs.}
 
-\item{type}{Type of rasterlist; simple (RGB) or nested (k) (result from RGB or k-means analysis, respectively)}
+\item{type}{Type of rasterlist; 'RGB' or 'k' (result from RGB or k-means analysis, respectively).}
 }
 \description{
-sum rasterlist for set of samples
+This function sums the individual color pattern RasterLayes as obtained by the main patternize functions.
 }
 \examples{
 data(rasterList_lanRGB)
