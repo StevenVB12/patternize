@@ -1,7 +1,8 @@
 #' Create a target image (RasterStack) from a polygon.
 #'
 #' @param outline xy coordinates that define outline.
-#' @param image Image imported as RasterStack used in the analysis. This is used to extract the extent and dimensions for the raster layers.
+#' @param image Image imported as RasterStack used in the analysis. This is used to extract
+#'    the extent and dimensions for the raster layers.
 #' @param res Resolution for RasterStack (default = 300).
 #' @param colorFill Color for the fill of the polygon (default = 'black').
 #' @param colorBG Color for the background (default = 'white').
@@ -12,7 +13,7 @@
 #'
 #' @examples
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
-#' '/BC0077_outline.txt', sep=''), h= F)
+#' '/BC0077_outline.txt', sep=''), header = FALSE)
 #'
 #' data(imageList)
 #'
@@ -21,7 +22,13 @@
 #' @export
 #' @import raster
 
-createTarget <- function(outline, image, res = 300, colorFill = 'black', colorBG = 'white', sigma = 10, plot = FALSE){
+createTarget <- function(outline,
+                         image,
+                         res = 300,
+                         colorFill = 'black',
+                         colorBG = 'white',
+                         sigma = 10,
+                         plot = FALSE){
 
   if(is.character(colorFill)){
     colorFill <- col2rgb(colorFill)

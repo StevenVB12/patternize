@@ -30,7 +30,7 @@ Create a target image (RasterStack) from a polygon.
 }
 \examples{
 outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
-'/BC0077_outline.txt', sep=''), h= F)
+'/BC0077_outline.txt', sep=''), header = FALSE)
 
 data(imageList)
 

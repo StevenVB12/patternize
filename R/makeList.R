@@ -21,7 +21,10 @@
 #' @export
 
 
-makeList <- function(IDlist, type, prepath = NULL, extension = NULL){
+makeList <- function(IDlist,
+                     type,
+                     prepath = NULL,
+                     extension = NULL){
 
   objectList <- list()
 

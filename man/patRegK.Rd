@@ -43,7 +43,7 @@ Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated im
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
-extension <- '.jpg'
+extension <- '.JPG'
 
 imageList <- makeList(IDlist, 'image', prepath, extension)
 

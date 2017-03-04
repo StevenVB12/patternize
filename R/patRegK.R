@@ -1,14 +1,22 @@
-#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.
+#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
+#' and extracts colors using k-means clustering.
 #'
 #' @param sampleList List of RasterStack objects.
 #' @param target Image imported as RasterStack used as target for registration.
 #' @param k Integere for defining number of k-means clusters (default = 3).
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}} (default = NULL).
-#' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}} (default = 75).
-#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.
-#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.
-#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.
-#' @param maskOutline When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).
+#' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
+#'    (default = 75).
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
+#'    original image.
+#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
+#'    pixels with average RGB > 100; default = NULL) for registration analysis. This works only to
+#'    remove a white background.
+#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
+#'    pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove
+#'    a white background.
+#' @param maskOutline When outline is specified, everything outside of the outline will be masked for
+#'    the color extraction (default = NULL).
 #' @param plot Whether to plot k-means clustered image while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -18,7 +26,7 @@
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
-#' extension <- '.jpg'
+#' extension <- '.JPG'
 #'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
@@ -29,7 +37,18 @@
 #'
 #' @export
 
-patRegK <- function(sampleList, target, k = 3, resampleFactor = NULL, useBlockPercentage = 75, crop = c(0,0,0,0), removebgR = NULL, removebgK = NULL, maskOutline = NULL, plot = FALSE, focal =  FALSE, sigma = 3){
+patRegK <- function(sampleList,
+                    target,
+                    k = 3,
+                    resampleFactor = NULL,
+                    useBlockPercentage = 75,
+                    crop = c(0,0,0,0),
+                    removebgR = NULL,
+                    removebgK = NULL,
+                    maskOutline = NULL,
+                    plot = FALSE,
+                    focal =  FALSE,
+                    sigma = 3){
 
   imageList <- sampleList
 

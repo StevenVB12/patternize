@@ -1,16 +1,26 @@
-#' Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.
+#' Aligns images usings transformations obtained from fixed landmarks and extracts colors using
+#' k-means clustering.
 #'
 #' @param sampleList List of RasterStack objects.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param k Integere for defining number of k-means clusters (default = 3).
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
-#' @param crop Whether to use the landmarks range to crop the image. This can significantly speed up the analysis (default = FALSE).
-#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).
-#' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
-#' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
-#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').
-#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.
-#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
+#' @param crop Whether to use the landmarks range to crop the image. This can significantly speed
+#'    up the analysis (default = FALSE).
+#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want
+#'    the cropping to be offset from the landmarks (in case the landmarks do not surround the entire
+#'    color pattern).
+#' @param res Resolution for color pattern raster (default = 300). This should be reduced if the
+#'    number of pixels in the image is lower than th raster.
+#' @param transformRef ID of reference sample for shape to which color patterns will be transformed
+#'    to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
+#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}}
+#'    (default ='tps').
+#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100
+#'    removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only
+#'    to remove a white background.
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
+#'    coordinates (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -26,12 +36,26 @@
 #' extension <- '.JPG'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
-#' rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebgK = TRUE, adjustCoords = TRUE, plot = TRUE)
+#' rasterList_lanK <- patLanK(imageList, landmarkList, k = 4, resampleFactor = 3, crop = TRUE,
+#' res = 150, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
 #' @import raster
 #'
-patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', removebgK = NULL, adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3){
+patLanK <- function(sampleList,
+                    landList,
+                    k = 3,
+                    resampleFactor = NULL,
+                    crop = FALSE,
+                    cropOffset = NULL,
+                    res = 300,
+                    transformRef = 'meanshape',
+                    transformType='tps',
+                    removebgK = NULL,
+                    adjustCoords = FALSE,
+                    plot = FALSE,
+                    focal =  FALSE,
+                    sigma = 3){
 
   rasterList <- list()
 
@@ -112,16 +136,6 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
 
       imageRaster<-raster::mask(imageRaster, toMaskR, inverse = T)
       imageRaster[is.na(imageRaster)] <- 0
-
-
-
-      # imagena <- apply(image, 1:2, function(x) ifelse(all(x>100),NA, x))
-      # imagenar <- raster::raster(as.matrix(imagena))
-      # extent(imagenar)<-extent(imageRaster)
-      #
-      # imageMASK<-raster::mask(imageRaster, imagenar)
-      # imageMASK[is.na(imageMASK)] <- 0
-      # image <- raster::as.array(imageMASK)
     }
 
     # k-means clustering of image
@@ -145,7 +159,7 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
       uniqueCols <- unique(cols)
       x2 <- match(cols, uniqueCols)
       dim(x2) <- dim(x)[1:2]
-      raster::image(t(apply(x2,2,rev)), col=uniqueCols,yaxt='n', xaxt='n')
+      raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
     }
 
 
@@ -167,7 +181,7 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
 
       mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
-      mapDFs <- raster::subset(mapDF, layer == TRUE)
+      mapDFs <- subset(mapDF, mapDF$layer == TRUE)
 
       invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, lanArray[,,n], type = transformType)))
 
@@ -179,13 +193,8 @@ patLanK <- function(sampleList, landList, k = 3, resampleFactor = NULL, crop = F
 
       patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
-      # if(n==1){
-      #   rasterList <- c(rasterList, patternRaster)
-      # }
-      #
-      # else{
       rasterListInd[[e]] <- patternRaster
-    # }
+
 
     rasterList[[names(landList)[n]]] <- rasterListInd
     }

@@ -1,17 +1,24 @@
-#' This fucntion calculates the area in which the color pattern is expressed in each sample as the relative proportion using the provided outline of the considered trait or structure.
+#' This fucntion calculates the area in which the color pattern is expressed in each sample as the
+#' relative proportion using the provided outline of the considered trait or structure.
 #'
 #' @param rList List of RasterLayers as obtained from the main patternize functions.
 #' @param IDlist List of sample IDs.
-#' @param refShape This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape using landmark transformation.
+#' @param refShape This can be 'target' in case the reference shape is a single sample (for
+#'    registration analysis) or 'mean' if the images were transformed to a mean shape using landmark
+#'    transformation.
 #' @param type Type of rasterlist; 'RGB' or 'k' (result from RGB or k-means analysis, respectively).
 #' @param outline xy coordinates that define outline.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
-#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
+#'    coordinates (default = FALSE).
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
-#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
-#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
+#'    original image used in landmark or registration analysis.
+#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between
+#'    raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
-#' @param imageList List of images as obtained from \code{\link[patternize]{makeList}} should be given if one wants to flip the outline or adjust landmark coordinates.
+#' @param imageList List of images as obtained from \code{\link[patternize]{makeList}} should be given
+#'    if one wants to flip the outline or adjust landmark coordinates.
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -48,8 +55,18 @@
 #' @export
 
 
-patArea <-function(rList, IDlist, refShape, type, outline = NULL, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL){
-
+patArea <-function(rList,
+                   IDlist,
+                   refShape,
+                   type,
+                   outline = NULL,
+                   landList = NULL,
+                   adjustCoords = FALSE,
+                   cartoonID = NULL,
+                   crop = c(0,0,0,0),
+                   flipRaster = NULL,
+                   flipOutline = NULL,
+                   imageList = NULL){
 
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){

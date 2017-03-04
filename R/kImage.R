@@ -1,16 +1,19 @@
-#' \code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is used by \code{patLanK} and \code{patRegK}.
+#' \code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is
+#' used by \code{patLanK} and \code{patRegK}.
 #'
 #' @param image Image imported as a RasterStack for k-means clustering.
 #' @param k Integer for number of k-means clusters (default = 3).
 #' @param startCenter A matrix of cluster centres to start k-means clustering from (default = NULL).
 #'
-#' @return List including the k-means clustered \code{RasterSatck} returned as an array and object of class "\code{kmeans}".
+#' @return List including the k-means clustered \code{RasterSatck} returned as an array and object
+#'    of class "\code{kmeans}".
 #'
 #' @examples
-#' image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))
+#' image <- raster::stack(system.file("extdata", "BC0077.JPG", package = "patternize"))
 #' out <- kImage(image, 6)
 #'
 #' @export
+#' @import rgdal
 
 kImage <- function(image, k = 5, startCenter = NULL){
 

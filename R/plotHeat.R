@@ -2,30 +2,43 @@
 #'
 #' @param summedRaster Summed raster or summedRasterList.
 #' @param IDlist List of sample IDs.
-#' @param colpalette Vector of colors for color palette (default = c("white","lightblue","blue","green", "yellow","red"))
-#' @param plotCartoon Whether to plot a cartoon. This cartoon should be drawn on one of the samples used in the analysis.
-#' @param refShape This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)
+#' @param colpalette Vector of colors for color palette
+#'    (default = c("white","lightblue","blue","green", "yellow","red"))
+#' @param plotCartoon Whether to plot a cartoon. This cartoon should be drawn on one of the samples
+#'    used in the analysis.
+#' @param refShape This can be 'target' in case the reference shape is a single sample (for
+#'    registration analysis) or 'mean' if the images were transformed to a mean shape (only for
+#'    meanshape when using landmark transformation)
 #' @param outline xy coordinates that define outline.
 #' @param lines list of files with xy coordinates of line objects to be added to cartoon.
 #' @param landList Landmark landmarkList.
 #' @param adjustCoords Adjust landmark coordinates.
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
-#' @param normalized Set this to true in case the summed rasters are already devided by the sample number.
-#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
-#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
+#' @param normalized Set this to true in case the summed rasters are already devided by the
+#'    sample number.
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop
+#'    the original image used in landmark or registration analysis.
+#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency
+#'    between raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
-#' @param imageList List of image should be given if one wants to flip the outline or adjust landmark coordinates.
-#' @param cartoonOrder Whether to plot the cartoon outline 'above' or 'under' the pattern raster (default = 'above'). Set to 'under' for filled outlines.
-#' @param lineOrder Whether to plot the cartoon lines 'above' or 'under' the pattern raster (default = 'above').
+#' @param imageList List of image should be given if one wants to flip the outline or adjust
+#'    landmark coordinates.
+#' @param cartoonOrder Whether to plot the cartoon outline 'above' or 'under' the pattern raster
+#'    (default = 'above'). Set to 'under' for filled outlines.
+#' @param lineOrder Whether to plot the cartoon lines 'above' or 'under' the pattern raster
+#'    (default = 'above').
 #' @param cartoonCol Outline and line color for cartoon (deafault = 'gray').
 #' @param cartoonFill Fill color for outline of cartoon (default = NULL).
-#' @param plotLandmarks Whether to plot the landmarks from the target image or mean shape landmarks (default = FALSE).
+#' @param plotLandmarks Whether to plot the landmarks from the target image or mean shape
+#'    landmarks (default = FALSE).
 #' @param landCol Color for ploting landmarks (default = 'black').
 #' @param zlim z-axis limit (default = c(0,1))
 #' @param legendTitle Title of the raster legend (default = 'Proportion')
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
 #' @param main Optional main title.
+#' @param plotPCA Set as TRUE when visualizing shape changes along PCA axis in \
+#'    code{\link[patternize]{patPCA}}.
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -48,13 +61,13 @@
 #' summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
 #' plotHeat(summedRasterList, IDlist)
 #'
-#' summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, refShape = 'k')
+#' summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
 #' plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, refShape = 'target',
 #' outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
 #' flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
 #' cartoonFill = 'black', main = 'kmeans_example')
 #'
-#' plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target',
+#' plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, refShape = 'target',
 #' outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
 #' flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
 #' cartoonFill = 'black', main = 'kmeans_example')
@@ -86,7 +99,33 @@
 #' @export
 #' @import raster
 
-plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL, landList = NULL,  adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL, cartoonOrder = 'above', lineOrder = 'above', cartoonCol = 'gray', cartoonFill = NULL, plotLandmarks = FALSE, landCol = 'black', zlim = c(0,1), legendTitle = 'Proportion', xlab='', ylab='', main=''){
+plotHeat <- function(summedRaster,
+                     IDlist,
+                     colpalette = NULL,
+                     plotCartoon = FALSE,
+                     refShape = NULL,
+                     outline = NULL,
+                     lines = NULL,
+                     landList = NULL,
+                     adjustCoords = FALSE,
+                     cartoonID = NULL,
+                     normalized = FALSE,
+                     crop = c(0,0,0,0),
+                     flipRaster = NULL,
+                     flipOutline = NULL,
+                     imageList = NULL,
+                     cartoonOrder = 'above',
+                     lineOrder = 'above',
+                     cartoonCol = 'gray',
+                     cartoonFill = NULL,
+                     plotLandmarks = FALSE,
+                     landCol = 'black',
+                     zlim = c(0,1),
+                     legendTitle = 'Proportion',
+                     xlab='',
+                     ylab='',
+                     main='',
+                     plotPCA = FALSE){
 
   if(!is.list(summedRaster)){
 
@@ -124,7 +163,7 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
 
     for(e in 1:length(lines)){
 
-      lineList[[e]] <- read.table(lines[e], h= FALSE)
+      lineList[[e]] <- read.table(lines[e], header = FALSE)
 
     }
   }
@@ -339,8 +378,8 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
       }
     }
 
-    par(mfrow=c(1,1), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
-
+    # par(mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
+    par(mar=c(4,4,2,2))
     if(is.null(refShape) || refShape == 'target'){
       plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
     }
@@ -400,7 +439,12 @@ plotHeat <- function(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALS
     }
 
 
-    plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3), add= TRUE)
+    if(plotPCA){
+      image(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3), add= TRUE, useRaster= FALSE)
+    }
+    else{
+      plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3), add= TRUE, useRaster= FALSE)
+    }
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)
 

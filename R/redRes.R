@@ -12,7 +12,8 @@
 #' @export
 #' @import raster
 
-redRes <- function(image, resampleFactor){
+redRes <- function(image,
+                   resampleFactor){
 
   inCols <- ncol(image)
   inRows <- nrow(image)

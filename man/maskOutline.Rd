@@ -38,7 +38,7 @@ Intersects a RasterStack with an outline. Everything outside of the outline will
 
 data(imageList)
 outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
-'/BC0077_outline.txt', sep=''), h= F)
+'/BC0077_outline.txt', sep=''), header = FALSE)
 
 masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipOutline = 'y')
 

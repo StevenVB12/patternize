@@ -1,16 +1,24 @@
-#' Aligns images usings transformations obtained from fixed landmarks and extracts colors using a predefined RGB values and cutoff value.
+#' Aligns images usings transformations obtained from fixed landmarks and extracts colors
+#' using a predefined RGB values and cutoff value.
 #'
 #' @param sampleList List of RasterStack objects.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param colOffset Color offset for color pattern extraction (default = 0).
-#' @param crop Whether to use the landmarks range to crop the image. This can significantly speed up the analysis (default = FALSE).
-#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).
-#' @param res Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.
-#' @param transformRef ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
-#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').
-#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
+#' @param crop Whether to use the landmarks range to crop the image. This can significantly
+#'    speed up the analysis (default = FALSE).
+#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you
+#'    want the cropping to be offset from the landmarks (in case the landmarks do not surround
+#'    the entire color pattern).
+#' @param res Resolution for color pattern raster (default = 300). This should be reduced if
+#'    the number of pixels in the image is lower than th raster.
+#' @param transformRef ID of reference sample for shape to which color patterns will be transformed
+#'    to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
+#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}}
+#'    (default ='tps').
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
+#'    coordinates (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -36,7 +44,21 @@
 #' @import raster
 
 
-patLanRGB <- function(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0, crop = FALSE, cropOffset = NULL, res = 300, transformRef = 'meanshape', transformType='tps', adjustCoords = FALSE, plot = FALSE, focal =  FALSE, sigma = 3, iterations = 0){
+patLanRGB <- function(sampleList,
+                      landList,
+                      RGB,
+                      resampleFactor = NULL,
+                      colOffset = 0,
+                      crop = FALSE,
+                      cropOffset = NULL,
+                      res = 300,
+                      transformRef = 'meanshape',
+                      transformType='tps',
+                      adjustCoords = FALSE,
+                      plot = FALSE,
+                      focal =  FALSE,
+                      sigma = 3,
+                      iterations = 0){
 
   rasterList <- list()
 
@@ -138,7 +160,7 @@ patLanRGB <- function(sampleList, landList, RGB, resampleFactor = NULL, colOffse
 
     mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
-    mapDFs <- raster::subset(mapDF, layer == TRUE)
+    mapDFs <- subset(mapDF, mapDF$layer == TRUE)
 
     invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, lanArray[,,n], type = transformType)))
 

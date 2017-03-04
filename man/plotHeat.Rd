@@ -11,7 +11,7 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   imageList = NULL, cartoonOrder = "above", lineOrder = "above",
   cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
   landCol = "black", zlim = c(0, 1), legendTitle = "Proportion",
-  xlab = "", ylab = "", main = "")
+  xlab = "", ylab = "", main = "", plotPCA = FALSE)
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -65,6 +65,8 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 \item{ylab}{Optional y-axis label.}
 
 \item{main}{Optional main title.}
+
+\item{plotPCA}{Set as TRUE when visualizing shape changes along PCA axis in \code{\link[patternize]{patPCA}}.}
 }
 \description{
 Plots the color pattern heatmaps from \code{sumRaster} output.
@@ -90,13 +92,13 @@ IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 summedRasterList <- sumRaster(rasterList_lanK, IDlist, type = 'k')
 plotHeat(summedRasterList, IDlist)
 
-summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, refShape = 'k')
+summedRasterList_regK <- sumRaster(rasterList_regK, IDlist, type = 'k')
 plotHeat(summedRasterList_regK, IDlist, plotCartoon = TRUE, refShape = 'target',
 outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
 flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
 cartoonFill = 'black', main = 'kmeans_example')
 
-plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, type = 'target',
+plotHeat(summedRasterList_regK[[1]], IDlist, plotCartoon = TRUE, refShape = 'target',
 outline = outline_BC0077, lines = lines_BC0077, crop = c(1000,4000,400,2500),
 flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
 cartoonFill = 'black', main = 'kmeans_example')

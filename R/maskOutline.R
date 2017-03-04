@@ -1,29 +1,46 @@
-#' Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.
+#' Intersects a RasterStack with an outline. Everything outside of the outline will be removed
+#' from the raster.
 #'
 #' @param RasterStack RasterStack to be masked.
 #' @param outline xy coordinates that define outline.
-#' @param refShape This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)
+#' @param refShape This can be 'target' in case the reference shape is a single sample (for
+#'    registration analysis) or 'mean' if the images were transformed to a mean shape (only
+#'    for meanshape when using landmark transformation)
 #' @param landList Landmark list to be given when type = 'mean'.
-#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).
+#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to
+#'    pixel coordinates (default = FALSE).
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
 #' @param IDlist List of sample IDs should be specified when refShape is 'mean'.
-#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.
-#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to
+#'    crop the original image used in landmark or registration analysis.
+#' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency
+#'    between raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
-#' @param imageList List of image as obtained from \code{\link[patternize]{makeList}} should be given if one wants to flip the outline or adjust landmark coordinates.
+#' @param imageList List of image as obtained from \code{\link[patternize]{makeList}} should
+#'    be given if one wants to flip the outline or adjust landmark coordinates.
 #'
 #' @examples
 #'
 #' data(imageList)
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
-#' '/BC0077_outline.txt', sep=''), h= F)
+#' '/BC0077_outline.txt', sep=''), header = FALSE)
 #'
 #' masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipOutline = 'y')
 #'
 #' @export
 #' @import raster
 
-maskOutline <-function(RasterStack, outline, refShape, landList = NULL, adjustCoords = FALSE, cartoonID = NULL, IDlist = NULL, crop = c(0,0,0,0), flipRaster = NULL, flipOutline = NULL, imageList = NULL){
+maskOutline <-function(RasterStack,
+                       outline,
+                       refShape,
+                       landList = NULL,
+                       adjustCoords = FALSE,
+                       cartoonID = NULL,
+                       IDlist = NULL,
+                       crop = c(0,0,0,0),
+                       flipRaster = NULL,
+                       flipOutline = NULL,
+                       imageList = NULL){
 
   imageEx <- raster::extent(RasterStack)
 

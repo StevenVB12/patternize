@@ -1,25 +1,34 @@
-#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using a predefined RGB values and cutoff value.
+#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
+#' and extracts colors using a predefined RGB values and cutoff value.
 #'
 #' @param sampleList List of RasterStack objects.
 #' @param target Image imported as RasterStack used as target for registration.
 #' @param RGB Values for color pattern extraction specified as RGB vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}} (default = NULL).
-#' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}} (default = 75).
+#' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
+#'    (default = 75).
 #' @param colOffset Color offset for color pattern extraction (default = 0).
-#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.
-#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.
-#' @param maskOutline When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
+#'    original image.
+#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
+#'    pixels with average RGB > 100; default = NULL) for registration analysis. This works only to
+#'    remove a white background.
+#' @param maskOutline When outline is specified, everything outside of the outline will be masked for
+#'    the color extraction (default = NULL).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
-#' @param iterations Number of iterations for recalculating average color (default = 0). If set the RGB value for pattern extraction will be iteratively recalculated to be the average of the extracted area. This may improve extraction of distinct color pattern, but fail for more gradually distributed (in color space) patterns.
+#' @param iterations Number of iterations for recalculating average color (default = 0). If set the
+#'    RGB value for pattern extraction will be iteratively recalculated to be the average of the
+#'    extracted area. This may improve extraction of distinct color pattern, but fail for more
+#'    gradually distributed (in color space) patterns.
 #'
 #' @return List of raster objects.
 #'
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
-#' extension <- '.jpg'
+#' extension <- '.JPG'
 #'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
@@ -33,7 +42,19 @@
 #' @export
 #' @import raster
 
-patRegRGB <- function(sampleList, target, RGB, resampleFactor = NULL, useBlockPercentage = 75, colOffset=0, crop = c(0,0,0,0), removebgR = NULL, maskOutline = NULL, plot = FALSE, focal =  FALSE, sigma = 3, iterations = 0){
+patRegRGB <- function(sampleList,
+                      target,
+                      RGB,
+                      resampleFactor = NULL,
+                      useBlockPercentage = 75,
+                      colOffset=0,
+                      crop = c(0,0,0,0),
+                      removebgR = NULL,
+                      maskOutline = NULL,
+                      plot = FALSE,
+                      focal =  FALSE,
+                      sigma = 3,
+                      iterations = 0){
 
   rasterList <- list()
 

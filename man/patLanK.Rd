@@ -53,7 +53,8 @@ landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 extension <- '.JPG'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
-rasterList_lanK <- patLanK(imageList, landmarkList, k = 5, resampleFactor = 3, crop = TRUE, res = 150, removebgK = TRUE, adjustCoords = TRUE, plot = TRUE)
+rasterList_lanK <- patLanK(imageList, landmarkList, k = 4, resampleFactor = 3, crop = TRUE,
+res = 150, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 
 }
 

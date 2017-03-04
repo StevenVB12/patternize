@@ -2,9 +2,20 @@
 % Please edit documentation in R/patPCA.R
 \name{patPCA}
 \alias{patPCA}
-\title{Performs PCA}
+\title{This function transforms the individual color pattern rasters as obtained by the main
+patternize functions to a dataframe of 0 and 1 values that can be used for Principal
+Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
+analysis including a visualization of the shape changes along the axis.}
 \usage{
-patPCA(rList, popList, colList)
+patPCA(rList, popList, colList, plot = FALSE, plotChanges = FALSE,
+  PCx = 1, PCy = 2, plotCartoon = FALSE, refShape = NULL,
+  outline = NULL, lines = NULL, landList = NULL, adjustCoords = FALSE,
+  crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
+  imageList = NULL, cartoonID = NULL, colpalette = NULL,
+  normalized = NULL, cartoonOrder = "above", lineOrder = "above",
+  cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
+  landCol = "black", zlim = c(-1, 1), legendTitle = "Predicted",
+  xlab = "", ylab = "", main = "")
 }
 \arguments{
 \item{rList}{List of raster objects.}
@@ -12,9 +23,82 @@ patPCA(rList, popList, colList)
 \item{popList}{List of vectors including sampleIDs for eacht population.}
 
 \item{colList}{List of colors for each population.}
+
+\item{plot}{Wether to include plots of the changes along the PC axis (default = FALSE).}
+
+\item{PCx}{PC axis to be presented for x-axis (default PC1).}
+
+\item{PCy}{PC axis to be presented for y-axis (default PC2).}
+
+\item{plotCartoon}{Whether to plot a cartoon. This cartoon should be drawn on one of the
+samples used in the analysis.}
+
+\item{refShape}{This can be 'target' in case the reference shape is a single sample (for
+registration analysis) or 'mean' if the images were transformed to a mean shape (only for
+meanshape when using landmark transformation)}
+
+\item{outline}{xy coordinates that define outline.}
+
+\item{lines}{list of files with xy coordinates of line objects to be added to cartoon.}
+
+\item{landList}{Landmark landmarkList.}
+
+\item{adjustCoords}{Adjust landmark coordinates.}
+
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop
+the original image used in landmark or registration analysis.}
+
+\item{flipRaster}{Whether to flip raster along xy axis (in case there is an inconsistency
+between raster and outline coordinates).}
+
+\item{flipOutline}{Whether to flip plot along x, y or xy axis.}
+
+\item{imageList}{List of image should be given if one wants to flip the outline or adjust
+landmark coordinates.}
+
+\item{cartoonID}{ID of the sample for which the cartoon was drawn.}
+
+\item{colpalette}{Vector of colors for color palette
+(default = c("white","lightblue","blue","green", "yellow","red"))}
+
+\item{normalized}{Set this to true in case the summed rasters are already devided by the
+sample number.}
+
+\item{cartoonOrder}{Whether to plot the cartoon outline 'above' or 'under' the pattern raster
+(default = 'above'). Set to 'under' for filled outlines.}
+
+\item{lineOrder}{Whether to plot the cartoon lines 'above' or 'under' the pattern raster
+(default = 'above').}
+
+\item{cartoonCol}{Outline and line color for cartoon (deafault = 'gray').}
+
+\item{cartoonFill}{Fill color for outline of cartoon (default = NULL).}
+
+\item{plotLandmarks}{Whether to plot the landmarks from the target image or mean shape
+landmarks (default = FALSE).}
+
+\item{landCol}{Color for ploting landmarks (default = 'black').}
+
+\item{zlim}{z-axis limit (default = c(0,1))}
+
+\item{legendTitle}{Title of the raster legend (default = 'Proportion')}
+
+\item{xlab}{Optional x-axis label.}
+
+\item{ylab}{Optional y-axis label.}
+
+\item{main}{Optional main title.}
+}
+\value{
+List including a [1] dataframe of the binary raster values that can be used for
+   principle component analysis and [2] a dataframe of sample IDs and specified population
+   colors.
 }
 \description{
-Performs PCA
+This function transforms the individual color pattern rasters as obtained by the main
+patternize functions to a dataframe of 0 and 1 values that can be used for Principal
+Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
+analysis including a visualization of the shape changes along the axis.
 }
 \examples{
 data(rasterList_lanRGB)
@@ -28,5 +112,8 @@ pcaOut <- patPCA(rasterList_lanRGB, popList, colList)
 comp <- prcomp(pcaOut[[1]])
 plot(comp$rotation, col=pcaOut[[2]]$col, pch=19)
 
+}
+\seealso{
+\code{\link[stats]{prcomp}}
 }
 

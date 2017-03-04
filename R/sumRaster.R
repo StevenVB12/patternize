@@ -1,4 +1,5 @@
-#' This function sums the individual color pattern RasterLayes as obtained by the main patternize functions.
+#' This function sums the individual color pattern RasterLayes as obtained by the main patternize
+#' functions.
 #'
 #' @param rList List of RasterLayers or list of RasterLayers for each k-means cluster.
 #' @param IDlist List of sample IDs.
@@ -15,7 +16,9 @@
 #'
 #' @export
 
-sumRaster <- function(rList, IDlist, type){
+sumRaster <- function(rList,
+                      IDlist,
+                      type){
 
   subRasterList <- list()
 
