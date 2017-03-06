@@ -18,11 +18,15 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 
 \item{IDlist}{List of sample IDs.}
 
-\item{colpalette}{Vector of colors for color palette (default = c("white","lightblue","blue","green", "yellow","red"))}
+\item{colpalette}{Vector of colors for color palette
+(default = c("white","lightblue","blue","green", "yellow","red"))}
 
-\item{plotCartoon}{Whether to plot a cartoon. This cartoon should be drawn on one of the samples used in the analysis.}
+\item{plotCartoon}{Whether to plot a cartoon. This cartoon should be drawn on one of the samples
+used in the analysis.}
 
-\item{refShape}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)}
+\item{refShape}{This can be 'target' in case the reference shape is a single sample (for
+registration analysis) or 'mean' if the images were transformed to a mean shape (only for
+meanshape when using landmark transformation)}
 
 \item{outline}{xy coordinates that define outline.}
 
@@ -34,25 +38,32 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn.}
 
-\item{normalized}{Set this to true in case the summed rasters are already devided by the sample number.}
+\item{normalized}{Set this to true in case the summed rasters are already devided by the
+sample number.}
 
-\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.}
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop
+the original image used in landmark or registration analysis.}
 
-\item{flipRaster}{Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).}
+\item{flipRaster}{Whether to flip raster along xy axis (in case there is an inconsistency
+between raster and outline coordinates).}
 
 \item{flipOutline}{Whether to flip plot along x, y or xy axis.}
 
-\item{imageList}{List of image should be given if one wants to flip the outline or adjust landmark coordinates.}
+\item{imageList}{List of image should be given if one wants to flip the outline or adjust
+landmark coordinates.}
 
-\item{cartoonOrder}{Whether to plot the cartoon outline 'above' or 'under' the pattern raster (default = 'above'). Set to 'under' for filled outlines.}
+\item{cartoonOrder}{Whether to plot the cartoon outline 'above' or 'under' the pattern raster
+(default = 'above'). Set to 'under' for filled outlines.}
 
-\item{lineOrder}{Whether to plot the cartoon lines 'above' or 'under' the pattern raster (default = 'above').}
+\item{lineOrder}{Whether to plot the cartoon lines 'above' or 'under' the pattern raster
+(default = 'above').}
 
 \item{cartoonCol}{Outline and line color for cartoon (deafault = 'gray').}
 
 \item{cartoonFill}{Fill color for outline of cartoon (default = NULL).}
 
-\item{plotLandmarks}{Whether to plot the landmarks from the target image or mean shape landmarks (default = FALSE).}
+\item{plotLandmarks}{Whether to plot the landmarks from the target image or mean shape
+landmarks (default = FALSE).}
 
 \item{landCol}{Color for ploting landmarks (default = 'black').}
 
@@ -66,7 +77,8 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
 
 \item{main}{Optional main title.}
 
-\item{plotPCA}{Set as TRUE when visualizing shape changes along PCA axis in \code{\link[patternize]{patPCA}}.}
+\item{plotPCA}{Set as TRUE when visualizing shape changes along PCA axis in \
+code{\link[patternize]{patPCA}}.}
 }
 \description{
 Plots the color pattern heatmaps from \code{sumRaster} output.

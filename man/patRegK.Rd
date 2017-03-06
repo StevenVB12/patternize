@@ -2,12 +2,13 @@
 % Please edit documentation in R/patRegK.R
 \name{patRegK}
 \alias{patRegK}
-\title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.}
+\title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
+and extracts colors using k-means clustering.}
 \usage{
 patRegK(sampleList, target, k = 3, resampleFactor = NULL,
   useBlockPercentage = 75, crop = c(0, 0, 0, 0), removebgR = NULL,
-  removebgK = NULL, maskOutline = NULL, plot = FALSE, focal = FALSE,
-  sigma = 3)
+  removebgK = NULL, maskOutline = NULL, maskColor = 0, plot = FALSE,
+  focal = FALSE, sigma = 3)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -18,15 +19,24 @@ patRegK(sampleList, target, k = 3, resampleFactor = NULL,
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}} (default = NULL).}
 
-\item{useBlockPercentage}{Block percentage as used in \code{\link[RNiftyReg]{niftyreg}} (default = 75).}
+\item{useBlockPercentage}{Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
+(default = 75).}
 
-\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image.}
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
+original image.}
 
-\item{removebgR}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for registration analysis. This works only to remove a white background.}
+\item{removebgR}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
+pixels with average RGB > 100; default = NULL) for registration analysis. This works only to
+remove a white background.}
 
-\item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.}
+\item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
+pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove
+a white background.}
 
-\item{maskOutline}{When outline is specified, everything outside of the outline will be masked for the color extraction (default = NULL).}
+\item{maskOutline}{When outline is specified, everything outside of the outline will be masked for
+the color extraction (default = NULL).}
+
+\item{maskColor}{Color the masked area gets. Set to 0 for black (default) or 255 for white.}
 
 \item{plot}{Whether to plot k-means clustered image while processing (default = FALSE).}
 
@@ -38,7 +48,8 @@ patRegK(sampleList, target, k = 3, resampleFactor = NULL,
 List of rasters for each k-means cluster objects.
 }
 \description{
-Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration and extracts colors using k-means clustering.
+Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
+and extracts colors using k-means clustering.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')

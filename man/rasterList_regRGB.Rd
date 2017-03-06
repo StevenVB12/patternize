@@ -4,7 +4,8 @@
 \name{rasterList_regRGB}
 \alias{rasterList_regRGB}
 \title{rasterList_regRGB}
-\format{A list of RasterLayers including the red color pattern extracted from 5 Heliconius erato hydara dorsal forewings using \code{patRegRGB}.}
+\format{A list of RasterLayers including the red color pattern extracted from 5 Heliconius
+   erato hydara dorsal forewings using \code{patRegRGB}.}
 \usage{
 rasterList_regRGB
 }

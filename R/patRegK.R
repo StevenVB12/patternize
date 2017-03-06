@@ -17,6 +17,7 @@
 #'    a white background.
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL).
+#' @param maskColor Color the masked area gets. Set to 0 for black (default) or 255 for white. 
 #' @param plot Whether to plot k-means clustered image while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -46,6 +47,7 @@ patRegK <- function(sampleList,
                     removebgR = NULL,
                     removebgK = NULL,
                     maskOutline = NULL,
+                    maskColor = 0,
                     plot = FALSE,
                     focal =  FALSE,
                     sigma = 3){
@@ -64,11 +66,11 @@ patRegK <- function(sampleList,
     target <- redRes(target, resampleFactor)
   }
 
-  target <- apply(raster::as.array(target),1:2,mean)
+  target <- apply(raster::as.array(target), 1:2, mean)
 
   if(is.numeric(removebgR)){
 
-    target <- apply(target, 1:2, function(x) ifelse(x > removebgR,0, x))
+    target <- apply(target, 1:2, function(x) ifelse(x > removebgR, 0, x))
   }
 
   for(n in 1:length(sampleList)){
@@ -97,11 +99,11 @@ patRegK <- function(sampleList,
 
     sourceRasterK <- sourceRaster
 
-    sourceRaster <- apply(raster::as.array(sourceRaster),1:2,mean)
+    sourceRaster <- apply(raster::as.array(sourceRaster), 1:2, mean)
 
     if(is.numeric(removebgR)){
 
-      sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR,0, x))
+      sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR, 0, x))
     }
 
     result <- RNiftyReg::niftyreg(sourceRaster, target, useBlockPercentage=useBlockPercentage)
@@ -119,7 +121,7 @@ patRegK <- function(sampleList,
     raster::extent(transRaster) <- raster::extent(sourceRasterK)
 
     if(!is.null(maskOutline)){
-      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop)
+      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop, maskColor = maskColor, imageList = imageList)
     }
 
     # k-means clustering of image

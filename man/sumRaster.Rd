@@ -2,7 +2,8 @@
 % Please edit documentation in R/sumRaster.R
 \name{sumRaster}
 \alias{sumRaster}
-\title{This function sums the individual color pattern RasterLayes as obtained by the main patternize functions.}
+\title{This function sums the individual color pattern RasterLayes as obtained by the main patternize
+functions.}
 \usage{
 sumRaster(rList, IDlist, type)
 }
@@ -14,7 +15,8 @@ sumRaster(rList, IDlist, type)
 \item{type}{Type of rasterlist; 'RGB' or 'k' (result from RGB or k-means analysis, respectively).}
 }
 \description{
-This function sums the individual color pattern RasterLayes as obtained by the main patternize functions.
+This function sums the individual color pattern RasterLayes as obtained by the main patternize
+functions.
 }
 \examples{
 data(rasterList_lanRGB)

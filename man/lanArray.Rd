@@ -9,12 +9,15 @@ lanArray(sampleList, adjustCoords = FALSE, imageList = NULL)
 \arguments{
 \item{sampleList}{List of landmark matrices as returned by \code{\link{makeList}}.}
 
-\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel
+coordinates (default = FALSE).}
 
-\item{imageList}{List of RasterStacks as returned by \code{\link{makeList}} should be given when \code{adjustCoords = TRUE}.}
+\item{imageList}{List of RasterStacks as returned by \code{\link{makeList}} should be given
+when \code{adjustCoords = TRUE}.}
 }
 \value{
-X x Y x n array, where X and Y define the coordinates of the landmark points and n is the sample size.
+X x Y x n array, where X and Y define the coordinates of the landmark points and n
+   is the sample size.
 }
 \description{
 Build landmark array for \code{\link[Morpho]{Morpho}}.

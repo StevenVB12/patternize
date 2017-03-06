@@ -9,7 +9,8 @@
 landmarkArray
 }
 \description{
-Array of landmarks as returned by \code{lanArray} and used by \code{link[Morpho]{procsym}}.
+Array of landmarks as returned by \code{lanArray} and used by
+   \code{link[Morpho]{procsym}}.
 }
 \examples{
 \dontrun{

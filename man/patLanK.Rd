@@ -2,7 +2,8 @@
 % Please edit documentation in R/patLanK.R
 \name{patLanK}
 \alias{patLanK}
-\title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.}
+\title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using
+k-means clustering.}
 \usage{
 patLanK(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE,
   cropOffset = NULL, res = 300, transformRef = "meanshape",
@@ -18,19 +19,28 @@ patLanK(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE,
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
 
-\item{crop}{Whether to use the landmarks range to crop the image. This can significantly speed up the analysis (default = FALSE).}
+\item{crop}{Whether to use the landmarks range to crop the image. This can significantly speed
+up the analysis (default = FALSE).}
 
-\item{cropOffset}{Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).}
+\item{cropOffset}{Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want
+the cropping to be offset from the landmarks (in case the landmarks do not surround the entire
+color pattern).}
 
-\item{res}{Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.}
+\item{res}{Resolution for color pattern raster (default = 300). This should be reduced if the
+number of pixels in the image is lower than th raster.}
 
-\item{transformRef}{ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
+\item{transformRef}{ID of reference sample for shape to which color patterns will be transformed
+to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
 
-\item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').}
+\item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}}
+(default ='tps').}
 
-\item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100 removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only to remove a white background.}
+\item{removebgK}{Integer indicating the range RGB treshold to remove from image (e.g. 100
+removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only
+to remove a white background.}
 
-\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel
+coordinates (default = FALSE).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
 
@@ -42,7 +52,8 @@ patLanK(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE,
 List of summed raster for each k-means cluster objects.
 }
 \description{
-Aligns images usings transformations obtained from fixed landmarks and extracts colors using k-means clustering.
+Aligns images usings transformations obtained from fixed landmarks and extracts colors using
+k-means clustering.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')

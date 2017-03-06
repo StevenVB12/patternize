@@ -127,13 +127,14 @@ patPCA <- function(rList,
   colnames(groupCol) <- c('sampleID', 'col')
 
 
-
   if(is.character(plot)){
 
     comp <- prcomp(t(rasDF))
 
     pcdata <- comp$x
     rotation <- comp$rotation
+    
+    summ <- summary(comp)
 
     if(plotChanges){
 
@@ -207,12 +208,12 @@ patPCA <- function(rList,
 
       if(plot == 'points'){
 
-        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3, xlab=paste('PC',PCx), ylab=paste('PC',PCy))
+        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3, xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'), ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       }
 
       if(plot == 'labels'){
 
-        plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19, xlab=paste('PC',PCx), ylab=paste('PC',PCy))
+        plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19, xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'), ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
         text(comp$x[,PCx], comp$x[,PCy], col=as.vector(pcaOut[[2]]$col), as.character(pcaOut[[2]]$sampleID))
       }
 
@@ -270,8 +271,8 @@ patPCA <- function(rList,
 
       plot(NULL, xlim=c(0,1), ylim=c(0,1), type="n", axes=F, xlab = '', ylab='')
 
-      plot(mapMay, col=colfunc(21), zlim=c(-1,1), legend.only=T, legend.width=5,
-           smallplot=c(0.5, 0.6, 0.2, 1), legend.args=list(text=legendTitle, side=2, font=2, line=2.5, cex=1))
+      plot(mapMay, col=colfunc(21), zlim=c(-1,1), legend.only=T, legend.width=5, horizontal = TRUE,
+           smallplot=c(0.3, 1, 0.5, 0.6), legend.args=list(text=legendTitle, side=3, font=2, line=2.5, cex=1))
     }
   }
 

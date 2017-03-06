@@ -2,7 +2,8 @@
 % Please edit documentation in R/patLanRGB.R
 \name{patLanRGB}
 \alias{patLanRGB}
-\title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using a predefined RGB values and cutoff value.}
+\title{Aligns images usings transformations obtained from fixed landmarks and extracts colors
+using a predefined RGB values and cutoff value.}
 \usage{
 patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
   crop = FALSE, cropOffset = NULL, res = 300,
@@ -20,17 +21,24 @@ patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
 
 \item{colOffset}{Color offset for color pattern extraction (default = 0).}
 
-\item{crop}{Whether to use the landmarks range to crop the image. This can significantly speed up the analysis (default = FALSE).}
+\item{crop}{Whether to use the landmarks range to crop the image. This can significantly
+speed up the analysis (default = FALSE).}
 
-\item{cropOffset}{Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want the cropping to be offset from the landmarks (in case the landmarks do not surround the entire color pattern).}
+\item{cropOffset}{Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you
+want the cropping to be offset from the landmarks (in case the landmarks do not surround
+the entire color pattern).}
 
-\item{res}{Resolution for color pattern raster (default = 300). This should be reduced if the number of pixels in the image is lower than th raster.}
+\item{res}{Resolution for color pattern raster (default = 300). This should be reduced if
+the number of pixels in the image is lower than th raster.}
 
-\item{transformRef}{ID of reference sample for shape to which color patterns will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
+\item{transformRef}{ID of reference sample for shape to which color patterns will be transformed
+to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
 
-\item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}} (default ='tps').}
+\item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}}
+(default ='tps').}
 
-\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel
+coordinates (default = FALSE).}
 
 \item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
 
@@ -44,7 +52,8 @@ patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
 List of raster objects.
 }
 \description{
-Aligns images usings transformations obtained from fixed landmarks and extracts colors using a predefined RGB values and cutoff value.
+Aligns images usings transformations obtained from fixed landmarks and extracts colors
+using a predefined RGB values and cutoff value.
 }
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')

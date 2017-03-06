@@ -191,6 +191,19 @@ plotHeat <- function(summedRaster,
         }
       }
     }
+    if(refShape != 'mean' && identical(crop, c(0,0,0,0))){
+      if(!is.null(flipOutline) && flipOutline == 'y'){
+        outline[,2] <- imageEx[4] - outline[,2]
+        
+        if(!is.null(lines)){
+          for(e in 1:length(lineList)){
+            
+            lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
+          }
+        }
+      }
+    }
+
   }
 
   if(!identical(crop, c(0,0,0,0))){
@@ -378,8 +391,13 @@ plotHeat <- function(summedRaster,
       }
     }
 
-    # par(mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
-    par(mar=c(4,4,2,2))
+    if(!plotPCA){
+      par(mfrow = c(1,1), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
+    }
+    else{
+      par(mar=c(4,4,2,2))
+    }
+    
     if(is.null(refShape) || refShape == 'target'){
       plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
     }

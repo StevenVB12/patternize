@@ -2,37 +2,49 @@
 % Please edit documentation in R/maskOutline.R
 \name{maskOutline}
 \alias{maskOutline}
-\title{Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.}
+\title{Intersects a RasterStack with an outline. Everything outside of the outline will be removed
+from the raster.}
 \usage{
 maskOutline(RasterStack, outline, refShape, landList = NULL,
   adjustCoords = FALSE, cartoonID = NULL, IDlist = NULL, crop = c(0, 0,
-  0, 0), flipRaster = NULL, flipOutline = NULL, imageList = NULL)
+  0, 0), flipRaster = NULL, flipOutline = NULL, imageList = NULL,
+  maskColor = 0)
 }
 \arguments{
 \item{RasterStack}{RasterStack to be masked.}
 
 \item{outline}{xy coordinates that define outline.}
 
-\item{refShape}{This can be 'target' in case the reference shape is a single sample (for registration analysis) or 'mean' if the images were transformed to a mean shape (only for meanshape when using landmark transformation)}
+\item{refShape}{This can be 'target' in case the reference shape is a single sample (for
+registration analysis) or 'mean' if the images were transformed to a mean shape (only
+for meanshape when using landmark transformation)}
 
 \item{landList}{Landmark list to be given when type = 'mean'.}
 
-\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel coordinates (default = FALSE).}
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to
+pixel coordinates (default = FALSE).}
 
-\item{cartoonID}{ID of the sample for which the cartoon was drawn.}
+\item{cartoonID}{ID of the sample for which the cartoon was drawn. Only has to be given when 
+refShape is 'mean'.}
 
 \item{IDlist}{List of sample IDs should be specified when refShape is 'mean'.}
 
-\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the original image used in landmark or registration analysis.}
+\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to
+crop the original image used in landmark or registration analysis.}
 
-\item{flipRaster}{Whether to flip raster along xy axis (in case there is an inconsistency between raster and outline coordinates).}
+\item{flipRaster}{Whether to flip raster along xy axis (in case there is an inconsistency
+between raster and outline coordinates).}
 
 \item{flipOutline}{Whether to flip plot along x, y or xy axis.}
 
-\item{imageList}{List of image as obtained from \code{\link[patternize]{makeList}} should be given if one wants to flip the outline or adjust landmark coordinates.}
+\item{imageList}{List of image as obtained from \code{\link[patternize]{makeList}} should
+be given if one wants to flip the outline or adjust landmark coordinates.}
+
+\item{maskColor}{Color the masked area gets. Set to 0 for black (default) or 255 for white.}
 }
 \description{
-Intersects a RasterStack with an outline. Everything outside of the outline will be removed from the raster.
+Intersects a RasterStack with an outline. Everything outside of the outline will be removed
+from the raster.
 }
 \examples{
 

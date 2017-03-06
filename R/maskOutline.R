@@ -9,7 +9,8 @@
 #' @param landList Landmark list to be given when type = 'mean'.
 #' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to
 #'    pixel coordinates (default = FALSE).
-#' @param cartoonID ID of the sample for which the cartoon was drawn.
+#' @param cartoonID ID of the sample for which the cartoon was drawn. Only has to be given when 
+#'    refShape is 'mean'.
 #' @param IDlist List of sample IDs should be specified when refShape is 'mean'.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to
 #'    crop the original image used in landmark or registration analysis.
@@ -18,6 +19,7 @@
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
 #' @param imageList List of image as obtained from \code{\link[patternize]{makeList}} should
 #'    be given if one wants to flip the outline or adjust landmark coordinates.
+#' @param maskColor Color the masked area gets. Set to 0 for black (default) or 255 for white. 
 #'
 #' @examples
 #'
@@ -40,9 +42,10 @@ maskOutline <-function(RasterStack,
                        crop = c(0,0,0,0),
                        flipRaster = NULL,
                        flipOutline = NULL,
-                       imageList = NULL){
+                       imageList = NULL,
+                       maskColor = 0){
 
-  imageEx <- raster::extent(RasterStack)
+  imageEx <- raster::extent(imageList[[1]])
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){
 
@@ -98,14 +101,15 @@ maskOutline <-function(RasterStack,
 
     if(adjustCoords){
 
-      extPicture <- extent(imageList[[indx]])
+      extPicture <- raster::extent(imageList[[indx]])
       outline[,2] <- extPicture[4]-outline[,2]
     }
 
     invisible(capture.output(transformed <- Morpho::procSym(landArray)))
 
 
-    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape, as.matrix(landArray[,,indx]), type="tps")))
+    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape, 
+                                                                          as.matrix(landArray[,,indx]), type="tps")))
     outline <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
 
 
@@ -132,7 +136,8 @@ maskOutline <-function(RasterStack,
   sr=sp::SpatialPolygons(polyList)
   srdf=sp::SpatialPolygonsDataFrame(sr, data.frame(1:length(polyNames), row.names=polyNames))
 
-  r <- raster::raster(imageEx, nrow=dim(RasterStack)[1], ncol=dim(RasterStack)[2])
+  imageExr <- raster::extent(RasterStack)
+  r <- raster::raster(imageExr, nrow=dim(RasterStack)[1], ncol=dim(RasterStack)[2])
   rr <-raster::rasterize(srdf, r)
 
   if(!is.null(flipRaster)){
@@ -149,7 +154,7 @@ maskOutline <-function(RasterStack,
   }
 
   RasterStack <- raster::mask(RasterStack, rr)
-  RasterStack[is.na(RasterStack)] <- 0
+  RasterStack[is.na(RasterStack)] <- maskColor
 
   return(RasterStack)
 }
