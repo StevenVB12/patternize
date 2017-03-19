@@ -13,5 +13,6 @@ install.packages("patternize")
 ```
 install.packages("devtools")
 library(devtools)
-install_github("StevenVB12/patternize"
+install_github("StevenVB12/patternize")
+install_github("zarquon42b/Morpho") # Morpho has commited a change that affects computeTransform used in patternize (not available in CRAN)
 ```
