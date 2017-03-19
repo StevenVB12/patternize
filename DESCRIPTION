@@ -17,8 +17,9 @@ Imports:
     sp,
     rgdal,
     RNiftyReg,
-    abind,
-    Morpho
+    abind
+DevPackage:
+    zarquon42b/Morpho
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

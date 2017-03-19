@@ -33,7 +33,7 @@
 #'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
-#' extension <- '.JPG'
+#' extension <- '.jpg'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' RGB <- c(114,17,0)
@@ -110,11 +110,17 @@ patLanRGB <- function(sampleList,
     if(crop){
 
       landm <- lanArray[,,n]
-      extRaster <- raster::extent(min(landm[,1]), max(landm[,1]), min(landm[,2]), max(landm[,2]))
+      extRaster <- raster::extent(min(landm[,1]),
+                                  max(landm[,1]),
+                                  min(landm[,2]),
+                                  max(landm[,2]))
 
       if(!is.null(cropOffset)){
 
-        extRaster <- raster::extent(min(landm[,1])-cropOffset[1], max(landm[,1])+cropOffset[2], min(landm[,2])-cropOffset[3], max(landm[,2])+cropOffset[4])
+        extRaster <- raster::extent(min(landm[,1])-cropOffset[1],
+                                    max(landm[,1])+cropOffset[2],
+                                    min(landm[,2])-cropOffset[3],
+                                    max(landm[,2])+cropOffset[4])
 
       }
 
@@ -168,7 +174,11 @@ patLanRGB <- function(sampleList,
 
     r <- raster::raster(ncol = res, nrow = res)
 
-    raster::extent(r) <- extent(min(refShape[,1]),max(refShape[,1]),min(refShape[,2]),max(refShape[,2]))
+    raster::extent(r) <- extent(min(refShape[,1])*1.4,max(refShape[,1])*1.4,min(refShape[,2])*1.4,max(refShape[,2])*1.4)
+
+    if(!is.null(cropOffset)){
+      raster::extent(r) <- extent(min(refShape[,1]),max(refShape[,1]),min(refShape[,2]),max(refShape[,2]))
+    }
 
     patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
     if(plot){
@@ -184,12 +194,6 @@ patLanRGB <- function(sampleList,
 
     rasterList[[names(landList)[n]]] <- patternRaster
   }
-
-
-  #   # Sum raster list
-  #   rasterList$fun <- sum
-  #   rasterList$na.rm <- TRUE
-  #   rrr <- do.call(mosaic,rasterList)
 
   return(rasterList)
 }

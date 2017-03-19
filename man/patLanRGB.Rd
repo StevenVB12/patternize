@@ -62,7 +62,7 @@ extension <- '_landmarks_LFW.txt'
 
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
-extension <- '.JPG'
+extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
 RGB <- c(114,17,0)

@@ -458,11 +458,12 @@ plotHeat <- function(summedRaster,
 
 
     if(plotPCA){
-      image(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3), add= TRUE, useRaster= FALSE)
+      image(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE)
     }
     else{
-      plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3), add= TRUE, useRaster= FALSE)
-    }
+      plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F, xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE)
+      plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(21),legend.width=1, legend.shrink=0.75, legend.args=list(text=legendTitle, side=4, font=2, line=2.5, cex=1))
+      }
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)
 
