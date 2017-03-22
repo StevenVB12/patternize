@@ -94,6 +94,13 @@
 #' \code{\link[Morpho]{computeTransform}},
 #' \code{\link[RNiftyReg]{niftyreg}}
 #'
+#' \cite{Jon Clayden, Marc Modat, Benoit Presles, Thanasis Anthopoulos and Pankaj Daga (2017).
+#' RNiftyReg: Image Registration Using the 'NiftyReg' Library. R package version 2.5.0.
+#' https://CRAN.R-project.org/package=RNiftyReg} \cr
+#'
+#' \cite{Stefan Schlager (2016). Morpho: Calculations and Visualisations Related to Geometric
+#' Morphometrics. R package version 2.4.1.1. https://github.com/zarquon42b/Morpho} \cr
+#'
 #' @docType package
 #' @name patternize
 NULL
