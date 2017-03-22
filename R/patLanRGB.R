@@ -41,7 +41,9 @@
 #' colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
-#' @import raster
+#' @import raster Morpho
+#' @importFrom utils capture.output
+#' @importFrom stats na.omit
 
 
 patLanRGB <- function(sampleList,
@@ -148,7 +150,7 @@ patLanRGB <- function(sampleList,
       x <- x + 1
 
       mapRaster <- raster::raster(as.matrix(map))
-      extent(mapRaster) <- extRaster
+      raster::extent(mapRaster) <- extRaster
       mapRaster[mapRaster == 0] <- NA
 
       mapMASK<-raster::mask(raster::as.array(image), mapRaster)
@@ -193,6 +195,8 @@ patLanRGB <- function(sampleList,
 
 
     rasterList[[names(landList)[n]]] <- patternRaster
+
+    print(paste('sample', names(landList)[n], 'done and added to rasterList', sep=' '))
   }
 
   return(rasterList)

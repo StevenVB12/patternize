@@ -70,4 +70,3 @@ rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3,
 colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
 
 }
-

@@ -89,7 +89,7 @@ IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
 '/BC0077_outline.txt', sep=''), header = FALSE)
 lines_BC0077 <- list.files(path=paste(system.file("extdata",  package = 'patternize')),
-pattern='vein', full.names = T)
+pattern='vein', full.names = TRUE)
 
 summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 data(imageList)
@@ -140,4 +140,3 @@ adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
 cartoonOrder = 'under', cartoonFill= 'black', main = 'Landmark_example')
 
 }
-

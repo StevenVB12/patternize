@@ -14,6 +14,7 @@
 #'
 #' @export
 #' @import rgdal
+#' @importFrom stats kmeans
 
 kImage <- function(image, k = 5, startCenter = NULL){
 

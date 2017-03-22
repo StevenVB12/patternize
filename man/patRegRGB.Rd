@@ -55,7 +55,7 @@ and extracts colors using a predefined RGB values and cutoff value.
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
-extension <- '.JPG'
+extension <- '.jpg'
 
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
@@ -67,4 +67,3 @@ rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10,
 colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 
 }
-

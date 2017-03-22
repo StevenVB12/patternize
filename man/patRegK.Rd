@@ -54,14 +54,13 @@ and extracts colors using k-means clustering.
 \examples{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
-extension <- '.JPG'
+extension <- '.jpg'
 
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
 target <- imageList[[1]]
 
 rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10,
-crop = c(1000,4000,400,2500), removebg = 100, plot = TRUE)
+crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 
 }
-

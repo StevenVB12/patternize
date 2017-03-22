@@ -90,9 +90,7 @@ transformation is used, landmark arrays.
    Intersects a RasterStack with an outline. Everything outside of the outline will be removed
    from the raster.
 }
-\author{
-Steven M. Van Belleghem
-}
+
 \seealso{
 \code{\link[raster]{raster}},
 \code{\link[raster]{stack}},
@@ -100,4 +98,6 @@ Steven M. Van Belleghem
 \code{\link[Morpho]{computeTransform}},
 \code{\link[RNiftyReg]{niftyreg}}
 }
-
+\author{
+Steven M. Van Belleghem
+}

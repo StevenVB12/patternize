@@ -17,7 +17,7 @@
 #'    a white background.
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL).
-#' @param maskColor Color the masked area gets. Set to 0 for black (default) or 255 for white. 
+#' @param maskColor Color the masked area gets. Set to 0 for black (default) or 255 for white.
 #' @param plot Whether to plot k-means clustered image while processing (default = FALSE).
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
@@ -27,14 +27,14 @@
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
-#' extension <- '.JPG'
+#' extension <- '.jpg'
 #'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' target <- imageList[[1]]
 #'
 #' rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10,
-#' crop = c(1000,4000,400,2500), removebg = 100, plot = TRUE)
+#' crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
 #'
 #' @export
 
@@ -189,6 +189,8 @@ patRegK <- function(sampleList,
 
     }
     rasterList[[names(imageList)[n]]] <- rasterListInd
+
+    print(paste('sample', names(imageList)[n], 'done and added to rasterList', sep=' '))
   }
 
   return(rasterList)

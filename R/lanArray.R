@@ -39,6 +39,7 @@ lanArray <- function(sampleList,
       if(is.null(imageList)){
         stop('For adjusting landmarkcoordinates, you should supply the image list')
       }
+
       extPicture <- extent(imageList[[n]])
 
       landmarks[,2] <- (extPicture[4]-landmarks[,2])

@@ -46,7 +46,7 @@
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
 #' '/BC0077_outline.txt', sep=''), header = FALSE)
 #' lines_BC0077 <- list.files(path=paste(system.file("extdata",  package = 'patternize')),
-#' pattern='vein', full.names = T)
+#' pattern='vein', full.names = TRUE)
 #'
 #' summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 #' data(imageList)
@@ -98,6 +98,8 @@
 #'
 #' @export
 #' @import raster
+#' @importFrom graphics layout mtext par points polygon
+#' @importFrom grDevices col2rgb colorRampPalette rgb
 
 plotHeat <- function(summedRaster,
                      IDlist,
@@ -194,10 +196,10 @@ plotHeat <- function(summedRaster,
     if(refShape != 'mean' && identical(crop, c(0,0,0,0))){
       if(!is.null(flipOutline) && flipOutline == 'y'){
         outline[,2] <- imageEx[4] - outline[,2]
-        
+
         if(!is.null(lines)){
           for(e in 1:length(lineList)){
-            
+
             lineList[[e]][[2]] <- imageEx[4] - lineList[[e]][[2]]
           }
         }
@@ -397,7 +399,7 @@ plotHeat <- function(summedRaster,
     else{
       par(mar=c(4,4,2,2))
     }
-    
+
     if(is.null(refShape) || refShape == 'target'){
       plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
     }

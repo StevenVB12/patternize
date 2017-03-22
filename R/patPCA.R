@@ -5,8 +5,10 @@
 #'
 #' @param rList List of raster objects.
 #' @param popList List of vectors including sampleIDs for eacht population.
+#' @param plot Whether to plot the PCA analysis.
 #' @param colList List of colors for each population.
-#' @param plot Wether to include plots of the changes along the PC axis (default = FALSE).
+#' @param plotType Plot 'points' or sample 'labels' (default = 'points')
+#' @param plotChanges Wether to include plots of the changes along the PC axis (default = FALSE).
 #' @param PCx PC axis to be presented for x-axis (default PC1).
 #' @param PCy PC axis to be presented for y-axis (default PC2).
 #' @param colpalette Vector of colors for color palette
@@ -59,18 +61,18 @@
 #' popList <- list(pop1, pop2)
 #' colList <- c("red", "blue")
 #'
-#' pcaOut <- patPCA(rasterList_lanRGB, popList, colList)
-#' comp <- prcomp(pcaOut[[1]])
-#' plot(comp$rotation, col=pcaOut[[2]]$col, pch=19)
+#' pcaOut <- patPCA(rasterList_lanRGB, popList, colList, plot = TRUE)
 #'
 #' @export
 #' @import raster
+#' @importFrom stats prcomp
 
 
 patPCA <- function(rList,
                    popList,
                    colList,
                    plot = FALSE,
+                   plotType = 'points',
                    plotChanges = FALSE,
                    PCx = 1,
                    PCy = 2,
@@ -133,7 +135,7 @@ patPCA <- function(rList,
 
     pcdata <- comp$x
     rotation <- comp$rotation
-    
+
     summ <- summary(comp)
 
     if(plotChanges){
@@ -186,15 +188,15 @@ patPCA <- function(rList,
 
     if(!plotChanges){
 
-      if(plot == 'points'){
+      if(plotType == 'points'){
 
         plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=2)
       }
 
-      if(plot == 'labels'){
+      if(plotType == 'labels'){
 
         plot(comp$x[,PCx:PCy], col=NA, pch=19)
-        text(comp$x[,PCx:PCy], col=as.vector(pcaOut[[2]]$col), as.character(pcaOut[[2]]$sampleID))
+        text(comp$x[,PCx:PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
       }
     }
 
@@ -214,7 +216,7 @@ patPCA <- function(rList,
       if(plot == 'labels'){
 
         plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19, xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'), ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-        text(comp$x[,PCx], comp$x[,PCy], col=as.vector(pcaOut[[2]]$col), as.character(pcaOut[[2]]$sampleID))
+        text(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
       }
 
       if(is.null(colpalette)){

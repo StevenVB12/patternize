@@ -21,6 +21,7 @@
 #'
 #' @export
 #' @import raster
+#' @importFrom grDevices col2rgb rgb
 
 createTarget <- function(outline,
                          image,
@@ -81,6 +82,8 @@ createTarget <- function(outline,
   print('resampling raster')
   r2 <- raster::raster(rasterEx, nrow=dim(image)[1], ncol=dim(image)[2])
   rrr <- raster::resample(rr,r2, datatype="INT1U", method='ngb')
+
+  print('done')
 
   return(rrr)
 }

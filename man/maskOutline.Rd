@@ -24,7 +24,7 @@ for meanshape when using landmark transformation)}
 \item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to
 pixel coordinates (default = FALSE).}
 
-\item{cartoonID}{ID of the sample for which the cartoon was drawn. Only has to be given when 
+\item{cartoonID}{ID of the sample for which the cartoon was drawn. Only has to be given when
 refShape is 'mean'.}
 
 \item{IDlist}{List of sample IDs should be specified when refShape is 'mean'.}
@@ -55,4 +55,3 @@ outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize
 masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipOutline = 'y')
 
 }
-

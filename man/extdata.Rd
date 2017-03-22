@@ -31,4 +31,3 @@
 \description{
 Raw image, landmark and cartoon data of Heliconius erato hydara wings.
 }
-

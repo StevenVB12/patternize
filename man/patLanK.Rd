@@ -61,11 +61,10 @@ prepath <- system.file("extdata",  package = 'patternize')
 extension <- '_landmarks_LFW.txt'
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
-extension <- '.JPG'
+extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
 rasterList_lanK <- patLanK(imageList, landmarkList, k = 4, resampleFactor = 3, crop = TRUE,
 res = 150, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 
 }
-

@@ -33,4 +33,3 @@ extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
 }
-

@@ -28,7 +28,7 @@
 #' @examples
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
-#' extension <- '.JPG'
+#' extension <- '.jpg'
 #'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
@@ -155,6 +155,8 @@ patRegRGB <- function(sampleList,
     print(names(sampleList)[n])
 
     rasterList[[names(sampleList)[n]]] <- transRaster
+
+    print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))
   }
 
   return(rasterList)

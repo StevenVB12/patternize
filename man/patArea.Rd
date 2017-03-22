@@ -40,41 +40,46 @@ raster and outline coordinates).}
 \item{imageList}{List of images as obtained from \code{\link[patternize]{makeList}} should be given
 if one wants to flip the outline or adjust landmark coordinates.}
 }
+\value{
+Table or list of tables with sample IDs and relative area of color pattern or kmeans cluster.
+}
 \description{
 This fucntion calculates the area in which the color pattern is expressed in each sample as the
 relative proportion using the provided outline of the considered trait or structure.
 }
 \examples{
+
 data(rasterList_lanRGB)
-data(rasterList_regRGB)
-data(rasterList_lanK)
-data(rasterList_regK)
+#data(rasterList_regRGB)
+#data(rasterList_lanK)
+#data(rasterList_regK)
 
 data(imageList)
 
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
+
 outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
-'/BC0077_outline.txt', sep=''), h= F)
+'/BC0077_outline.txt', sep=''), header = FALSE)
+
 prepath <- system.file("extdata", package = 'patternize')
 extension <- '_landmarks_LFW.txt'
 
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
-summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
+area_lanRGB <- patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB',
+outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE,
+imageList = imageList, cartoonID = 'BC0077')
 
-patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB', outline = outline_BC0077,
-landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
+#area_regRGB <- patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB',
+#outline = outline_BC0077, crop = c(1000,4000,400,2500), adjustCoords = TRUE,
+#imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
 
-patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB', outline = outline_BC0077,
-crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
-flipRaster = 'xy')
+#areaList_lanK <- patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k',
+#outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE,
+#imageList = imageList, cartoonID = 'BC0077')
 
-patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k', outline = outline_BC0077,
-landList = landmarkList, adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077')
-
-patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k', outline = outline_BC0077,
-crop = c(1000,4000,400,2500), adjustCoords = TRUE, imageList = imageList, cartoonID = 'BC0077',
-flipRaster = 'xy')
+#areaList_regK <- patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k',
+#outline = outline_BC0077, crop = c(1000,4000,400,2500), adjustCoords = TRUE,
+#imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
 
 }
-

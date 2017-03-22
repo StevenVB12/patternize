@@ -33,15 +33,16 @@
 #' extension <- '_landmarks_LFW.txt'
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
-#' extension <- '.JPG'
+#' extension <- '.jpg'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' rasterList_lanK <- patLanK(imageList, landmarkList, k = 4, resampleFactor = 3, crop = TRUE,
 #' res = 150, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
-#' @import raster
-#'
+#' @import raster Morpho
+#' @importFrom utils capture.output
+
 patLanK <- function(sampleList,
                     landList,
                     k = 3,
@@ -198,6 +199,8 @@ patLanK <- function(sampleList,
 
     rasterList[[names(landList)[n]]] <- rasterListInd
     }
+
+    print(paste('sample', names(landList)[n], 'done and added to rasterList', sep=' '))
   }
 
   return(rasterList)

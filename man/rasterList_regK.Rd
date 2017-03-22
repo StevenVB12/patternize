@@ -19,4 +19,3 @@ summary(rasterList_regK)
 }
 }
 \keyword{datasets}
-

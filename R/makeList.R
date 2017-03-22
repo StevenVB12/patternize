@@ -19,6 +19,7 @@
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
 #'
 #' @export
+#' @importFrom utils read.table
 
 
 makeList <- function(IDlist,
@@ -29,6 +30,8 @@ makeList <- function(IDlist,
   objectList <- list()
 
   for(n in 1:length(IDlist)){
+
+    print(paste('sample', n,  IDlist[n], 'added to list', sep=' '))
 
     if(type == 'landmark'){
 
