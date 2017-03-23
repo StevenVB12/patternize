@@ -1,7 +1,10 @@
 #' This function transforms the individual color pattern rasters as obtained by the main
 #' patternize functions to a dataframe of 0 and 1 values that can be used for Principal
 #' Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
-#' analysis including a visualization of the shape changes along the axis.
+#' analysis including a visualization of the shape changes along the axis. Pixel values
+#' are predicted by multiplying the rotation matrix (eigenvectors) with a vector that has
+#' the same length as the number of rows in the rotation matrix and in which all values are
+#' set to zero except for the PC value for which we want to predict the pixel values.
 #'
 #' @param rList List of raster objects.
 #' @param popList List of vectors including sampleIDs for eacht population.
@@ -210,12 +213,17 @@ patPCA <- function(rList,
 
       if(plot == 'points'){
 
-        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3, xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'), ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       }
 
       if(plot == 'labels'){
 
-        plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19, xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'), ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+        plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+
         text(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
       }
 
@@ -278,7 +286,7 @@ patPCA <- function(rList,
     }
   }
 
-  return(list(rasDF, groupCol))
+  return(list(t(rasDF), groupCol))
 }
 
 

@@ -5,7 +5,10 @@
 \title{This function transforms the individual color pattern rasters as obtained by the main
 patternize functions to a dataframe of 0 and 1 values that can be used for Principal
 Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
-analysis including a visualization of the shape changes along the axis.}
+analysis including a visualization of the shape changes along the axis. Pixel values
+are predicted by multiplying the rotation matrix (eigenvectors) with a vector that has
+the same length as the number of rows in the rotation matrix and in which all values are
+set to zero except for the PC value for which we want to predict the pixel values.}
 \usage{
 patPCA(rList, popList, colList, plot = FALSE, plotType = "points",
   plotChanges = FALSE, PCx = 1, PCy = 2, plotCartoon = FALSE,
@@ -102,7 +105,10 @@ List including a [1] dataframe of the binary raster values that can be used for
 This function transforms the individual color pattern rasters as obtained by the main
 patternize functions to a dataframe of 0 and 1 values that can be used for Principal
 Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
-analysis including a visualization of the shape changes along the axis.
+analysis including a visualization of the shape changes along the axis. Pixel values
+are predicted by multiplying the rotation matrix (eigenvectors) with a vector that has
+the same length as the number of rows in the rotation matrix and in which all values are
+set to zero except for the PC value for which we want to predict the pixel values.
 }
 \examples{
 data(rasterList_lanRGB)
