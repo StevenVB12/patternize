@@ -63,8 +63,9 @@ landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
 extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
-
-rasterList_lanK <- patLanK(imageList, landmarkList, k = 4, resampleFactor = 3, crop = TRUE,
-res = 150, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
+# Note that this example only aligns two images with the target,
+# remove [1:2] to run a full examples.
+rasterList_lanK <- patLanK(imageList[1:2], landmarkList[1:2], k = 4, crop = TRUE,
+res = 100, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 
 }

@@ -36,8 +36,10 @@
 #'
 #' RGB <- c(114,17,0)
 #'
-#' rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10,
-#' colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
+#' # Note that this example only aligns one image with the target,
+#' # remove [2] to run a full examples.
+#' rasterList_regRGB <- patRegRGB(imageList[2], target, RGB,
+#' colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
 #'
 #' @export
 #' @import raster
@@ -68,11 +70,11 @@ patRegRGB <- function(sampleList,
     target <- redRes(target, resampleFactor)
   }
 
-  target <- apply(raster::as.array(target),1:2,mean)
+  target <- apply(raster::as.array(target), 1:2, mean)
 
   if(is.numeric(removebgR)){
 
-    target <- apply(target, 1:2, function(x) ifelse(x > removebgR,0, x))
+    target <- apply(target, 1:2, function(x) ifelse(x > removebgR, 0, x))
   }
 
   for(n in 1:length(sampleList)){
@@ -84,12 +86,16 @@ patRegRGB <- function(sampleList,
 
       extRaster <- crop
       sStack <- crop(sStack, extRaster)
-
     }
 
-    sourceRaster <- redRes(sStack, resampleFactor)
+    sourceRaster <- sStack
+
+    if(!is.null(resampleFactor)){
+      sourceRaster <- redRes(sStack, resampleFactor)
+    }
 
     if(focal){
+
       gf <- focalWeight(sourceRaster, sigma, "Gauss")
 
       rrr1 <- raster::focal(sourceRaster[[1]], gf)
@@ -101,11 +107,11 @@ patRegRGB <- function(sampleList,
 
     sourceRasterK <- sourceRaster
 
-    sourceRaster <- apply(raster::as.array(sourceRaster),1:2,mean)
+    sourceRaster <- apply(raster::as.array(sourceRaster), 1:2, mean)
 
     if(is.numeric(removebgR)){
 
-      sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR,0, x))
+      sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR, 0, x))
     }
 
     result <- RNiftyReg::niftyreg(sourceRaster, target, useBlockPercentage=useBlockPercentage)

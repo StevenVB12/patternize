@@ -33,8 +33,10 @@
 #'
 #' target <- imageList[[1]]
 #'
-#' rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10,
-#' crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
+#' \dontrun{
+#' rasterList_regK <- patRegK(imageList[3], target, k = 5,
+#' crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
+#' }
 #'
 #' @export
 
@@ -51,8 +53,6 @@ patRegK <- function(sampleList,
                     plot = FALSE,
                     focal =  FALSE,
                     sigma = 3){
-
-  imageList <- sampleList
 
   rasterList <- list()
 
@@ -84,7 +84,11 @@ patRegK <- function(sampleList,
       sStack <- crop(sStack, extRaster)
     }
 
-    sourceRaster <- redRes(sStack, resampleFactor)
+    sourceRaster <- redRes(sStack, 1)
+
+    if(!is.null(resampleFactor)){
+      sourceRaster <- redRes(sStack, resampleFactor)
+    }
 
     if(focal){
 
@@ -121,7 +125,8 @@ patRegK <- function(sampleList,
     raster::extent(transRaster) <- raster::extent(sourceRasterK)
 
     if(!is.null(maskOutline)){
-      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop, maskColor = maskColor, imageList = imageList)
+      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop,
+                                 maskColor = maskColor, imageList = sampleList)
     }
 
     # k-means clustering of image
@@ -188,9 +193,9 @@ patRegK <- function(sampleList,
       rasterListInd[[e]] <- r
 
     }
-    rasterList[[names(imageList)[n]]] <- rasterListInd
+    rasterList[[names(sampleList)[n]]] <- rasterListInd
 
-    print(paste('sample', names(imageList)[n], 'done and added to rasterList', sep=' '))
+    print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))
   }
 
   return(rasterList)

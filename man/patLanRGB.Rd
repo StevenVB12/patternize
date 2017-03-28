@@ -66,7 +66,7 @@ extension <- '.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
 RGB <- c(114,17,0)
-rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, resampleFactor = 3,
-colOffset = 0.15, crop = TRUE, res = 150, adjustCoords = TRUE, plot = TRUE)
+rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB,
+colOffset = 0.15, crop = TRUE, res = 100, adjustCoords = TRUE, plot = TRUE)
 
 }

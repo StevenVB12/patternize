@@ -60,7 +60,9 @@ imageList <- makeList(IDlist, 'image', prepath, extension)
 
 target <- imageList[[1]]
 
-rasterList_regK <- patRegK(imageList, target, k = 5, resampleFactor = 10,
-crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
+\dontrun{
+rasterList_regK <- patRegK(imageList[3], target, k = 5,
+crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
+}
 
 }

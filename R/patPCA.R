@@ -8,8 +8,8 @@
 #'
 #' @param rList List of raster objects.
 #' @param popList List of vectors including sampleIDs for eacht population.
-#' @param plot Whether to plot the PCA analysis.
 #' @param colList List of colors for each population.
+#' @param plot Whether to plot the PCA analysis.
 #' @param plotType Plot 'points' or sample 'labels' (default = 'points')
 #' @param plotChanges Wether to include plots of the changes along the PC axis (default = FALSE).
 #' @param PCx PC axis to be presented for x-axis (default PC1).
@@ -132,7 +132,7 @@ patPCA <- function(rList,
   colnames(groupCol) <- c('sampleID', 'col')
 
 
-  if(is.character(plot)){
+  if(plot == TRUE){
 
     comp <- prcomp(t(rasDF))
 

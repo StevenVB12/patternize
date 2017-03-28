@@ -35,9 +35,10 @@
 #'
 #' extension <- '.jpg'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
-#'
-#' rasterList_lanK <- patLanK(imageList, landmarkList, k = 4, resampleFactor = 3, crop = TRUE,
-#' res = 150, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
+#' # Note that this example only aligns two images with the target,
+#' # remove [1:2] to run a full examples.
+#' rasterList_lanK <- patLanK(imageList[1:2], landmarkList[1:2], k = 4, crop = TRUE,
+#' res = 100, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 #'
 #' @export
 #' @import raster Morpho
@@ -112,31 +113,29 @@ patLanK <- function(sampleList,
     }
 
     if(!is.null(resampleFactor)){
-      imageRaster <- redRes(image, resampleFactor)
+      image <- redRes(image, resampleFactor)
     }
 
     if(focal){
-      gf <- focalWeight(imageRaster, sigma, "Gauss")
+      gf <- focalWeight(image, sigma, "Gauss")
 
-      rrr1 <- raster::focal(imageRaster[[1]], gf)
-      rrr2 <- raster::focal(imageRaster[[2]], gf)
-      rrr3 <- raster::focal(imageRaster[[3]], gf)
+      rrr1 <- raster::focal(image[[1]], gf)
+      rrr2 <- raster::focal(image[[2]], gf)
+      rrr3 <- raster::focal(image[[3]], gf)
 
-      imageRaster <- raster::stack(rrr1, rrr2, rrr3)
+      image <- raster::stack(rrr1, rrr2, rrr3)
     }
-
-    # image <- raster::as.array(imageRaster)
 
     if(is.vector(removebgK)){
 
-      toMask <- apply(raster::as.array(imageRaster), 1:2, function(x) all(x > removebgK))
+      toMask <- apply(raster::as.array(image), 1:2, function(x) all(x > removebgK))
 
       toMaskR <- raster::raster(as.matrix(toMask))
-      raster::extent(toMaskR) <- raster::extent(imageRaster)
+      raster::extent(toMaskR) <- raster::extent(image)
       toMaskR[toMaskR == 0] <- NA
 
-      imageRaster<-raster::mask(imageRaster, toMaskR, inverse = T)
-      imageRaster[is.na(imageRaster)] <- 0
+      image<-raster::mask(image, toMaskR, inverse = T)
+      image[is.na(image)] <- 0
     }
 
     # k-means clustering of image
@@ -149,7 +148,7 @@ patLanK <- function(sampleList,
       startCenter <- K$centers
     }
 
-    imageKmeans <- kImage(raster::as.array(imageRaster), k, startCenter)
+    imageKmeans <- kImage(raster::as.array(image), k, startCenter)
 
     image.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]

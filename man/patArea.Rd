@@ -70,16 +70,18 @@ area_lanRGB <- patArea(rasterList_lanRGB, IDlist, refShape = 'mean', type = 'RGB
 outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE,
 imageList = imageList, cartoonID = 'BC0077')
 
-#area_regRGB <- patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB',
-#outline = outline_BC0077, crop = c(1000,4000,400,2500), adjustCoords = TRUE,
-#imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
+\dontrun{
+area_regRGB <- patArea(rasterList_regRGB, IDlist, refShape = 'target', type = 'RGB',
+outline = outline_BC0077, crop = c(100,400,40,250), adjustCoords = TRUE,
+imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
 
-#areaList_lanK <- patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k',
-#outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE,
-#imageList = imageList, cartoonID = 'BC0077')
+areaList_lanK <- patArea(rasterList_lanK, IDlist, refShape = 'mean', type = 'k',
+outline = outline_BC0077, landList = landmarkList, adjustCoords = TRUE,
+imageList = imageList, cartoonID = 'BC0077')
 
-#areaList_regK <- patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k',
-#outline = outline_BC0077, crop = c(1000,4000,400,2500), adjustCoords = TRUE,
-#imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
+areaList_regK <- patArea(rasterList_regK, IDlist, refShape = 'target', type = 'k',
+outline = outline_BC0077, crop = c(100,400,40,250), adjustCoords = TRUE,
+imageList = imageList, cartoonID = 'BC0077', flipRaster = 'xy')
+}
 
 }

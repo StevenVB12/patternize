@@ -9,7 +9,7 @@
 #'    of class "\code{kmeans}".
 #'
 #' @examples
-#' image <- raster::stack(system.file("extdata", "BC0077.JPG", package = "patternize"))
+#' image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))
 #' out <- kImage(image, 6)
 #'
 #' @export

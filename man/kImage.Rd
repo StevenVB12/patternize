@@ -23,7 +23,7 @@ List including the k-means clustered \code{RasterSatck} returned as an array and
 used by \code{patLanK} and \code{patRegK}.
 }
 \examples{
-image <- raster::stack(system.file("extdata", "BC0077.JPG", package = "patternize"))
+image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))
 out <- kImage(image, 6)
 
 }

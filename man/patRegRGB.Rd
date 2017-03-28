@@ -63,7 +63,9 @@ target <- imageList[[1]]
 
 RGB <- c(114,17,0)
 
-rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 10,
-colOffset= 0.15, crop = c(1000,4000,400,2500), removebgR = 100, plot = TRUE)
+# Note that this example only aligns one image with the target,
+# remove [2] to run a full examples.
+rasterList_regRGB <- patRegRGB(imageList[2], target, RGB,
+colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
 
 }

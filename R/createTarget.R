@@ -12,12 +12,15 @@
 #' @return RasterStack
 #'
 #' @examples
+#'
+#' \dontrun{
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
 #' '/BC0077_outline.txt', sep=''), header = FALSE)
 #'
 #' data(imageList)
 #'
 #' target <- createTarget(outline_BC0077, imageList[[1]], plot =  TRUE)
+#' }
 #'
 #' @export
 #' @import raster
