@@ -153,7 +153,7 @@ patLanRGB <- function(sampleList,
       raster::extent(mapRaster) <- extRaster
       mapRaster[mapRaster == 0] <- NA
 
-      mapMASK<-raster::mask(raster::as.array(image), mapRaster)
+      mapMASK<-raster::mask(image, mapRaster)
 
       RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
                mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
