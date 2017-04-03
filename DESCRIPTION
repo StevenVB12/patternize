@@ -1,6 +1,6 @@
 Package: patternize
 Title: Quantification of Color Pattern Variation
-Version: 0.0.1
+Version: 0.0.1.1
 Authors@R: person("Steven", "Van Belleghem", email = "vanbelleghemsteven@hotmail.com", role = c("aut", "cre"))
 Maintainer: Steven Van Belleghem <vanbelleghemsteven@hotmail.com>
 Description: Quantification of variation in organismal color patterns as obtained from image data. 

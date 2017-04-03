@@ -78,7 +78,7 @@ patLanRGB <- function(sampleList,
 
   if(is.matrix(transformRef)){
 
-    refShape <- transformed$mshape
+    refShape <- transformRef
 
   }
 

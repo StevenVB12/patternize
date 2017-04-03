@@ -73,23 +73,32 @@ patLanK <- function(sampleList,
 
   lanArray <- lanArray(landList, adjustCoords, sampleList)
 
-  if(transformRef == 'meanshape'){
+  if(is.matrix(transformRef)){
 
-    invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
-    refShape <- transformed$mshape
+    refShape <- transformRef
 
   }
 
   else{
 
-    if(exists(landList[[transformRef]])){
+    if(transformRef == 'meanshape'){
 
-      e <- which(names(landList) == transformRef)
-      refShape <- lanArray[e]
+      invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
+      refShape <- transformed$mshape
+
     }
 
     else{
-      stop("specified ID for reference shape does not exist")
+
+      if(exists(landList[[transformRef]])){
+
+        e <- which(names(landList) == transformRef)
+        refShape <- lanArray[e]
+      }
+
+      else{
+        stop("specified ID for reference shape does not exist")
+      }
     }
   }
 
