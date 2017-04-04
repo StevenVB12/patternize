@@ -23,7 +23,7 @@ install_github("zarquon42b/Morpho")
 
 <b>Making cartoon for plotting (or masking)</b>
 
-To plot a cartoon of the organism or trait of interest I use XY coordinates of an outline or lines obtained in the Fiji distribution of ImageJ (https://fiji.sc/). The cartoon should be drawn for the reference (target) image when using image registration (patRegRGB or patRegK) or when using landmark transformation to a target image (patLanRGB or patLanK; transformRef = 'sample_ID').
+To plot a cartoon of the organism or trait of interest I use XY coordinates of an outline or lines obtained in the Fiji distribution of ImageJ (https://fiji.sc/). This is an annoying manual task, but if done precisely it can provide an outline or cartoon for any type of shape. The cartoon should be drawn for the reference (target) image when using image registration (patRegRGB or patRegK) or when using landmark transformation to a target image (patLanRGB or patLanK; transformRef = 'sample_ID'). When using transformRef = 'meanShape', the cartoon will also be transformed to the mean shape.
 
 outline
 ```
