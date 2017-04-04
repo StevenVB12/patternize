@@ -20,3 +20,25 @@ install_github("zarquon42b/Morpho")
 ```
 
 <b>For examples see package examples or https://github.com/StevenVB12/patternize-examples</b>
+
+<b>Making cartoon for plotting (or masking)</b>
+
+To plot a cartoon of the organism or trait of interest I use XY coordinates of an outline or lines obtained in the Fiji distribution of ImageJ (https://fiji.sc/). The cartoon should be drawn for the reference (target) image when using image registration (patRegRGB or patRegK) or when using landmark transformation to a target image (patLanRGB or patLanK; transformRef = 'sample_ID').
+
+outline
+```
+Fiji
+> File > open (image)
+> Polygon selections (draw outline)
+> Save As > XY coordinates
+
+```
+
+lines
+```
+Fiji
+> File > open (image)
+> Multi-point (draw lines by setting points)
+> Save As > XY coordinates
+
+```
