@@ -21,6 +21,18 @@ install_github("zarquon42b/Morpho")
 
 <b>For examples see package examples or https://github.com/StevenVB12/patternize-examples</b>
 
+<b>Setting landmarks</b>
+
+I set landmarks using the Fiji distribution of ImageJ (https://fiji.sc/).
+
+```
+Fiji
+> File > open (image)
+> Multi-point (make sure points are set in the same order for each sample)
+> Save As > XY coordinates
+
+```
+
 <b>Making cartoon for plotting (or masking)</b>
 
 To plot a cartoon of the organism or trait of interest I use XY coordinates of an outline or lines obtained in the Fiji distribution of ImageJ (https://fiji.sc/). This is an annoying manual task, but if done precisely it can provide an outline or cartoon for any type of shape. The cartoon should be drawn for the reference (target) image when using image registration (patRegRGB or patRegK) or when using landmark transformation to a target image (patLanRGB or patLanK; transformRef = 'sample_ID'). When using transformRef = 'meanShape', the cartoon will also be transformed to the mean shape.
@@ -34,7 +46,7 @@ Fiji
 
 ```
 
-lines
+lines (same as setting landmarks)
 ```
 Fiji
 > File > open (image)
