@@ -30,7 +30,6 @@ Fiji
 > File > open (image)
 > Multi-point (make sure points are set in the same order for each sample)
 > Save As > XY coordinates
-
 ```
 
 <b>Making cartoon for plotting (or masking)</b>
@@ -43,7 +42,6 @@ Fiji
 > File > open (image)
 > Polygon selections (draw outline)
 > Save As > XY coordinates
-
 ```
 
 lines (same as setting landmarks)
@@ -52,5 +50,4 @@ Fiji
 > File > open (image)
 > Multi-point (draw lines by setting points)
 > Save As > XY coordinates
-
 ```
