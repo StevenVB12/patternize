@@ -5,7 +5,7 @@
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
-#' @param colOffset Color offset for color pattern extraction (default = 0).
+#' @param colOffset Color offset for color pattern extraction (default = 0.10).
 #' @param crop Whether to use the landmarks range to crop the image. This can significantly
 #'    speed up the analysis (default = FALSE).
 #' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you
@@ -50,7 +50,7 @@ patLanRGB <- function(sampleList,
                       landList,
                       RGB,
                       resampleFactor = NULL,
-                      colOffset = 0,
+                      colOffset = 0.10,
                       crop = FALSE,
                       cropOffset = NULL,
                       res = 300,
@@ -189,7 +189,7 @@ patLanRGB <- function(sampleList,
         plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
       }
 
-      par(new=T)
+      par(new = TRUE)
       plot(patternRaster, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
     }
 

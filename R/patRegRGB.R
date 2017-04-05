@@ -7,7 +7,7 @@
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}} (default = NULL).
 #' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
 #'    (default = 75).
-#' @param colOffset Color offset for color pattern extraction (default = 0).
+#' @param colOffset Color offset for color pattern extraction (default = 0.10).
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
 #'    original image.
 #' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
@@ -49,7 +49,7 @@ patRegRGB <- function(sampleList,
                       RGB,
                       resampleFactor = NULL,
                       useBlockPercentage = 75,
-                      colOffset=0,
+                      colOffset=0.10,
                       crop = c(0,0,0,0),
                       removebgR = NULL,
                       maskOutline = NULL,
@@ -151,10 +151,10 @@ patRegRGB <- function(sampleList,
     if(plot){
 
       if(n == 1){
-        plot(1, type="n", axes=F, xlab='', ylab='')
+        plot(1, type="n", axes = FALSE, xlab='', ylab='')
       }
 
-      par(new=T)
+      par(new = TRUE)
       raster::plot(transRaster, col=rgb(1,0,0,alpha=1/length(sampleList)),legend = FALSE)
     }
 
