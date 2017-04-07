@@ -21,6 +21,10 @@ install_github("zarquon42b/Morpho")
 
 <b>For examples see package examples or https://github.com/StevenVB12/patternize-examples</b>
 
+<b>Workflow</b>
+
+<img src="https://cloud.githubusercontent.com/assets/6349171/24803641/b6187db6-1ba3-11e7-893d-67f064faf876.png" alt="workflow" width="500" align="center"></p>
+
 <b>Setting landmarks</b>
 
 I set landmarks using the Fiji distribution of ImageJ (https://fiji.sc/).
