@@ -23,7 +23,7 @@ install_github("zarquon42b/Morpho")
 
 <b>Workflow</b>
 
-<img src="https://cloud.githubusercontent.com/assets/6349171/24803641/b6187db6-1ba3-11e7-893d-67f064faf876.png" alt="workflow" width="500" align="center"></p>
+<img src="https://cloud.githubusercontent.com/assets/6349171/24803641/b6187db6-1ba3-11e7-893d-67f064faf876.png" alt="workflow" width="500" align="centre"></p>
 
 <b>Setting landmarks</b>
 
