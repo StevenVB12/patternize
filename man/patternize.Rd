@@ -90,7 +90,9 @@ transformation is used, landmark arrays.
    Intersects a RasterStack with an outline. Everything outside of the outline will be removed
    from the raster.
 }
-
+\author{
+Steven M. Van Belleghem
+}
 \seealso{
 \code{\link[raster]{raster}},
 \code{\link[raster]{stack}},
@@ -105,6 +107,4 @@ https://CRAN.R-project.org/package=RNiftyReg} \cr
 \cite{Stefan Schlager (2016). Morpho: Calculations and Visualisations Related to Geometric
 Morphometrics. R package version 2.4.1.1. https://github.com/zarquon42b/Morpho} \cr
 }
-\author{
-Steven M. Van Belleghem
-}
+

@@ -69,3 +69,4 @@ rasterList_lanK <- patLanK(imageList[1:2], landmarkList[1:2], k = 4, crop = TRUE
 res = 100, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 
 }
+

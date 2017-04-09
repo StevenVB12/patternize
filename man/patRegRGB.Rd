@@ -6,7 +6,7 @@
 and extracts colors using a predefined RGB values and cutoff value.}
 \usage{
 patRegRGB(sampleList, target, RGB, resampleFactor = NULL,
-  useBlockPercentage = 75, colOffset = 0, crop = c(0, 0, 0, 0),
+  useBlockPercentage = 75, colOffset = 0.1, crop = c(0, 0, 0, 0),
   removebgR = NULL, maskOutline = NULL, plot = FALSE, focal = FALSE,
   sigma = 3, iterations = 0)
 }
@@ -22,7 +22,7 @@ patRegRGB(sampleList, target, RGB, resampleFactor = NULL,
 \item{useBlockPercentage}{Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
 (default = 75).}
 
-\item{colOffset}{Color offset for color pattern extraction (default = 0).}
+\item{colOffset}{Color offset for color pattern extraction (default = 0.10).}
 
 \item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
 original image.}
@@ -69,3 +69,4 @@ rasterList_regRGB <- patRegRGB(imageList[2], target, RGB,
 colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
 
 }
+

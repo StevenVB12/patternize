@@ -124,3 +124,4 @@ pcaOut <- patPCA(rasterList_lanRGB, popList, colList, plot = TRUE)
 \seealso{
 \code{\link[stats]{prcomp}}
 }
+

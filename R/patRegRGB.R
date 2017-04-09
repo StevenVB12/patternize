@@ -118,6 +118,10 @@ patRegRGB <- function(sampleList,
 
     map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
+    if(all(map == FALSE)){
+      stop("The RGB range does not seem to overlap with any of the RGB values in the image")
+    }
+
     x <- 1
     while(x <= iterations){
       x <- x + 1

@@ -19,3 +19,4 @@ summary(rasterList_lanRGB)
 }
 }
 \keyword{datasets}
+

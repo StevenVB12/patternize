@@ -5,7 +5,7 @@
 \title{Aligns images usings transformations obtained from fixed landmarks and extracts colors
 using a predefined RGB values and cutoff value.}
 \usage{
-patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
+patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0.1,
   crop = FALSE, cropOffset = NULL, res = 300,
   transformRef = "meanshape", transformType = "tps", adjustCoords = FALSE,
   plot = FALSE, focal = FALSE, sigma = 3, iterations = 0)
@@ -19,7 +19,7 @@ patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0,
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
 
-\item{colOffset}{Color offset for color pattern extraction (default = 0).}
+\item{colOffset}{Color offset for color pattern extraction (default = 0.10).}
 
 \item{crop}{Whether to use the landmarks range to crop the image. This can significantly
 speed up the analysis (default = FALSE).}
@@ -70,3 +70,4 @@ rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB,
 colOffset = 0.15, crop = TRUE, res = 100, adjustCoords = TRUE, plot = TRUE)
 
 }
+
