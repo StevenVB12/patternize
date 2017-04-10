@@ -8,7 +8,7 @@ using a predefined RGB values and cutoff value.}
 patLanRGB(sampleList, landList, RGB, resampleFactor = NULL, colOffset = 0.1,
   crop = FALSE, cropOffset = NULL, res = 300,
   transformRef = "meanshape", transformType = "tps", adjustCoords = FALSE,
-  plot = FALSE, focal = FALSE, sigma = 3, iterations = 0)
+  plot = NULL, focal = FALSE, sigma = 3, iterations = 0)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -40,7 +40,9 @@ to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
 \item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel
 coordinates (default = FALSE).}
 
-\item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
+\item{plot}{Whether to plot transformed color patterns while processing (default = NULL).
+Transformed color patterns can be plot on top of each other ('stack') or next to the
+original image for each sample ('compare').}
 
 \item{focal}{Whether to perform Gaussian blurring (default = FALSE).}
 

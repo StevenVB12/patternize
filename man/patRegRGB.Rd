@@ -34,7 +34,9 @@ remove a white background.}
 \item{maskOutline}{When outline is specified, everything outside of the outline will be masked for
 the color extraction (default = NULL).}
 
-\item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).}
+\item{plot}{Whether to plot transformed color patterns while processing (default = FALSE).
+Transformed color patterns can be plot on top of each other ('stack') or next to the
+original image for each sample ('compare').}
 
 \item{focal}{Whether to perform Gaussian blurring (default = FALSE).}
 

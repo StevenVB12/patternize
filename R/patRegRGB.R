@@ -16,6 +16,8 @@
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
+#'    Transformed color patterns can be plot on top of each other ('stack') or next to the
+#'    original image for each sample ('compare').
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #' @param iterations Number of iterations for recalculating average color (default = 0). If set the
@@ -152,7 +154,7 @@ patRegRGB <- function(sampleList,
     }
     transRaster[transRaster == 0] <- NA
 
-    if(plot){
+    if(plot == 'stack'){
 
       if(n == 1){
         plot(1, type="n", axes = FALSE, xlab='', ylab='')
@@ -160,6 +162,22 @@ patRegRGB <- function(sampleList,
 
       par(new = TRUE)
       raster::plot(transRaster, col=rgb(1,0,0,alpha=1/length(sampleList)),legend = FALSE)
+    }
+
+    if(plot == 'compare'){
+
+      par(mfrow=c(1,2))
+      plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
+      par(new = TRUE)
+      plot(transRaster, col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+
+      x <- as.array(sStack)/255
+      cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+      uniqueCols <- unique(cols)
+      x2 <- match(cols, uniqueCols)
+      dim(x2) <- dim(x)[1:2]
+      raster::image(apply(x2, 1, rev), col=uniqueCols, yaxt='n', xaxt='n')
+
     }
 
     print(names(sampleList)[n])

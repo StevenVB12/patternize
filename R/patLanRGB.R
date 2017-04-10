@@ -19,7 +19,9 @@
 #'    (default ='tps').
 #' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
 #'    coordinates (default = FALSE).
-#' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
+#' @param plot Whether to plot transformed color patterns while processing (default = NULL).
+#'    Transformed color patterns can be plot on top of each other ('stack') or next to the
+#'    original image for each sample ('compare').
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #' @param iterations Number of iterations for recalculating average color.
@@ -57,7 +59,7 @@ patLanRGB <- function(sampleList,
                       transformRef = 'meanshape',
                       transformType='tps',
                       adjustCoords = FALSE,
-                      plot = FALSE,
+                      plot = NULL,
                       focal =  FALSE,
                       sigma = 3,
                       iterations = 0){
@@ -188,7 +190,8 @@ patLanRGB <- function(sampleList,
     }
 
     patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
-    if(plot){
+
+    if(plot == 'stack'){
 
       if(n == 1){
         plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
@@ -197,6 +200,23 @@ patLanRGB <- function(sampleList,
       par(new = TRUE)
       plot(patternRaster, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
     }
+
+    if(plot == 'compare'){
+
+      par(mfrow=c(1,2))
+      plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
+      par(new = TRUE)
+      plot(patternRaster, col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+
+      x <- as.array(image)/255
+      cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+      uniqueCols <- unique(cols)
+      x2 <- match(cols, uniqueCols)
+      dim(x2) <- dim(x)[1:2]
+      raster::image(apply(x2, 1, rev), col=uniqueCols, yaxt='n', xaxt='n')
+
+    }
+
 
 
     rasterList[[names(landList)[n]]] <- patternRaster
