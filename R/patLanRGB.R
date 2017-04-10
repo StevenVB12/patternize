@@ -40,7 +40,7 @@
 #'
 #' RGB <- c(114,17,0)
 #' rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB,
-#' colOffset = 0.15, crop = TRUE, res = 100, adjustCoords = TRUE, plot = TRUE)
+#' colOffset = 0.15, crop = TRUE, res = 100, adjustCoords = TRUE, plot = 'stack')
 #'
 #' @export
 #' @import raster Morpho

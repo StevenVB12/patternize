@@ -41,7 +41,7 @@
 #' # Note that this example only aligns one image with the target,
 #' # remove [2] to run a full examples.
 #' rasterList_regRGB <- patRegRGB(imageList[2], target, RGB,
-#' colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
+#' colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = 'stack')
 #'
 #' @export
 #' @import raster
