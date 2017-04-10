@@ -114,9 +114,13 @@ patLanK <- function(sampleList,
 
       if(!is.null(cropOffset)){
 
-        extRaster <- raster::extent(min(landm[,1])-cropOffset[1], max(landm[,1])+cropOffset[2], min(landm[,2])-cropOffset[3], max(landm[,2])+cropOffset[4])
+        extRaster <- raster::extent(min(landm[,1])-cropOffset[1],
+                                    max(landm[,1])+cropOffset[2],
+                                    min(landm[,2])-cropOffset[3],
+                                    max(landm[,2])+cropOffset[4])
 
       }
+
 
       image <- raster::crop(image, extRaster)
     }

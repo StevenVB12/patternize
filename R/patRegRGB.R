@@ -156,6 +156,7 @@ patRegRGB <- function(sampleList,
 
     if(plot == 'stack'){
 
+      par(mfrow=c(1,1))
       if(n == 1){
         plot(1, type="n", axes = FALSE, xlab='', ylab='')
       }
