@@ -157,6 +157,7 @@ patLanRGB <- function(sampleList,
       raster::extent(mapRaster) <- extRaster
       mapRaster[mapRaster == 0] <- NA
 
+      raster::extent(image) <- extRaster
       mapMASK<-raster::mask(image, mapRaster)
 
       RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
@@ -174,7 +175,7 @@ patLanRGB <- function(sampleList,
 
     mapDFs <- subset(mapDF, mapDF$layer == TRUE)
 
-    invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, lanArray[,,n], type = transformType)))
+    invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, as.matrix(lanArray[,,n]), type = transformType)))
 
     invisible(capture.output(mapTransformed <- Morpho::applyTransform(as.matrix(mapDFs[1:2]), transMatrix)))
 

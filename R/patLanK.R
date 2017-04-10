@@ -192,7 +192,7 @@ patLanK <- function(sampleList,
 
       mapDFs <- subset(mapDF, mapDF$layer == TRUE)
 
-      invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, lanArray[,,n], type = transformType)))
+      invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, as.matrix(lanArray[,,n]), type = transformType)))
 
       invisible(capture.output(mapTransformed <- Morpho::applyTransform(as.matrix(mapDFs[1:2]), transMatrix)))
 
