@@ -51,8 +51,8 @@
 #' @param main Optional main title.
 #'
 #' @return  List including a [1] dataframe of the binary raster values that can be used for
-#'    principle component analysis and [2] a dataframe of sample IDs and specified population
-#'    colors.
+#'    principle component analysis, [2] a dataframe of sample IDs and specified population
+#'    colors and [3] prcomp results.
 #'
 #' @seealso \code{\link[stats]{prcomp}}
 #'
@@ -286,7 +286,7 @@ patPCA <- function(rList,
     }
   }
 
-  return(list(t(rasDF), groupCol))
+  return(list(t(rasDF), groupCol, comp))
 }
 
 
