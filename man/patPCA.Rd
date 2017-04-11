@@ -98,8 +98,8 @@ landmarks (default = FALSE).}
 }
 \value{
 List including a [1] dataframe of the binary raster values that can be used for
-   principle component analysis and [2] a dataframe of sample IDs and specified population
-   colors.
+   principle component analysis, [2] a dataframe of sample IDs and specified population
+   colors and [3] prcomp results.
 }
 \description{
 This function transforms the individual color pattern rasters as obtained by the main

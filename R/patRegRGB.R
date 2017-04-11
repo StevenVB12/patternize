@@ -121,38 +121,52 @@ patRegRGB <- function(sampleList,
     map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
     if(all(map == FALSE)){
-      stop("The RGB range does not seem to overlap with any of the RGB values in the image")
+      warning("The RGB range does not seem to overlap with any of the RGB values in the image")
     }
 
-    x <- 1
-    while(x <= iterations){
-      x <- x + 1
+    if(iterations > 0){
+      if(all(map == FALSE)){
+        warning("Iterations can't be performed")
+      }
+    }
 
-      mapRaster <- raster::raster(as.matrix(map))
-      extent(mapRaster) <- extRaster
-      mapRaster[mapRaster == 0] <- NA
+    if(all(map != FALSE)){
 
-      mapMASK<-raster::mask(sourceRasterK, mapRaster)
+      x <- 1
+      while(x <= iterations){
+        x <- x + 1
 
-      RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
-               mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
-               mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
+        mapRaster <- raster::raster(as.matrix(map))
+        extent(mapRaster) <- extRaster
+        mapRaster[mapRaster == 0] <- NA
 
-      map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+        mapMASK<-raster::mask(sourceRasterK, mapRaster)
+
+        RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
+                 mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
+                 mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
+
+        map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+
+      }
+
+      transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), map, interpolation=0)
+      transformedMapMatrix <- transformedMap[1:nrow(transformedMap),ncol(transformedMap):1]
+
+      transRaster <- raster::raster(transformedMapMatrix)
+      raster::extent(transRaster) <- extRaster
+
+      if(!is.null(maskOutline)){
+
+        transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop)
+      }
+      transRaster[transRaster == 0] <- NA
 
     }
 
-    transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), map, interpolation=0)
-    transformedMapMatrix <- transformedMap[1:nrow(transformedMap),ncol(transformedMap):1]
-
-    transRaster <- raster::raster(transformedMapMatrix)
-    raster::extent(transRaster) <- extRaster
-
-    if(!is.null(maskOutline)){
-
-      transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop)
+    else{
+      transRaster <- raster::raster(extRaster, nrow=dim(sStack)[1], ncol=dim(sStack)[2])
     }
-    transRaster[transRaster == 0] <- NA
 
     if(plot == 'stack'){
 

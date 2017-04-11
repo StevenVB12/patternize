@@ -148,27 +148,34 @@ patLanRGB <- function(sampleList,
     map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
     if(all(map == FALSE)){
-      stop("The RGB range does not seem to overlap with any of the RGB values in the image")
+      warning("The RGB range does not seem to overlap with any of the RGB values in the image")
     }
 
-    x <- 1
-    while(x <= iterations){
-      x <- x + 1
-
-      mapRaster <- raster::raster(as.matrix(map))
-      raster::extent(mapRaster) <- extRaster
-      mapRaster[mapRaster == 0] <- NA
-
-      raster::extent(image) <- extRaster
-      mapMASK<-raster::mask(image, mapRaster)
-
-      RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
-               mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
-               mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
-
-      map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
-
+    if(iterations > 0){
+      if(all(map == FALSE)){
+        warning("Iterations can't be performed")
+      }
     }
+
+    if(all(map != FALSE)){
+
+      x <- 1
+      while(x <= iterations){
+        x <- x + 1
+
+        mapRaster <- raster::raster(as.matrix(map))
+        raster::extent(mapRaster) <- extRaster
+        mapRaster[mapRaster == 0] <- NA
+
+        raster::extent(image) <- extRaster
+        mapMASK<-raster::mask(image, mapRaster)
+
+        RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
+                 mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
+                 mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
+
+        map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+      }
 
     mapR <- raster::raster(map)
     raster::extent(mapR) <- extRaster
@@ -191,6 +198,12 @@ patLanRGB <- function(sampleList,
 
     patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
+    }
+
+    else{
+      patternRaster <- raster::raster(ncol = res, nrow = res, vals = rep(0, res*res))
+    }
+
     if(plot == 'stack'){
 
       par(mfrow=c(1,1))
@@ -210,7 +223,7 @@ patLanRGB <- function(sampleList,
       plot(patternRaster, col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
 
       x <- as.array(image)/255
-      cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+      cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1.01)
       uniqueCols <- unique(cols)
       x2 <- match(cols, uniqueCols)
       dim(x2) <- dim(x)[1:2]
