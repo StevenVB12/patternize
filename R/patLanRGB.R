@@ -157,7 +157,7 @@ patLanRGB <- function(sampleList,
       }
     }
 
-    if(all(map != FALSE)){
+    if(!all(map == FALSE)){
 
       x <- 1
       while(x <= iterations){
@@ -201,7 +201,7 @@ patLanRGB <- function(sampleList,
     }
 
     else{
-      patternRaster <- raster::raster(ncol = res, nrow = res, vals = rep(0, res*res))
+      patternRaster <- raster::raster(ncol = res, nrow = res, vals = rep(NA, res*res))
     }
 
     if(plot == 'stack'){

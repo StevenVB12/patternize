@@ -130,7 +130,7 @@ patRegRGB <- function(sampleList,
       }
     }
 
-    if(all(map != FALSE)){
+    if(!all(map == FALSE)){
 
       x <- 1
       while(x <= iterations){
@@ -165,7 +165,7 @@ patRegRGB <- function(sampleList,
     }
 
     else{
-      transRaster <- raster::raster(extRaster, nrow=dim(sStack)[1], ncol=dim(sStack)[2])
+      transRaster <- raster::raster(extRaster, nrow=dim(sStack)[1], ncol=dim(sStack)[2], vals = rep(NA, dim(sStack)[1]*dim(sStack)[2]))
     }
 
     if(plot == 'stack'){
