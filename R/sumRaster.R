@@ -30,6 +30,15 @@ sumRaster <- function(rList,
 
   if(type == 'RGB'){
 
+    for(e in 1:length(IDlist)){
+
+      if(!identical(raster::extent(subRasterList[[IDlist[e]]]), raster::extent(subRasterList[[1]]))){
+
+        print(paste('raster extent set to extent of rasterLayer 1 in IDlist for sample', IDlist[e], sep=' '))
+        raster::extent(subRasterList[[IDlist[e]]]) <- raster::extent(subRasterList[[1]])
+      }
+    }
+
     names(subRasterList) <- NULL
     subRasterList$fun <- sum
     subRasterList$na.rm <- TRUE
@@ -66,6 +75,15 @@ sumRaster <- function(rList,
     summedRasterList <- list()
 
     for(k in 1:length(rasterListList)){
+
+      for(e in 1:length(IDlist)){
+
+        if(!identical(raster::extent(rasterListList[[k]][[IDlist[e]]]), raster::extent(rasterListList[[k]][[1]]))){
+
+          print(paste('raster extent set to extent of rasterLayer 1 in IDlist for cluster', k , 'in sample', IDlist[e], sep=' '))
+          raster::extent(rasterListList[[k]][[IDlist[e]]]) <- raster::extent(rasterListList[[k]][[1]])
+        }
+      }
 
       names(rasterListList[[k]]) <- NULL
       rasterListList[[k]]$fun <- sum
