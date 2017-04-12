@@ -170,11 +170,11 @@ patLanRGB <- function(sampleList,
         raster::extent(image) <- extRaster
         mapMASK<-raster::mask(image, mapRaster)
 
-        RGB <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
+        RGBnew <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
                  mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
                  mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
 
-        map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
+        map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGBnew) < colOffset*255))
       }
 
     mapR <- raster::raster(map)
