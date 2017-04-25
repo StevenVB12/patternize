@@ -21,7 +21,7 @@
 #' @param flipRaster Whether to flip raster along xy axis (in case there is an inconsistency
 #'    between raster and outline coordinates).
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
-#' @param imageList List of image should be given if one wants to flip the outline or adjust
+#' @param imageList List of images should be given if one wants to flip the outline or adjust
 #'    landmark coordinates.
 #' @param cartoonOrder Whether to plot the cartoon outline 'above' or 'under' the pattern raster
 #'    (default = 'above'). Set to 'under' for filled outlines.
@@ -292,7 +292,7 @@ plotHeat <- function(summedRaster,
 
   if(plotCartoon && refShape == 'mean'){
 
-    indx <- which(IDlist == cartoonID)
+    indx <- which(names(imageList) == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
 
     if(adjustCoords){
