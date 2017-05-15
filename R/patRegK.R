@@ -66,11 +66,11 @@ patRegK <- function(sampleList,
     target <- redRes(target, resampleFactor)
   }
 
-  target <- apply(raster::as.array(target), 1:2, mean)
+  targetA <- apply(raster::as.array(target), 1:2, mean)
 
   if(is.numeric(removebgR)){
 
-    target <- apply(target, 1:2, function(x) ifelse(x > removebgR, 0, x))
+    targetA <- apply(targetA, 1:2, function(x) ifelse(x > removebgR, 0, x))
   }
 
   for(n in 1:length(sampleList)){
@@ -110,7 +110,7 @@ patRegK <- function(sampleList,
       sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR, 0, x))
     }
 
-    result <- RNiftyReg::niftyreg(sourceRaster, target, useBlockPercentage=useBlockPercentage)
+    result <- RNiftyReg::niftyreg(sourceRaster, targetA, useBlockPercentage=useBlockPercentage)
 
     transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), raster::as.array(sourceRasterK), interpolation=0)
 
@@ -193,6 +193,11 @@ patRegK <- function(sampleList,
       rasterListInd[[e]] <- r
 
     }
+    
+    if(!identical(raster::extent(rasterListInd), raster::extent(target))){
+      raster::extent(rasterListInd) <- raster::extent(target)
+    }
+    
     rasterList[[names(sampleList)[n]]] <- rasterListInd
 
     print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))

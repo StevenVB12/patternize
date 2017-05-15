@@ -49,7 +49,7 @@ between raster and outline coordinates).}
 
 \item{flipOutline}{Whether to flip plot along x, y or xy axis.}
 
-\item{imageList}{List of image should be given if one wants to flip the outline or adjust
+\item{imageList}{List of images should be given if one wants to flip the outline or adjust
 landmark coordinates.}
 
 \item{cartoonOrder}{Whether to plot the cartoon outline 'above' or 'under' the pattern raster

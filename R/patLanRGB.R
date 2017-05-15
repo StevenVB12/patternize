@@ -190,7 +190,10 @@ patLanRGB <- function(sampleList,
 
     r <- raster::raster(ncol = res, nrow = res)
 
-    raster::extent(r) <- extent(min(refShape[,1])*1.4,max(refShape[,1])*1.4,min(refShape[,2])*1.4,max(refShape[,2])*1.4)
+    raster::extent(r) <- extent(min(refShape[,1])*1.4,
+                                max(refShape[,1])*1.4,
+                                min(refShape[,2])*1.4,
+                                max(refShape[,2])*1.4)
 
     # if(!is.null(cropOffset)){
     #   raster::extent(r) <- extent(min(refShape[,1]),max(refShape[,1]),min(refShape[,2]),max(refShape[,2]))
@@ -201,7 +204,12 @@ patLanRGB <- function(sampleList,
     }
 
     else{
-      patternRaster <- raster::raster(ncol = res, nrow = res, vals = rep(NA, res*res))
+
+      patternRaster <- raster::raster(extent(min(refShape[,1])*1.4,
+                                             max(refShape[,1])*1.4,
+                                             min(refShape[,2])*1.4,
+                                             max(refShape[,2])*1.4),
+                                      ncol = res, nrow = res, vals = rep(NA, res*res))
     }
 
     if(plot == 'stack'){

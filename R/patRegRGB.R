@@ -20,7 +20,7 @@
 #'    original image for each sample ('compare').
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
-#' @param iterations Number of iterations for recalculating average color (default = 0). If set the
+#' @param iterations Number of iterations for recalculating average color (default = 0). If set, the
 #'    RGB value for pattern extraction will be iteratively recalculated to be the average of the
 #'    extracted area. This may improve extraction of distinct color pattern, but fail for more
 #'    gradually distributed (in color space) patterns.
@@ -72,11 +72,11 @@ patRegRGB <- function(sampleList,
     target <- redRes(target, resampleFactor)
   }
 
-  target <- apply(raster::as.array(target), 1:2, mean)
+  targetA <- apply(raster::as.array(target), 1:2, mean)
 
   if(is.numeric(removebgR)){
 
-    target <- apply(target, 1:2, function(x) ifelse(x > removebgR, 0, x))
+    targetA <- apply(targetA, 1:2, function(x) ifelse(x > removebgR, 0, x))
   }
 
   for(n in 1:length(sampleList)){
@@ -116,7 +116,7 @@ patRegRGB <- function(sampleList,
       sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR, 0, x))
     }
 
-    result <- RNiftyReg::niftyreg(sourceRaster, target, useBlockPercentage=useBlockPercentage)
+    result <- RNiftyReg::niftyreg(sourceRaster, targetA, useBlockPercentage=useBlockPercentage)
 
     map <- apply(raster::as.array(sourceRasterK), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
@@ -184,18 +184,20 @@ patRegRGB <- function(sampleList,
       par(mfrow=c(1,2))
       plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
       par(new = TRUE)
-      plot(transRaster, col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+      plot(raster::flip(transRaster,'x'), col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
 
       x <- as.array(sStack)/255
       cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
       uniqueCols <- unique(cols)
       x2 <- match(cols, uniqueCols)
       dim(x2) <- dim(x)[1:2]
-      raster::image(apply(x2, 1, rev), col=uniqueCols, yaxt='n', xaxt='n')
+      raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
 
     }
 
-    print(names(sampleList)[n])
+    if(!identical(raster::extent(transRaster), raster::extent(target))){
+      raster::extent(transRaster) <- raster::extent(target)
+    }
 
     rasterList[[names(sampleList)[n]]] <- transRaster
 

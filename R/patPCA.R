@@ -205,20 +205,20 @@ patPCA <- function(rList,
 
     if(plotChanges){
 
-      mat <- matrix(c(4,5,6,1,1,2,1,1,3), 3)
+      mat <- matrix(c(4,1,1,5,1,1,6,2,3), 3, 3, byrow = TRUE)
       layout(mat, widths=c(1,1,1), heights=c(1,1,1))
 
 
       # par(mar=c(4,4,1,1))
 
-      if(plot == 'points'){
+      if(plotType == 'points'){
 
         plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       }
 
-      if(plot == 'labels'){
+      if(plotType == 'labels'){
 
         plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
@@ -279,10 +279,10 @@ patPCA <- function(rList,
 
       colfunc <- colorRampPalette(colpalette)
 
-      plot(NULL, xlim=c(0,1), ylim=c(0,1), type="n", axes=F, xlab = '', ylab='')
+      plot(NULL, xlim=c(0,1), ylim=c(0,1), type="n", axes = FALSE, xlab = '', ylab='')
 
-      plot(mapMay, col=colfunc(21), zlim=c(-1,1), legend.only=T, legend.width=5, horizontal = TRUE,
-           smallplot=c(0.3, 1, 0.5, 0.6), legend.args=list(text=legendTitle, side=3, font=2, line=2.5, cex=1))
+      plot(mapMay, col=colfunc(21), zlim = c(-1,1), legend.only = TRUE, legend.width = 5, horizontal = TRUE,
+           smallplot = c(0.3, 1, 0.5, 0.6), legend.args = list(text=legendTitle, side = 3, font = 2, line = 2.5, cex = 1))
     }
   }
 

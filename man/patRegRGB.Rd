@@ -42,7 +42,7 @@ original image for each sample ('compare').}
 
 \item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 
-\item{iterations}{Number of iterations for recalculating average color (default = 0). If set the
+\item{iterations}{Number of iterations for recalculating average color (default = 0). If set, the
 RGB value for pattern extraction will be iteratively recalculated to be the average of the
 extracted area. This may improve extraction of distinct color pattern, but fail for more
 gradually distributed (in color space) patterns.}
