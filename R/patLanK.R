@@ -79,28 +79,19 @@ patLanK <- function(sampleList,
 
   }
 
-  else{
+  if(transformRef == 'meanshape'){
 
-    if(transformRef == 'meanshape'){
+    invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
+    refShape <- transformed$mshape
 
-      invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
-      refShape <- transformed$mshape
-
-    }
-
-    else{
-
-      if(exists(landList[[transformRef]])){
-
-        e <- which(names(landList) == transformRef)
-        refShape <- lanArray[e]
-      }
-
-      else{
-        stop("specified ID for reference shape does not exist")
-      }
-    }
   }
+
+  if(transformRef %in% names(landList)){
+
+    e <- which(names(landList) == transformRef)
+    refShape <- lanArray[e]
+  }
+
 
   for(n in 1:length(sampleList)){
 
@@ -110,7 +101,10 @@ patLanK <- function(sampleList,
     if(crop){
 
       landm <- lanArray[,,n]
-      extRaster <- raster::extent(min(landm[,1]), max(landm[,1]), min(landm[,2]), max(landm[,2]))
+      extRaster <- raster::extent(min(landm[,1]),
+                                  max(landm[,1]),
+                                  min(landm[,2]),
+                                  max(landm[,2]))
 
       if(!is.null(cropOffset)){
 
