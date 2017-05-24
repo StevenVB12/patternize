@@ -183,7 +183,7 @@ plotHeat <- function(summedRaster,
 
     imageEx <- raster::extent(imageList[[1]])
 
-    if(refShape != 'mean'){
+    if(refShape[1] != 'mean' && !is.matrix(refShape)){
 
       outline[,2] <- outline[,2] - crop[3]
 
@@ -195,7 +195,7 @@ plotHeat <- function(summedRaster,
         }
       }
     }
-    if(refShape != 'mean' && identical(crop, c(0,0,0,0))){
+    if(refShape[1] != 'mean' && !is.matrix(refShape) && identical(crop, c(0,0,0,0))){
       if(!is.null(flipOutline) && flipOutline == 'y'){
         outline[,2] <- imageEx[4] - outline[,2]
 
@@ -211,7 +211,7 @@ plotHeat <- function(summedRaster,
   }
 
   if(!identical(crop, c(0,0,0,0))){
-    if(refShape != 'mean'){
+    if(refShape[1] != 'mean' && !is.matrix(refShape)){
 
       if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
 
@@ -290,10 +290,25 @@ plotHeat <- function(summedRaster,
     }
   }
 
-  if(plotCartoon && refShape == 'mean'){
+  if(plotCartoon && refShape[1] != 'target'){
 
     indx <- which(names(imageList) == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
+
+    if(!is.matrix(refShape)){
+
+      invisible(capture.output(transformed <- Morpho::procSym(landArray)))
+
+      invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape,
+                                                                            as.matrix(landArray[,,indx]),
+                                                                            type="tps")))
+    }
+
+    if(is.matrix(refShape)){
+      invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
+                                                                            as.matrix(landArray[,,indx]),
+                                                                            type="tps")))
+    }
 
     if(adjustCoords){
 
@@ -311,12 +326,11 @@ plotHeat <- function(summedRaster,
       }
     }
 
-    invisible(capture.output(transformed <- Morpho::procSym(landArray)))
 
 
-    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape, as.matrix(landArray[,,indx]), type="tps")))
     outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
 
+    cartoonLinesTrans <- NULL
 
     if(!is.null(lines)){
 
@@ -376,7 +390,7 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -402,7 +416,7 @@ plotHeat <- function(summedRaster,
       par(mar=c(4,4,2,2))
     }
 
-    if(is.null(refShape) || refShape == 'target'){
+    if(is.null(refShape) || refShape[1] == 'target'){
       plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
     }
 
@@ -419,13 +433,13 @@ plotHeat <- function(summedRaster,
 
       summedRaster[summedRaster == 0] <- NA
 
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
 
         polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
       }
 
-      if(refShape == 'mean'){
+      if(refShape[1] == 'mean' || is.matrix(refShape)){
 
         plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
 
@@ -436,7 +450,7 @@ plotHeat <- function(summedRaster,
 
     if(plotCartoon && lineOrder == 'under'){
 
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
 
         if(!is.null(lines)){
 
@@ -448,7 +462,7 @@ plotHeat <- function(summedRaster,
         }
       }
 
-      if(refShape =='mean'){
+      if(refShape[1] =='mean' || is.matrix(refShape)){
 
         if(!is.null(lines)){
 
@@ -473,13 +487,13 @@ plotHeat <- function(summedRaster,
 
     if(plotCartoon && cartoonOrder == 'above'){
 
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
 
         polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
       }
 
-      if(refShape == 'mean'){
+      if(refShape[1] == 'mean' || is.matrix(refShape)){
 
         polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
@@ -488,7 +502,7 @@ plotHeat <- function(summedRaster,
 
     if(plotCartoon && lineOrder == 'above'){
 
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
 
         if(!is.null(lines)){
 
@@ -499,7 +513,7 @@ plotHeat <- function(summedRaster,
           }
         }
       }
-      if(refShape =='mean'){
+      if(refShape[1] =='mean' || is.matrix(refShape)){
 
         if(!is.null(lines)){
 
@@ -512,10 +526,10 @@ plotHeat <- function(summedRaster,
     }
 
     if(plotLandmarks){
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
         points(as.matrix(landArray[,,indx]), pch = 19, col = landCol)
       }
-      if(refShape =='mean'){
+      if(refShape[1] =='mean' || is.matrix(refShape)){
         points(transformed$mshape, pch = 19, col = landCol)
       }
     }
@@ -528,7 +542,7 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(refShape == 'target'){
+      if(refShape[1] == 'target'){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -551,7 +565,7 @@ plotHeat <- function(summedRaster,
         }
       }
 
-      if(is.null(refShape) || refShape == 'target'){
+      if(is.null(refShape) || refShape[1] == 'target'){
         plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main)
       }
 
@@ -568,13 +582,13 @@ plotHeat <- function(summedRaster,
 
         summedRaster[[k]][summedRaster[[k]] == 0] <- NA
 
-        if(refShape == 'target'){
+        if(refShape[1] == 'target'){
 
           polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
         }
 
-        if(refShape == 'mean'){
+        if(refShape[1] == 'mean' || is.matrix(refShape)){
 
           plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='')
 
@@ -585,7 +599,7 @@ plotHeat <- function(summedRaster,
 
       if(plotCartoon && lineOrder == 'under'){
 
-        if(refShape == 'target'){
+        if(refShape[1] == 'target'){
 
           if(!is.null(lines)){
 
@@ -597,7 +611,7 @@ plotHeat <- function(summedRaster,
           }
         }
 
-        if(refShape =='mean'){
+        if(refShape[1] =='mean' || is.matrix(refShape)){
 
           if(!is.null(lineList)){
 
@@ -615,13 +629,13 @@ plotHeat <- function(summedRaster,
 
       if(plotCartoon && cartoonOrder == 'above'){
 
-        if(refShape == 'target'){
+        if(refShape[1] == 'target'){
 
           polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
         }
 
-        if(refShape == 'mean'){
+        if(refShape[1] == 'mean' || is.matrix(refShape)){
 
           polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM)
 
@@ -630,7 +644,7 @@ plotHeat <- function(summedRaster,
 
       if(plotCartoon && lineOrder == 'above'){
 
-        if(refShape == 'target'){
+        if(refShape[1] == 'target'){
 
           if(!is.null(lines)){
 
@@ -642,7 +656,7 @@ plotHeat <- function(summedRaster,
           }
         }
 
-        if(refShape =='mean'){
+        if(refShape[1] =='mean' || is.matrix(refShape)){
 
           if(!is.null(lines)){
 
@@ -660,10 +674,10 @@ plotHeat <- function(summedRaster,
       }
 
       if(plotLandmarks){
-        if(refShape == 'target'){
+        if(refShape[1] == 'target'){
           points(as.matrix(landArray[,,indx]), pch = 19, col = landCol)
         }
-        if(refShape =='mean'){
+        if(refShape[1] =='mean' || is.matrix(refShape)){
           points(transformed$mshape, pch = 19, col = landCol)
         }
       }

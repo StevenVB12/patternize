@@ -84,17 +84,20 @@ patLanRGB <- function(sampleList,
 
   }
 
-  if(transformRef == 'meanshape'){
+  if(!is.matrix(transformRef)){
 
-    invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
-    refShape <- transformed$mshape
+    if(transformRef == 'meanshape'){
 
-  }
+      invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
+      refShape <- transformed$mshape
 
-  if(transformRef %in% names(landList)){
+    }
 
-    e <- which(names(landList) == transformRef)
-    refShape <- lanArray[,,e]
+    if(transformRef %in% names(landList)){
+
+      e <- which(names(landList) == transformRef)
+      refShape <- lanArray[,,e]
+    }
   }
 
 
