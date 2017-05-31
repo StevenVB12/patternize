@@ -185,10 +185,10 @@ patLanRGB <- function(sampleList,
 
     r <- raster::raster(ncol = res, nrow = res)
 
-    raster::extent(r) <- extent(min(refShape[,1]),
-                                max(refShape[,1]),
-                                min(refShape[,2]),
-                                max(refShape[,2]))
+    raster::extent(r) <- extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/500,
+                                max(refShape[,1])+max(refShape[,1])*cropOffset[2]/500,
+                                min(refShape[,2])-max(refShape[,2])*cropOffset[3]/500,
+                                max(refShape[,2])+max(refShape[,2])*cropOffset[4]/500)
 
     # if(!is.null(cropOffset)){
     #   raster::extent(r) <- extent(min(refShape[,1]),max(refShape[,1]),min(refShape[,2]),max(refShape[,2]))
@@ -200,10 +200,10 @@ patLanRGB <- function(sampleList,
 
     else{
 
-      patternRaster <- raster::raster(extent(min(refShape[,1]),
-                                             max(refShape[,1]),
-                                             min(refShape[,2]),
-                                             max(refShape[,2])),
+      patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/500,
+                                             max(refShape[,1])+max(refShape[,1])*cropOffset[2]/500,
+                                             min(refShape[,2])-max(refShape[,2])*cropOffset[3]/500,
+                                             max(refShape[,2])+max(refShape[,2])*cropOffset[4]/500),
                                       ncol = res, nrow = res, vals = rep(NA, res*res))
     }
 

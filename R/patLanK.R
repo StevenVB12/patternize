@@ -196,7 +196,10 @@ patLanK <- function(sampleList,
 
       r <- raster::raster(ncol = res, nrow = res)
 
-      raster::extent(r) <- extent(min(refShape[,1])*1.4,max(refShape[,1])*1.4,min(refShape[,2])*1.4,max(refShape[,2])*1.4)
+      raster::extent(r) <- extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/500,
+                                  max(refShape[,1])+max(refShape[,1])*cropOffset[2]/500,
+                                  min(refShape[,2])-max(refShape[,2])*cropOffset[3]/500,
+                                  max(refShape[,2])+max(refShape[,2])*cropOffset[4]/500)
 
       patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
