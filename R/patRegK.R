@@ -192,10 +192,10 @@ patRegK <- function(sampleList,
 
       rasterListInd[[e]] <- r
 
-    }
+      if(!identical(raster::extent(rasterListInd[[e]]), raster::extent(target))){
+        raster::extent(rasterListInd[[e]]) <- raster::extent(target)
+      }
 
-    if(!identical(raster::extent(rasterListInd[[e]]), raster::extent(target))){
-      raster::extent(rasterListInd[[e]]) <- raster::extent(target)
     }
 
     rasterList[[names(sampleList)[n]]] <- rasterListInd

@@ -48,7 +48,7 @@ maskOutline <-function(RasterStack,
                        imageList = NULL,
                        maskColor = 0){
 
-  imageEx <- raster::extent(RasterStack)
+  imageEx <- raster::extent(imageList[[1]])
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){
 
