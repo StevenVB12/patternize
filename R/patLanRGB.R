@@ -217,6 +217,7 @@ patLanRGB <- function(sampleList,
       par(new = TRUE)
       plot(patternRaster, col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
 
+      image[is.na(image)] <- 255
       x <- as.array(image)/255
       cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1.01)
       uniqueCols <- unique(cols)

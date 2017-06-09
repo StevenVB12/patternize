@@ -152,6 +152,7 @@ patLanK <- function(sampleList,
       startCenter <- K$centers
     }
 
+    image[is.na(image)] <- 255
     imageKmeans <- kImage(raster::as.array(image), k, startCenter)
 
     image.segmented <- imageKmeans[[1]]
