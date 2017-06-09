@@ -6,11 +6,12 @@
 #' @param RGB RGB values for color pattern extraction specified as vector.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param colOffset Color offset for color pattern extraction (default = 0.10).
-#' @param crop Whether to use the landmarks range to crop the image. This can significantly
-#'    speed up the analysis (default = FALSE).
+#' @param crop Whether to use the landmarks range to crop the image. This can speed up the
+#'    analysis (default = FALSE).
 #' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you
 #'    want the cropping to be offset from the landmarks (in case the landmarks do not surround
-#'    the entire color pattern).
+#'    the entire color pattern). The values specified should present the percentage of the maximum
+#'    landmark value along the x and y axis.
 #' @param res Resolution for color pattern raster (default = 300). This should be reduced if
 #'    the number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed
@@ -54,10 +55,10 @@ patLanRGB <- function(sampleList,
                       resampleFactor = NULL,
                       colOffset = 0.10,
                       crop = FALSE,
-                      cropOffset = NULL,
+                      cropOffset = c(0,0,0,0),
                       res = 300,
                       transformRef = 'meanshape',
-                      transformType='tps',
+                      transformType = 'tps',
                       adjustCoords = FALSE,
                       plot = NULL,
                       focal =  FALSE,
@@ -104,30 +105,26 @@ patLanRGB <- function(sampleList,
   for(n in 1:length(sampleList)){
 
     image <- sampleList[[n]]
-    extRaster <- raster::extent(image)
+    extRasterOr <- raster::extent(image)
+
+    if(!is.null(resampleFactor)){
+      image <- redRes(image, resampleFactor)
+    }
 
     if(crop){
 
       landm <- lanArray[,,n]
-      extRaster <- raster::extent(min(landm[,1]),
-                                  max(landm[,1]),
-                                  min(landm[,2]),
-                                  max(landm[,2]))
 
-      if(!is.null(cropOffset)){
-
-        extRaster <- raster::extent(min(landm[,1])-cropOffset[1],
-                                    max(landm[,1])+cropOffset[2],
-                                    min(landm[,2])-cropOffset[3],
-                                    max(landm[,2])+cropOffset[4])
-
-      }
+      extRaster <- raster::extent(min(landm[,1])-min(landm[,1])*cropOffset[1]/100,
+                                  max(landm[,1])+max(landm[,1])*cropOffset[2]/100,
+                                  min(landm[,2])-min(landm[,2])*cropOffset[3]/100,
+                                  max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
 
       image <- raster::crop(image, extRaster)
-    }
 
-    if(!is.null(resampleFactor)){
-      image <- redRes(image, resampleFactor)
+      y <- raster::raster(ncol = dim(image)[2], nrow = dim(image)[1])
+      extent(y) <- extRasterOr
+      image <- resample(image, y)
     }
 
     if(focal){
@@ -159,10 +156,9 @@ patLanRGB <- function(sampleList,
         x <- x + 1
 
         mapRaster <- raster::raster(as.matrix(map))
-        raster::extent(mapRaster) <- extRaster
+        raster::extent(mapRaster) <- extRasterOr
         mapRaster[mapRaster == 0] <- NA
 
-        raster::extent(image) <- extRaster
         mapMASK<-raster::mask(image, mapRaster)
 
         RGBnew <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
@@ -173,7 +169,7 @@ patLanRGB <- function(sampleList,
       }
 
     mapR <- raster::raster(map)
-    raster::extent(mapR) <- extRaster
+    raster::extent(mapR) <- extRasterOr
 
     mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
@@ -185,14 +181,10 @@ patLanRGB <- function(sampleList,
 
     r <- raster::raster(ncol = res, nrow = res)
 
-    raster::extent(r) <- extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/500,
-                                max(refShape[,1])+max(refShape[,1])*cropOffset[2]/500,
-                                min(refShape[,2])-max(refShape[,2])*cropOffset[3]/500,
-                                max(refShape[,2])+max(refShape[,2])*cropOffset[4]/500)
-
-    # if(!is.null(cropOffset)){
-    #   raster::extent(r) <- extent(min(refShape[,1]),max(refShape[,1]),min(refShape[,2]),max(refShape[,2]))
-    # }
+    raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
+                                        max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
+                                        min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
+                                        max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
 
     patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
@@ -200,10 +192,10 @@ patLanRGB <- function(sampleList,
 
     else{
 
-      patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/500,
-                                             max(refShape[,1])+max(refShape[,1])*cropOffset[2]/500,
-                                             min(refShape[,2])-max(refShape[,2])*cropOffset[3]/500,
-                                             max(refShape[,2])+max(refShape[,2])*cropOffset[4]/500),
+      patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/100,
+                                             max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
+                                             min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
+                                             max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100),
                                       ncol = res, nrow = res, vals = rep(NA, res*res))
     }
 
@@ -233,8 +225,6 @@ patLanRGB <- function(sampleList,
       raster::image(apply(x2, 1, rev), col=uniqueCols, yaxt='n', xaxt='n')
 
     }
-
-
 
     rasterList[[names(landList)[n]]] <- patternRaster
 

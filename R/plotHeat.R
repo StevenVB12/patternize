@@ -295,16 +295,18 @@ plotHeat <- function(summedRaster,
     indx <- which(names(imageList) == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
 
-    if(!is.matrix(refShape)){
-
-      invisible(capture.output(transformed <- Morpho::procSym(landArray)))
-
-      invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape,
+    if(is.matrix(refShape)){
+      invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
                                                                             as.matrix(landArray[,,indx]),
                                                                             type="tps")))
     }
 
-    if(is.matrix(refShape)){
+    if(!is.matrix(refShape)){
+
+      invisible(capture.output(transformed <- Morpho::procSym(landArray)))
+
+      refShape <- transformed$mshape
+
       invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
                                                                             as.matrix(landArray[,,indx]),
                                                                             type="tps")))
@@ -325,7 +327,6 @@ plotHeat <- function(summedRaster,
         }
       }
     }
-
 
 
     outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)

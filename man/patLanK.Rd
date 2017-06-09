@@ -6,7 +6,7 @@
 k-means clustering.}
 \usage{
 patLanK(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE,
-  cropOffset = NULL, res = 300, transformRef = "meanshape",
+  cropOffset = c(0, 0, 0, 0), res = 300, transformRef = "meanshape",
   transformType = "tps", removebgK = NULL, adjustCoords = FALSE,
   plot = FALSE, focal = FALSE, sigma = 3)
 }
@@ -22,9 +22,10 @@ patLanK(sampleList, landList, k = 3, resampleFactor = NULL, crop = FALSE,
 \item{crop}{Whether to use the landmarks range to crop the image. This can significantly speed
 up the analysis (default = FALSE).}
 
-\item{cropOffset}{Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want
-the cropping to be offset from the landmarks (in case the landmarks do not surround the entire
-color pattern).}
+\item{cropOffset}{Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you
+want the cropping to be offset from the landmarks (in case the landmarks do not surround
+the entire color pattern). The values specified should present the percentage of the maximum
+landmark value along the x and y axis.}
 
 \item{res}{Resolution for color pattern raster (default = 300). This should be reduced if the
 number of pixels in the image is lower than th raster.}

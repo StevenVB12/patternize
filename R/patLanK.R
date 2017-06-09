@@ -7,9 +7,10 @@
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param crop Whether to use the landmarks range to crop the image. This can significantly speed
 #'    up the analysis (default = FALSE).
-#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you want
-#'    the cropping to be offset from the landmarks (in case the landmarks do not surround the entire
-#'    color pattern).
+#' @param cropOffset Vector c(xmin, xmax, ymin, ymax) that specifies the number of pixels you
+#'    want the cropping to be offset from the landmarks (in case the landmarks do not surround
+#'    the entire color pattern). The values specified should present the percentage of the maximum
+#'    landmark value along the x and y axis.
 #' @param res Resolution for color pattern raster (default = 300). This should be reduced if the
 #'    number of pixels in the image is lower than th raster.
 #' @param transformRef ID of reference sample for shape to which color patterns will be transformed
@@ -49,7 +50,7 @@ patLanK <- function(sampleList,
                     k = 3,
                     resampleFactor = NULL,
                     crop = FALSE,
-                    cropOffset = NULL,
+                    cropOffset = c(0,0,0,0),
                     res = 300,
                     transformRef = 'meanshape',
                     transformType='tps',
@@ -96,32 +97,28 @@ patLanK <- function(sampleList,
   for(n in 1:length(sampleList)){
 
     image <- sampleList[[n]]
-    extRaster <- raster::extent(image)
-
-    if(crop){
-
-      landm <- lanArray[,,n]
-      extRaster <- raster::extent(min(landm[,1]),
-                                  max(landm[,1]),
-                                  min(landm[,2]),
-                                  max(landm[,2]))
-
-      if(!is.null(cropOffset)){
-
-        extRaster <- raster::extent(min(landm[,1])-cropOffset[1],
-                                    max(landm[,1])+cropOffset[2],
-                                    min(landm[,2])-cropOffset[3],
-                                    max(landm[,2])+cropOffset[4])
-
-      }
-
-
-      image <- raster::crop(image, extRaster)
-    }
+    extRasterOr <- raster::extent(image)
 
     if(!is.null(resampleFactor)){
       image <- redRes(image, resampleFactor)
     }
+
+    if(crop){
+
+      landm <- lanArray[,,n]
+      extRaster <- raster::extent(min(landm[,1])-min(landm[,1])*cropOffset[1]/100,
+                                  max(landm[,1])+max(landm[,1])*cropOffset[2]/100,
+                                  min(landm[,2])-min(landm[,2])*cropOffset[3]/100,
+                                  max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
+
+
+      image <- raster::crop(image, extRaster)
+
+      y <- raster::raster(ncol = dim(image)[2], nrow = dim(image)[1])
+      extent(y) <- extRasterOr
+      image <- resample(image, y)
+    }
+
 
     if(focal){
       gf <- focalWeight(image, sigma, "Gauss")
@@ -184,7 +181,7 @@ patLanK <- function(sampleList,
 
       map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
       mapR <- raster::raster(map)
-      raster::extent(mapR) <- extRaster
+      raster::extent(mapR) <- extRasterOr
 
       mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
@@ -196,10 +193,10 @@ patLanK <- function(sampleList,
 
       r <- raster::raster(ncol = res, nrow = res)
 
-      raster::extent(r) <- extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/500,
-                                  max(refShape[,1])+max(refShape[,1])*cropOffset[2]/500,
-                                  min(refShape[,2])-max(refShape[,2])*cropOffset[3]/500,
-                                  max(refShape[,2])+max(refShape[,2])*cropOffset[4]/500)
+      raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
+                                          max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
+                                          min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
+                                          max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
 
       patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
