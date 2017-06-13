@@ -317,7 +317,7 @@ patLanW <- function(sampleList,
 
       print(paste('x: ', as.character(xy)[1], 'y: ', as.character(xy)[2]))
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
         break
       }
 
@@ -332,7 +332,7 @@ patLanW <- function(sampleList,
 
       print(paste('x: ', as.character(xy)[1], 'y: ', as.character(xy)[2]))
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
         break
       }
 

@@ -76,7 +76,7 @@ sampleLandmarks <- function(sampleList,
 
         xy <- locator(n=1)
 
-        if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0){
+        if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
 
           if(n != length(sampleList)){
             print('Loading next image...')
@@ -146,7 +146,7 @@ sampleLandmarks <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
         break
       }
 
