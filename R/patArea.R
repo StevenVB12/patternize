@@ -146,6 +146,8 @@ patArea <-function(rList,
 
     if(!is.null(flipOutline)){
 
+      rasterEx <- raster::extent(rList[[1]])
+
       if(flipOutline == 'x'){
         outlineTrans[,1] = rasterEx[2] - outlineTrans[,1] + rasterEx[1]
       }

@@ -12,7 +12,7 @@
 #'
 #' @section patternize main functions:
 #'
-#' The package has four main functions depending on how you want the alignment of the iamges and
+#' The package has six main functions depending on how you want the alignment of the iamges and
 #' the color extraction to be performed.
 #'
 #' \code{patLanRGB} \cr
@@ -31,6 +31,13 @@
 #'    Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image
 #'    registration and extracts colors using k-means clustering.
 #'
+#' \code{patLanW} \cr
+#'    Aligns images usings transformations obtained from fixed landmarks and extracts color
+#'    patterns using watershed segmentation.
+#'
+#' \code{patRegW} \cr
+#'    Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image
+#'    registration and extracts color patterns using watershed segmentation.
 #'
 #'
 #' @section patternize preprocessing functions:
@@ -41,6 +48,9 @@
 #' \code{makeList} \cr
 #'    This function returns a list of RasterStacks or a list of landmarks depending on the input
 #'    provided.
+#'
+#' \code{sampleLandmarks} \cr
+#'    Sample landmarks in an image.
 #'
 #' \code{lanArray} \cr
 #'    This function creates a landmark array as used by \code{\link[Morpho]{procSym}} in the
@@ -76,6 +86,9 @@
 #'
 #' \code{kImage} \cr
 #'    Performs k-means clustering of images.
+#'
+#' \code{sampleRGB} \cr
+#'    Interactive function to sample RGB value from pixel in an image.
 #'
 #' \code{createTarget} \cr
 #'    Creates an artificial target images using a provided outline that can be used for image
