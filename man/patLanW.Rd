@@ -3,17 +3,16 @@
 \name{patLanW}
 \alias{patLanW}
 \title{Extracts color pattern from landmark transformed image using watershed segmentation. This function
-can work interactively by allowing to pick a starting pixel within each pattern element from which the
+works interactively by allowing to pick a starting pixel within each pattern element from which the
 watershed will extract the pattern. This function works best for patterns with sharp boundaries.}
 \usage{
 patLanW(sampleList, landList, IDlist = NULL, adjustCoords = FALSE,
-  transformRef = "meanshape", resampleFactor = NULL, crop = c(0, 0, 0, 0),
+  transformRef = "meanshape", resampleFactor = NULL,
   transformType = "tps", maskOutline = NULL, cartoonID = NULL,
-  correct = FALSE, blur = TRUE, focal = FALSE, sigma = 3,
-  bucketfill = TRUE, cleanP = NULL, splitC = NULL,
-  plotTransformed = FALSE, plotCorrect = FALSE, plotEdges = FALSE,
-  plotPriority = FALSE, plotWS = FALSE, plotBF = FALSE,
-  plotFinal = FALSE)
+  correct = FALSE, blur = TRUE, sigma = 3, bucketfill = TRUE,
+  cleanP = NULL, splitC = NULL, plotTransformed = FALSE,
+  plotCorrect = FALSE, plotEdges = FALSE, plotPriority = FALSE,
+  plotWS = FALSE, plotBF = FALSE, plotFinal = FALSE)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -31,9 +30,6 @@ to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
 
 \item{resampleFactor}{Integer for downsampling image used by \code{\link{redRes}}.}
 
-\item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
-original image.}
-
 \item{transformType}{Transformation type as used by \code{\link[Morpho]{computeTransform}}
 (default ='tps').}
 
@@ -46,8 +42,6 @@ the color extraction (default = NULL).}
 \item{correct}{Correct image illumination using a linear model (default = FALSE).}
 
 \item{blur}{Blur image for priority map extraction (default = TRUE).}
-
-\item{focal}{Blur image for color extraction (default = FALSE).}
 
 \item{sigma}{Size of sigma for Gaussian blurring (default = 5).}
 
@@ -78,7 +72,7 @@ List of raster objects.
 }
 \description{
 Extracts color pattern from landmark transformed image using watershed segmentation. This function
-can work interactively by allowing to pick a starting pixel within each pattern element from which the
+works interactively by allowing to pick a starting pixel within each pattern element from which the
 watershed will extract the pattern. This function works best for patterns with sharp boundaries.
 }
 \examples{

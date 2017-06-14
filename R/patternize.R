@@ -16,12 +16,16 @@
 #' the color extraction to be performed.
 #'
 #' \code{patLanRGB} \cr
-#'    Aligns images usings transformations obtained from fixed landmarks and extracts colors using
+#'    Aligns images by transformations obtained from fixed landmarks and extracts colors using
 #'    a predefined RGB values and cutoff value.
 #'
 #' \code{patLanK} \cr
-#'    Aligns images usings transformations obtained from fixed landmarks and extracts colors using
+#'    Aligns images by transformations obtained from fixed landmarks and extracts colors using
 #'    k-means clustering.
+#'
+#' \code{patLanW} \cr
+#'    Aligns images by transformations obtained from fixed landmarks and extracts color
+#'    patterns by watershed segmentation using \code{\link[imager]{imager}} utilities.
 #'
 #' \code{patRegRGB} \cr
 #'    Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image
@@ -31,13 +35,10 @@
 #'    Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image
 #'    registration and extracts colors using k-means clustering.
 #'
-#' \code{patLanW} \cr
-#'    Aligns images usings transformations obtained from fixed landmarks and extracts color
-#'    patterns using watershed segmentation.
-#'
 #' \code{patRegW} \cr
 #'    Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image
-#'    registration and extracts color patterns using watershed segmentation.
+#'    registration and extracts color patterns by watershed segmentation using
+#'    \code{\link[imager]{imager}} utilities.
 #'
 #'
 #' @section patternize preprocessing functions:

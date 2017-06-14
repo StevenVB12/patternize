@@ -1,22 +1,18 @@
-#' Extracts color pattern from landmark transformed image using watershed segmentation. This function
-#' works interactively by allowing to pick a starting pixel within each pattern element from which the
-#' watershed will extract the pattern. This function works best for patterns with sharp boundaries.
+#' Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
+#' and extracts color pattern using watershed segmentation. This function works interactively by
+#' allowing to pick a starting pixel within each pattern element from which the watershed will
+#' extract the pattern. This function works best for patterns with sharp boundaries.
 #'
 #' @param sampleList List of RasterStack objects.
-#' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
-#' @param IDlist List of sample IDs should be specified when masking outline and transformRef
-#'    is 'meanshape'.
-#' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
-#'    coordinates (default = FALSE).
-#' @param transformRef ID of reference sample for shape to which color patterns will be transformed
-#'    to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
+#' @param target Image imported as RasterStack used as target for registration.
 #' @param resampleFactor Integer for downsampling image used by \code{\link{redRes}}.
-#' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}}
-#'    (default ='tps').
+#' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
+#'    original image.
+#' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
+#'    pixels with average RGB > 100; default = NULL) for registration analysis. This works only to
+#'    remove a white background.
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL).
-#' @param cartoonID ID of the sample for which the cartoon was drawn and will be used for masking
-#'    (should be set when transformRef = 'meanShape').
 #' @param correct Correct image illumination using a linear model (default = FALSE).
 #' @param blur Blur image for priority map extraction (default = TRUE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 5).
@@ -36,40 +32,37 @@
 #' @return List of raster objects.
 #'
 #' @examples
-#'
-#' \dontrun{
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
-#' extension <- '_landmarks_LFW.txt'
-#'
-#' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
-#'
 #' extension <- '.jpg'
+#'
 #' imageList <- makeList(IDlist, 'image', prepath, extension)
+#'
+#' target <- imageList[[1]]
 #'
 #' outline_BC0077 <- read.table(paste(system.file("extdata",  package = 'patternize'),
 #' '/BC0077_outline.txt', sep=''), header = FALSE)
 #'
-#' rasterList_W <- patLanW(imageList, landmarkList, IDlist, transformRef = 'meanshape',
-#' adjustCoords = TRUE, plotTransformed = FALSE, correct = TRUE, plotCorrect = FALSE, blur = FALSE,
-#' sigma = 2, bucketfill = FALSE, cleanP = 0, splitC = 10, plotPriority = TRUE, plotWS = TRUE,
-#' plotBF = TRUE, plotFinal = TRUE, maskOutline = outline_BC0077, cartoonID = 'BC0077')
-#' }
+#' rasterList_regW <- patRegW(imageList, target, plotTransformed = FALSE, cartoonID = 'BC0077',
+#'                           correct = TRUE, plotCorrect = FALSE, blur = FALSE, sigma = 2,
+#'                           bucketfill = FALSE, cleanP = 0, splitC = 10, plotPriority = TRUE,
+#'                           plotWS = FALSE, plotBF = FALSE, plotFinal = TRUE, removebgR = 100,
+#'                           maskOutline = outline_BC0077)
 #'
 #' @export
-#' @import raster Morpho
+#'
+#' @import raster
 #' @importFrom imager as.cimg imfill isoblur imgradient imsplit watershed bucketfill clean split_connected highlight enorm parany add
 #' @importFrom purrr discard
 #' @importFrom dplyr sample_n
 #' @importFrom magrittr %>%
 
-patLanW <- function(sampleList,
-                    landList,
-                    IDlist = NULL,
-                    adjustCoords = FALSE,
-                    transformRef = 'meanshape',
+patRegW <- function(sampleList,
+                    target,
                     resampleFactor = NULL,
-                    transformType = 'tps',
+                    useBlockPercentage = 75,
+                    crop = c(0,0,0,0),
+                    removebgR = NULL,
                     maskOutline = NULL,
                     cartoonID = NULL,
                     correct = FALSE,
@@ -86,61 +79,36 @@ patLanW <- function(sampleList,
                     plotBF = FALSE,
                     plotFinal = FALSE){
 
-  declare( . <- as_nonstandard())
   rasterList <- list()
 
+  # Crop target image
+  if(!identical(crop, c(0,0,0,0))){
 
-  # Check whether sampleList and landList have the same length
-  if(length(sampleList) != length(landList)){
-    stop("sampleList is not of the same length as lanArray")
+    targetExtRaster <- crop
+    target <- raster::crop(target, targetExtRaster)
   }
 
-  for(n in 1:length(sampleList)){
-    if(names(sampleList)[n] != names(landList)[n]){
-      stop("samples are not in the same order in sampleList and lanArray")
-    }
+  # Reduce resolution of target image
+  if(!is.null(resampleFactor)){
+    target <- redRes(target, resampleFactor)
   }
 
+  # Average color channels to gray scale
+  targetA <- apply(raster::as.array(target), 1:2, mean)
 
-  # Make landmark array
-  lanArray <- lanArray(landList, adjustCoords, sampleList)
+  # Remove bacground of target image
+  if(is.numeric(removebgR)){
 
-
-  # Set the reference shape
-  if(is.matrix(transformRef)){
-
-    refShape <- transformRef
+    targetA <- apply(targetA, 1:2, function(x) ifelse(x > removebgR, 0, x))
   }
 
-  if(!is.matrix(transformRef)){
-
-    if(transformRef == 'meanshape'){
-
-      invisible(capture.output(transformed <- Morpho::procSym(lanArray)))
-      refShape <- transformed$mshape
-    }
-
-    if(transformRef %in% names(landList)){
-
-      e <- which(names(landList) == transformRef)
-      refShape <- lanArray[,,e]
-    }
-  }
-
-  # Transform the outline for masking if 'meanShape'
-  if(!is.null(maskOutline) && transformRef == 'meanshape'){
+  if(!is.null(maskOutline)){
 
     indx <- which(names(sampleList) == cartoonID)
-
-    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
-                                                                          as.matrix(lanArray[,,indx]),
-                                                                          type="tps")))
 
     maskOutlineNew <- maskOutline
     extPicture <- raster::extent(sampleList[[indx]])
     maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
-
-    maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
   }
 
 
@@ -152,44 +120,56 @@ patLanW <- function(sampleList,
 
     if(todo != 'r' && todo != 'a'){
 
-      image <- sampleList[[n]]
-      extRaster <- raster::extent(image)
+      sStack <- sampleList[[n]]
+      extRaster <- raster::extent(sStack)
+
+      # Crop image
+      if(!identical(crop, c(0,0,0,0))){
+
+        extRaster <- crop
+        sStack <- crop(sStack, extRaster)
+      }
+
+      sourceRaster <- redRes(sStack, 1)
 
       # Reduce resolution
       if(!is.null(resampleFactor)){
-        image <- redRes(image, resampleFactor)
+        sourceRaster <- redRes(sStack, resampleFactor)
       }
 
+      sourceRasterK <- sourceRaster
 
-      # Transform image using landmarks
-      invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape,
-                                                                       as.matrix(lanArray[,,n]),
-                                                                       type = transformType)))
+      # Average color channels to gray scale
+      sourceRaster <- apply(raster::as.array(sourceRaster), 1:2, mean)
 
-      imageDF1 <- raster::as.data.frame(image[[1]], xy = TRUE)
-      imageDF2 <- raster::as.data.frame(image[[2]], xy = TRUE)
-      imageDF3 <- raster::as.data.frame(image[[3]], xy = TRUE)
+      # Remove bacground for registration
+      if(is.numeric(removebgR)){
 
-      invisible(capture.output(imageT <- Morpho::applyTransform(as.matrix(imageDF1)[,1:2], transMatrix)))
+        sourceRaster <- apply(sourceRaster, 1:2, function(x) ifelse(x > removebgR, 0, x))
+      }
 
-      r <- raster::raster(ncol = dim(image)[1], nrow = dim(image)[2])
+      # Calculate transformation
+      result <- RNiftyReg::niftyreg(sourceRaster, targetA, useBlockPercentage=useBlockPercentage)
 
-      raster::extent(r) <- c(min(imageT[,1]),max(imageT[,1]),min(imageT[,2]),max(imageT[,2]))
+      # Apply transformation
+      transformedMap <- RNiftyReg::applyTransform(RNiftyReg::forward(result), raster::as.array(sourceRasterK), interpolation=0)
 
-      # Rasterize the transformed image and fill in NA values using
-      imageT1r <- raster::rasterize(imageT, field = imageDF1[,3], r, fun = mean)
-      imageT1rf <- focal(imageT1r, w=matrix(1,nrow=3,ncol=3), fun=fill.na, pad = TRUE, na.rm = FALSE)
+      r1 <- raster::raster(transformedMap[1:nrow(transformedMap),ncol(transformedMap):1,1])
+      # r1 <- focal(r1, w=matrix(1,nrow=3,ncol=3), fun=fill.na, pad = TRUE, na.rm = FALSE)
 
-      imageT2r <- raster::rasterize(imageT, field = imageDF2[,3], r, fun = mean)
-      imageT2rf <- focal(imageT2r, w=matrix(1,nrow=3,ncol=3), fun=fill.na, pad = TRUE, na.rm = FALSE)
+      r2 <- raster::raster(transformedMap[1:nrow(transformedMap),ncol(transformedMap):1,2])
+      # r2 <- focal(r2, w=matrix(1,nrow=3,ncol=3), fun=fill.na, pad = TRUE, na.rm = FALSE)
 
-      imageT3r <- raster::rasterize(imageT, field = imageDF3[,3], r, fun = mean)
-      imageT3rf <- focal(imageT3r, w=matrix(1,nrow=3,ncol=3), fun=fill.na, pad = TRUE, na.rm = FALSE)
+      r3 <- raster::raster(transformedMap[1:nrow(transformedMap),ncol(transformedMap):1,3])
+      # r3 <- focal(r3, w=matrix(1,nrow=3,ncol=3), fun=fill.na, pad = TRUE, na.rm = FALSE)
 
-      imageTr <- raster::stack(imageT1rf, imageT2rf, imageT3rf)
 
-      imageTr[is.na(imageTr)] <- 0
+      imageTr <-raster::stack(r1,r2,r3)
+      imageTr <- raster::flip(imageTr,'x')
 
+      raster::extent(imageTr) <- raster::extent(sourceRasterK)
+
+      imageTr[imageTr == 0] <- NA
 
       # Plot transformed raster
       if(plotTransformed){
@@ -209,26 +189,16 @@ patLanW <- function(sampleList,
       # MaskOutline
       if(!is.null(maskOutline)){
 
-        if(transformRef[1] != 'meanshape'){
-          imageTr <- maskOutline(imageTr, maskOutline, refShape = 'target', crop = c(0,0,0,0),
-                                maskColor = 255, imageList = sampleList)
+        imageTr <- maskOutline(imageTr, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop,
+                               maskColor = 255, imageList = sampleList)
 
-          cropEx <- c(min(maskOutline[,1]), max(maskOutline[,1]), min(maskOutline[,2]), max(maskOutline[,2]))
-
-        }
-        if(transformRef[1] == 'meanshape'){
-
-          imageTr <- maskOutline(imageTr, outline = maskOutline, refShape = 'mean',
-                      IDlist = IDlist, landList = landList, imageList = sampleList,
-                      adjustCoords = TRUE, cartoonID = cartoonID)
-
-          cropEx <- c(min(maskOutlineMean[,1]), max(maskOutlineMean[,1]), min(maskOutlineMean[,2]), max(maskOutlineMean[,2]))
-        }
+        cropEx <- c(min(maskOutlineNew[,1]), max(maskOutlineNew[,1]), min(maskOutlineNew[,2]), max(maskOutlineNew[,2]))
 
         imageTr <- raster::crop(imageTr, cropEx)
         raster::extent(imageTr) <- cropEx
       }
 
+      imageTr[is.na(imageTr)] <- 0
 
       # Transform to imager format
       imA <- raster::as.array(imageTr)
@@ -356,7 +326,7 @@ patLanW <- function(sampleList,
     # Remove spurious areas with width < cleanP
     if(!is.null(cleanP)){
 
-       ws <- imager::clean(ws,cleanP)
+      ws <- imager::clean(ws,cleanP)
     }
 
 
@@ -402,26 +372,18 @@ patLanW <- function(sampleList,
 
       patternRaster <- resample(patternRaster, y, method = 'ngb')
 
-      raster::extent(patternRaster) <- c(min(refShape[,1]), max(refShape[,1]), min(refShape[,2]), max((refShape[,2])))
+      raster::extent(patternRaster) <- raster::extent(target)
 
-      rasterList[[names(landList)[n]]] <- patternRaster
+      rasterList[[names(sampleList)[n]]] <- patternRaster
 
-      print(paste('sample', names(landList)[n], 'done and added to rasterList', sep=' '))
+      print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))
 
       n = n + 1
     }
   }
 
   return(rasterList)
-}
 
-# Function used in focal to calculate average for NA values in tranformed matrix
-fill.na <- function(x, i=5) {
-  if( is.na(x)[i] ) {
-    return( round(mean(x, na.rm=TRUE),0) )
-  } else {
-    return( round(x[i],0) )
-  }
 }
 
 ###
@@ -454,3 +416,4 @@ declare <- function(declaration)
       delayedAssign(x, stop(m, call. = FALSE), environment(), environment()),
       list(m = msg, x = sym)), p, p)
 }
+

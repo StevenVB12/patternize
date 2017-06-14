@@ -90,7 +90,7 @@ patRegRGB <- function(sampleList,
       sStack <- crop(sStack, extRaster)
     }
 
-    sourceRaster <- sStack
+    sourceRaster <- redRes(sStack, 1)
 
     if(!is.null(resampleFactor)){
       sourceRaster <- redRes(sStack, resampleFactor)
