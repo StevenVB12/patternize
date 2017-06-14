@@ -120,11 +120,11 @@ patLanRGB <- function(sampleList,
                                   min(landm[,2])-min(landm[,2])*cropOffset[3]/100,
                                   max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
 
-      image <- raster::crop(image, extRaster)
+      imageC <- raster::crop(image, extRaster)
 
       y <- raster::raster(ncol = dim(image)[2], nrow = dim(image)[1])
       extent(y) <- extRasterOr
-      image <- resample(image, y)
+      image <- resample(imageC, y)
     }
 
     if(focal){
@@ -216,6 +216,12 @@ patLanRGB <- function(sampleList,
       plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
       par(new = TRUE)
       plot(patternRaster, col='black', legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+
+      rasterExt <- raster::extent(min(landm[,1])-min(landm[,1])*cropOffset[1]/100,
+                                  max(landm[,1])+max(landm[,1])*cropOffset[2]/100,
+                                  min(landm[,2])-min(landm[,2])*cropOffset[3]/100,
+                                  max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
+      image <- raster::crop(image,rasterExt)
 
       image[is.na(image)] <- 255
       x <- as.array(image)/255

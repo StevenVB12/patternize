@@ -112,11 +112,11 @@ patLanK <- function(sampleList,
                                   max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
 
 
-      image <- raster::crop(image, extRaster)
+      imageC <- raster::crop(image, extRaster)
 
       y <- raster::raster(ncol = dim(image)[2], nrow = dim(image)[1])
       extent(y) <- extRasterOr
-      image <- resample(image, y)
+      image <- resample(imageC, y)
     }
 
 
