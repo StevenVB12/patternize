@@ -29,6 +29,7 @@
 #' @return  List of summed raster for each k-means cluster objects.
 #'
 #' @examples
+#' \dontrun{
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '_landmarks_LFW.txt'
@@ -40,6 +41,7 @@
 #' # remove [1:2] to run a full examples.
 #' rasterList_lanK <- patLanK(imageList[1:2], landmarkList[1:2], k = 4, crop = TRUE,
 #' res = 100, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
+#' }
 #'
 #' @export
 #' @import raster Morpho

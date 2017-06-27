@@ -22,6 +22,9 @@ patRegW(sampleList, target, resampleFactor = NULL, useBlockPercentage = 75,
 
 \item{resampleFactor}{Integer for downsampling image used by \code{\link{redRes}}.}
 
+\item{useBlockPercentage}{Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
+(default = 75).}
+
 \item{crop}{Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
 original image.}
 
@@ -31,6 +34,8 @@ remove a white background.}
 
 \item{maskOutline}{When outline is specified, everything outside of the outline will be masked for
 the color extraction (default = NULL).}
+
+\item{cartoonID}{ID of the sample for which the cartoon was drawn and will be used for masking.}
 
 \item{correct}{Correct image illumination using a linear model (default = FALSE).}
 
@@ -70,6 +75,7 @@ allowing to pick a starting pixel within each pattern element from which the wat
 extract the pattern. This function works best for patterns with sharp boundaries.
 }
 \examples{
+\dontrun{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
 extension <- '.jpg'
@@ -86,6 +92,7 @@ rasterList_regW <- patRegW(imageList, target, plotTransformed = FALSE, cartoonID
                           bucketfill = FALSE, cleanP = 0, splitC = 10, plotPriority = TRUE,
                           plotWS = FALSE, plotBF = FALSE, plotFinal = TRUE, removebgR = 100,
                           maskOutline = outline_BC0077)
+}
 
 }
 

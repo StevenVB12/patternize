@@ -172,7 +172,7 @@ patLanW <- function(sampleList,
 
       invisible(capture.output(imageT <- Morpho::applyTransform(as.matrix(imageDF1)[,1:2], transMatrix)))
 
-      r <- raster::raster(ncol = dim(image)[1], nrow = dim(image)[2])
+      r <- raster::raster(nrow = dim(image)[1], ncol = dim(image)[2])
 
       raster::extent(r) <- c(min(imageT[,1]),max(imageT[,1]),min(imageT[,2]),max(imageT[,2]))
 
@@ -188,13 +188,13 @@ patLanW <- function(sampleList,
 
       imageTr <- raster::stack(imageT1rf, imageT2rf, imageT3rf)
 
-      imageTr[is.na(imageTr)] <- 0
+      imageTr[is.na(imageTr)] <- 255
 
 
       # Plot transformed raster
       if(plotTransformed){
 
-        imageTr <- raster::flip(imageTr, 'y')
+        # imageTr <- raster::flip(imageTr, 'y')
 
         x <- as.array(imageTr)/255
         cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
@@ -203,7 +203,7 @@ patLanW <- function(sampleList,
         dim(x2) <- dim(x)[1:2]
         raster::image(t(x2), col=uniqueCols, yaxt='n', xaxt='n', main = paste(names(landList)[n],'transformed', sep=' '))
 
-        imageTr <- raster::flip(imageTr, 'y')
+        # imageTr <- raster::flip(imageTr, 'y')
       }
 
       # MaskOutline
@@ -311,7 +311,7 @@ patLanW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
         break
       }
 
@@ -326,7 +326,7 @@ patLanW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
         break
       }
 
@@ -378,7 +378,7 @@ patLanW <- function(sampleList,
       layout(t(1:2))
 
       plot(im, main="Watershed")
-      highlight(ws, col="red")
+      highlight(ws, col="blue")
 
       plot(patternRaster, legend = FALSE, bty = 'n', main = 'Extracted pattern')
     }

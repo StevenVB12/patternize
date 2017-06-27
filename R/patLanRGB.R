@@ -30,6 +30,8 @@
 #' @return  List of raster objects.
 #'
 #' @examples
+#'
+#' \dontrun{
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '_landmarks_LFW.txt'
@@ -42,6 +44,7 @@
 #' RGB <- c(114,17,0)
 #' rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB,
 #' colOffset = 0.15, crop = TRUE, res = 100, adjustCoords = TRUE, plot = 'stack')
+#' }
 #'
 #' @export
 #' @import raster Morpho

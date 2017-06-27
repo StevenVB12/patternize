@@ -9,7 +9,8 @@
 #' @param rList List of raster objects.
 #' @param popList List of vectors including sampleIDs for eacht population.
 #' @param colList List of colors for each population.
-#' @param plot Whether to plot the PCA analysis.
+#' @param symbolList List with graphical plotting symbols (default = NULL).
+#' @param plot Whether to plot the PCA analysis (default = FALSE).
 #' @param plotType Plot 'points' or sample 'labels' (default = 'points')
 #' @param plotChanges Wether to include plots of the changes along the PC axis (default = FALSE).
 #' @param PCx PC axis to be presented for x-axis (default PC1).
@@ -43,7 +44,7 @@
 #' @param cartoonFill Fill color for outline of cartoon (default = NULL).
 #' @param plotLandmarks Whether to plot the landmarks from the target image or mean shape
 #'    landmarks (default = FALSE).
-#' @param landCol Color for ploting landmarks (default = 'black').
+#' @param landCol Color for plotting landmarks (default = 'black').
 #' @param zlim z-axis limit (default = c(0,1))
 #' @param legendTitle Title of the raster legend (default = 'Proportion')
 #' @param xlab Optional x-axis label.
@@ -74,6 +75,7 @@
 patPCA <- function(rList,
                    popList,
                    colList,
+                   symbolList = NULL,
                    plot = FALSE,
                    plotType = 'points',
                    plotChanges = FALSE,
@@ -123,14 +125,27 @@ patPCA <- function(rList,
 
     for(ind in 1:length(popList[[p]])){
 
+      if(!is.null(symbolList)){
+
+        groupCol <- rbind(groupCol, c(popList[[p]][ind], colList[p], symbolList[p]))
+      }
+
+      if(is.null(symbolList)){
+
         groupCol <- rbind(groupCol, c(popList[[p]][ind], colList[p]))
+      }
 
     }
   }
 
   groupCol<-as.data.frame(groupCol)
-  colnames(groupCol) <- c('sampleID', 'col')
 
+  if(!is.null(symbolList)){
+    colnames(groupCol) <- c('sampleID', 'col', 'symbol')
+  }
+  if(is.null(symbolList)){
+    colnames(groupCol) <- c('sampleID', 'col')
+  }
 
   if(plot == TRUE){
 
@@ -191,7 +206,12 @@ patPCA <- function(rList,
 
     if(!plotChanges){
 
-      if(plotType == 'points'){
+      if(plotType == 'points' && !is.null(symbolList)){
+
+        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=2)
+      }
+
+      if(plotType == 'points' && is.null(symbolList)){
 
         plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=2)
       }
@@ -211,9 +231,16 @@ patPCA <- function(rList,
 
       # par(mar=c(4,4,1,1))
 
-      if(plotType == 'points'){
+      if(plotType == 'points' && is.null(symbolList)){
 
         plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+      }
+
+      if(plotType == 'points' && !is.null(symbolList)){
+
+        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=2,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       }

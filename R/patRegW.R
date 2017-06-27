@@ -8,11 +8,14 @@
 #' @param resampleFactor Integer for downsampling image used by \code{\link{redRes}}.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop the
 #'    original image.
+#' @param useBlockPercentage Block percentage as used in \code{\link[RNiftyReg]{niftyreg}}
+#'    (default = 75).
 #' @param removebgR Integer indicating the range RGB treshold to remove from image (e.g. 100 removes
 #'    pixels with average RGB > 100; default = NULL) for registration analysis. This works only to
 #'    remove a white background.
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL).
+#' @param cartoonID ID of the sample for which the cartoon was drawn and will be used for masking.
 #' @param correct Correct image illumination using a linear model (default = FALSE).
 #' @param blur Blur image for priority map extraction (default = TRUE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 5).
@@ -32,6 +35,7 @@
 #' @return List of raster objects.
 #'
 #' @examples
+#' \dontrun{
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '.jpg'
@@ -48,6 +52,7 @@
 #'                           bucketfill = FALSE, cleanP = 0, splitC = 10, plotPriority = TRUE,
 #'                           plotWS = FALSE, plotBF = FALSE, plotFinal = TRUE, removebgR = 100,
 #'                           maskOutline = outline_BC0077)
+#' }
 #'
 #' @export
 #'
@@ -79,6 +84,7 @@ patRegW <- function(sampleList,
                     plotBF = FALSE,
                     plotFinal = FALSE){
 
+  declare( . <- as_nonstandard())
   rasterList <- list()
 
   # Crop target image
@@ -181,7 +187,7 @@ patRegW <- function(sampleList,
         uniqueCols <- unique(cols)
         x2 <- match(cols, uniqueCols)
         dim(x2) <- dim(x)[1:2]
-        raster::image(t(x2), col=uniqueCols, yaxt='n', xaxt='n', main = paste(names(landList)[n],'transformed', sep=' '))
+        raster::image(t(x2), col=uniqueCols, yaxt='n', xaxt='n', main = paste(names(sampleList)[n],'transformed', sep=' '))
 
         imageTr <- raster::flip(imageTr, 'y')
       }
@@ -216,7 +222,7 @@ patRegW <- function(sampleList,
 
           layout(t(1:2))
           par(mar=c(2, 2, 2, 2))
-          plot(im, main = paste(names(landList)[n], 'original', sep=' '))
+          plot(im, main = paste(names(sampleList)[n], 'original', sep=' '))
         }
 
         d <- as.data.frame(im)
@@ -227,7 +233,7 @@ patRegW <- function(sampleList,
         # Correct by removing the trend
         im <- im-predict(m,d)
 
-        if(plotCorrect) plot(im, main = paste(names(landList)[n], 'corrected', sep=' '))
+        if(plotCorrect) plot(im, main = paste(names(sampleList)[n], 'corrected', sep=' '))
       }
 
 
@@ -281,7 +287,7 @@ patRegW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
         break
       }
 
@@ -296,7 +302,7 @@ patRegW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[1] || as.numeric(xy)[2] < 0){
+      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
         break
       }
 

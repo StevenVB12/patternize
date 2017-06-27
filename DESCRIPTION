@@ -1,13 +1,13 @@
 Package: patternize
 Title: Quantification of Color Pattern Variation
-Version: 0.0.1.1
+Version: 0.0.2
 Authors@R: person("Steven", "Van Belleghem", email = "vanbelleghemsteven@hotmail.com", role = c("aut", "cre"))
 Maintainer: Steven Van Belleghem <vanbelleghemsteven@hotmail.com>
 Description: Quantification of variation in organismal color patterns as
     obtained from image data. Patternize defines homology between pattern positions
     across images either through fixed landmarks or image registration. Pattern
-    identification is performed by categorizing the distribution of colors using
-    RGB thresholds or image segmentation.
+    identification is performed by categorizing the distribution of colors using RGB
+    thresholds or image segmentation.
 BugReports: https://github.com/StevenVB12/patternize/issues
 URL: https://github.com/StevenVB12/patternize
 Depends:
