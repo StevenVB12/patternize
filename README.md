@@ -41,7 +41,7 @@ Solution: download XQuartz https://www.xquartz.org
 
 <b>Workflow</b>
 
-<img src="https://cloud.githubusercontent.com/assets/6349171/24803941/bf7e7274-1ba4-11e7-87e3-fdbc37b1c512.png" alt="workflow" width="500" align="center"></p>
+<img src="https://user-images.githubusercontent.com/6349171/27639019-f1a91760-5c0c-11e7-9705-40a7a24700b1.png" alt="workflow" width="500" align="center"></p>
 
 <b>Setting landmarks</b>
 
