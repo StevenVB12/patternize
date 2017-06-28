@@ -25,12 +25,16 @@ install_github("zarquon42b/Morpho")
 
 <b>Installation errors</b>
 
-Some people have notes praltform specific installation errors (mostly Mac). If you don't find your solution here, please contact me.
+Some people have noted platform specific installation errors (mostly Mac). If you don't find your solution here, please contact me.
 
 ```
-error: unable to load shared object '/Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgl/libs/rgl.so':
-```
+error: unable to load shared object 
+'/Library/Frameworks/R.framework/Versions/3.4/Resources/library/rgl/libs/rgl.so'
+
 Solution: download XQuartz https://www.xquartz.org 
+```
+
+
 
 
 <b>For examples see package examples or https://github.com/StevenVB12/patternize-examples</b>
