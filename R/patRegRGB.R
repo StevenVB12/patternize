@@ -168,6 +168,10 @@ patRegRGB <- function(sampleList,
       transRaster <- raster::raster(extRaster, nrow=dim(sStack)[1], ncol=dim(sStack)[2], vals = rep(NA, dim(sStack)[1]*dim(sStack)[2]))
     }
 
+    if(!identical(raster::extent(transRaster), raster::extent(target))){
+      raster::extent(transRaster) <- raster::extent(target)
+    }
+
     if(plot == 'stack'){
 
       par(mfrow=c(1,1))
@@ -176,7 +180,7 @@ patRegRGB <- function(sampleList,
       }
 
       par(new = TRUE)
-      raster::plot(transRaster, col=rgb(1,0,0,alpha=1/length(sampleList)),legend = FALSE)
+      raster::plot(transRaster, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE)
     }
 
     if(plot == 'compare'){
@@ -193,10 +197,6 @@ patRegRGB <- function(sampleList,
       dim(x2) <- dim(x)[1:2]
       raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
 
-    }
-
-    if(!identical(raster::extent(transRaster), raster::extent(target))){
-      raster::extent(transRaster) <- raster::extent(target)
     }
 
     rasterList[[names(sampleList)[n]]] <- transRaster
