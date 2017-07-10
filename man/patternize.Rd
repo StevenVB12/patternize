@@ -95,7 +95,7 @@ transformation is used, landmark arrays.
    Performs k-means clustering of images.
 
 \code{sampleRGB} \cr
-   Interactive function to sample RGB value from pixel in an image.
+   Interactive function to sample RGB value from pixel or area in an image.
 
 \code{createTarget} \cr
    Creates an artificial target images using a provided outline that can be used for image
@@ -114,6 +114,7 @@ Steven M. Van Belleghem
 \code{\link[Morpho]{procSym}},
 \code{\link[Morpho]{computeTransform}},
 \code{\link[RNiftyReg]{niftyreg}}
+\code{\link[imager]{imager}}
 
 \cite{Jon Clayden, Marc Modat, Benoit Presles, Thanasis Anthopoulos and Pankaj Daga (2017).
 RNiftyReg: Image Registration Using the 'NiftyReg' Library. R package version 2.5.0.
@@ -121,5 +122,8 @@ https://CRAN.R-project.org/package=RNiftyReg} \cr
 
 \cite{Stefan Schlager (2016). Morpho: Calculations and Visualisations Related to Geometric
 Morphometrics. R package version 2.4.1.1. https://github.com/zarquon42b/Morpho} \cr
+
+\cite{Simon Barthelmé (2017). imager: Image processing library based on ‘CImg’. R package
+version 0.40.2. https://CRAN.R-project.org/package=imager} \cr
 }
 
