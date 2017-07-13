@@ -184,10 +184,21 @@ patLanRGB <- function(sampleList,
 
     r <- raster::raster(ncol = res, nrow = res)
 
-    raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
+    if(transformRef == 'meanshape' || is.matrix(transformRef)){
+
+      raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[3]/100,
+                                          max(refShape[,1])+3*max(refShape[,1])*cropOffset[4]/100,
+                                          min(refShape[,2])-3*max(refShape[,2])*cropOffset[1]/100,
+                                          max(refShape[,2])+3*max(refShape[,2])*cropOffset[2]/100)
+    }
+
+    else{
+
+      raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
                                         max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
                                         min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
                                         max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
+    }
 
     patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
@@ -195,11 +206,22 @@ patLanRGB <- function(sampleList,
 
     else{
 
-      patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/100,
-                                             max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
-                                             min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
-                                             max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100),
-                                      ncol = res, nrow = res, vals = rep(NA, res*res))
+      if(transformRef == 'meanshape' || is.matrix(transformRef)){
+
+        patternRaster <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[3]/100,
+                                        max(refShape[,1])+3*max(refShape[,1])*cropOffset[4]/100,
+                                        min(refShape[,2])-3*max(refShape[,2])*cropOffset[1]/100,
+                                        max(refShape[,2])+3*max(refShape[,2])*cropOffset[2]/100)
+      }
+
+      else{
+
+        patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/100,
+                                              max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
+                                              min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
+                                              max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100),
+                                        ncol = res, nrow = res, vals = rep(NA, res*res))
+      }
     }
 
     if(plot == 'stack'){
@@ -210,7 +232,17 @@ patLanRGB <- function(sampleList,
       }
 
       par(new = TRUE)
-      plot(patternRaster, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+
+      if(transformRef == 'meanshape' || is.matrix(transformRef)){
+
+          patternRasterP <- raster::flip(t(patternRaster), 'y')
+      }
+
+      else{
+        patternRasterP <- patternRaster
+      }
+
+      plot(patternRasterP, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
     }
 
     if(plot == 'compare'){
@@ -224,6 +256,7 @@ patLanRGB <- function(sampleList,
                                   max(landm[,1])+max(landm[,1])*cropOffset[2]/100,
                                   min(landm[,2])-min(landm[,2])*cropOffset[3]/100,
                                   max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
+
       image <- raster::crop(image,rasterExt)
 
       image[is.na(image)] <- 255
