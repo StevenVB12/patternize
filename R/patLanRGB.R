@@ -165,44 +165,44 @@ patLanRGB <- function(sampleList,
         mapMASK<-raster::mask(image, mapRaster)
 
         RGBnew <- c(mean(na.omit(as.data.frame(mapMASK[[1]]))[,1]),
-                 mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
-                 mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
+                    mean(na.omit(as.data.frame(mapMASK[[2]]))[,1]),
+                    mean(na.omit(as.data.frame(mapMASK[[3]]))[,1]))
 
         map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGBnew) < colOffset*255))
       }
 
-    mapR <- raster::raster(map)
-    raster::extent(mapR) <- extRasterOr
+      mapR <- raster::raster(map)
+      raster::extent(mapR) <- extRasterOr
 
-    mapDF <- raster::as.data.frame(mapR, xy = TRUE)
+      mapDF <- raster::as.data.frame(mapR, xy = TRUE)
 
-    mapDFs <- subset(mapDF, mapDF$layer == TRUE)
+      mapDFs <- subset(mapDF, mapDF$layer == TRUE)
 
-    invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, as.matrix(lanArray[,,n]), type = transformType)))
+      invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, as.matrix(lanArray[,,n]), type = transformType)))
 
-    invisible(capture.output(mapTransformed <- Morpho::applyTransform(as.matrix(mapDFs[1:2]), transMatrix)))
+      invisible(capture.output(mapTransformed <- Morpho::applyTransform(as.matrix(mapDFs[1:2]), transMatrix)))
 
-    r <- raster::raster(ncol = res, nrow = res)
+      r <- raster::raster(ncol = res, nrow = res)
 
-    if(transformRef == 'meanshape' || is.matrix(transformRef)){
+      if(transformRef == 'meanshape' || is.matrix(transformRef)){
 
-      raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[3]/100,
-                                          max(refShape[,1])+3*max(refShape[,1])*cropOffset[4]/100,
-                                          min(refShape[,2])-3*max(refShape[,2])*cropOffset[1]/100,
-                                          max(refShape[,2])+3*max(refShape[,2])*cropOffset[2]/100)
-    }
+        raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[3]/100,
+                                            max(refShape[,1])+3*max(refShape[,1])*cropOffset[4]/100,
+                                            min(refShape[,2])-3*max(refShape[,2])*cropOffset[1]/100,
+                                            max(refShape[,2])+3*max(refShape[,2])*cropOffset[2]/100)
+      }
 
-    else{
+      else{
 
-      raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
-                                        max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
-                                        min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
-                                        max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
-    }
+        raster::extent(r) <- raster::extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/100,
+                                            max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
+                                            min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
+                                            max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100)
+      }
 
-    patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
+      patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
 
-    }
+      }
 
     else{
 
@@ -217,9 +217,9 @@ patLanRGB <- function(sampleList,
       else{
 
         patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/100,
-                                              max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
-                                              min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
-                                              max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100),
+                                               max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
+                                               min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
+                                               max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100),
                                         ncol = res, nrow = res, vals = rep(NA, res*res))
       }
     }
@@ -246,6 +246,8 @@ patLanRGB <- function(sampleList,
     }
 
     if(plot == 'compare'){
+
+      landm <- lanArray[,,n]
 
       par(mfrow=c(1,2))
       plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
