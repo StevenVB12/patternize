@@ -78,18 +78,20 @@ patArea <-function(rList,
                    imageList = NULL){
 
 
+  indx <- which(IDlist == cartoonID)
+
   if(!is.null(flipOutline) || !is.null(flipRaster)){
 
     imageEx <- raster::extent(imageList[[1]])
 
-    if(refShape != 'mean'){
+    if(refShape[1] != 'mean' && !is.matrix(refShape)){
 
       outline[,2] <- outline[,2] - crop[3]
 
     }
   }
 
-  if(refShape != 'mean'){
+  if(refShape[1] != 'mean' && !is.matrix(refShape)){
 
     if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
 
@@ -126,9 +128,8 @@ patArea <-function(rList,
     }
   }
 
-  if(refShape == 'mean'){
+  if(refShape[1] == 'mean' || is.matrix(refShape)){
 
-    indx <- which(IDlist == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
 
     if(adjustCoords){
@@ -137,16 +138,27 @@ patArea <-function(rList,
       outline[,2] <- extPicture[4]-outline[,2]
     }
 
-    invisible(capture.output(transformed <- Morpho::procSym(landArray)))
+    if(is.matrix(refShape)){
+      invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
+                                                                            as.matrix(landArray[,,indx]),
+                                                                            type="tps")))
+      outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
+    }
+
+    if(!is.matrix(refShape)){
+      invisible(capture.output(transformed <- Morpho::procSym(landArray)))
 
 
-    invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape, as.matrix(landArray[,,indx]), type="tps")))
-    outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
+      invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(transformed$mshape,
+                                                                            as.matrix(landArray[,,indx]),
+                                                                            type="tps")))
+      outlineTrans <- Morpho::applyTransform(as.matrix(outline), cartoonLandTrans)
+    }
 
 
     if(!is.null(flipOutline)){
 
-      rasterEx <- raster::extent(rList[[1]])
+      rasterEx <- raster::extent(rList[[indx]])
 
       if(flipOutline == 'x'){
         outlineTrans[,1] = rasterEx[2] - outlineTrans[,1] + rasterEx[1]
@@ -160,17 +172,17 @@ patArea <-function(rList,
   }
 
 
-  if(refShape == 'mean'){
+  if(refShape[1] == 'mean' || is.matrix(refShape)){
 
     rasterEx <- raster::extent(min(outlineTrans[,1]),max(outlineTrans[,1]),min(outlineTrans[,2]),max(outlineTrans[,2]))
     rRe <- raster::raster(nrow=150,ncol=150)
     extent(rRe) <- rasterEx
 
     if(type == 'RGB'){
-      newRaster <- raster::resample(rList[[IDlist[[1]]]], rRe)
+      newRaster <- raster::resample(rList[[1]], rRe)
     }
     if(type == 'k'){
-      newRaster <- raster::resample(rList[[IDlist[[1]]]][[1]], rRe)
+      newRaster <- raster::resample(rList[[1]][[1]], rRe)
     }
     poly <- sp::Polygons(list(sp::Polygon(outlineTrans)),paste("r"))
 
@@ -178,17 +190,17 @@ patArea <-function(rList,
 
 
 
-  if(refShape == 'target'){
+  if(refShape[1] == 'target'){
 
     rasterEx <- raster::extent(min(outline[,1]),max(outline[,1]),min(outline[,2]),max(outline[,2]))
     rRe <- raster::raster(nrow=150,ncol=150)
     extent(rRe) <- rasterEx
 
     if(type == 'RGB'){
-      newRaster <- raster::resample(rList[[IDlist[[1]]]], rRe)
+      newRaster <- raster::resample(rList[[1]], rRe)
     }
     if(type == 'k'){
-      newRaster <- raster::resample(rList[[IDlist[[1]]]][[1]], rRe)
+      newRaster <- raster::resample(rList[[1]][[1]], rRe)
     }
 
     poly <- sp::Polygons(list(sp::Polygon(outline)),paste("r"))
@@ -210,9 +222,10 @@ patArea <-function(rList,
 
   if(type == 'RGB'){
 
-    for(n in 1:length(IDlist)){
+    for(n in 1:length(rList)){
 
-      rast <- rList[[IDlist[[n]]]]
+      rast <- rList[[n]]
+      ID <- names(rList[n])
 
       if(!is.null(flipRaster)){
         if(flipRaster == 'x'){
@@ -233,7 +246,7 @@ patArea <-function(rList,
 
       nrCells  <- raster::freq(rast, value=1)
 
-      outDf <- rbind(outDf, c(IDlist[[n]], nrCells/nrCellsOutline))
+      outDf <- rbind(outDf, c(ID, nrCells/nrCellsOutline))
     }
 
     outDf <- as.data.frame(outDf)
@@ -247,9 +260,10 @@ patArea <-function(rList,
 
     kList <- list()
 
-    for(n in 1:length(IDlist)){
+    for(n in 1:length(rList)){
 
-      sRast <- rList[[IDlist[[n]]]]
+      sRast <- rList[[n]]
+      ID <- names(rList[n])
 
       for(e in 1:length(sRast)){
 
@@ -272,10 +286,10 @@ patArea <-function(rList,
         nrCells  <- raster::freq(sRast[[e]], value=1)
 
         if(n == 1){
-          kList[[e]] <- c(IDlist[[n]], nrCells/nrCellsOutline)
+          kList[[e]] <- c(ID, nrCells/nrCellsOutline)
         }
         else{
-          kList[[e]] <- rbind(kList[[e]], c(IDlist[[n]], nrCells/nrCellsOutline))
+          kList[[e]] <- rbind(kList[[e]], c(ID, nrCells/nrCellsOutline))
         }
       }
     }
