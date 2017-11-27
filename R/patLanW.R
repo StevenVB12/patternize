@@ -127,18 +127,19 @@ patLanW <- function(sampleList,
     }
   }
 
+  if(!is.null(maskOutline) || transformRef == 'meanshape'){
+    indx <- which(names(sampleList) == cartoonID)
+    maskOutlineNew <- maskOutline
+    extPicture <- raster::extent(sampleList[[indx]])
+    maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
+  }
+
   # Transform the outline for masking if 'meanShape'
   if(!is.null(maskOutline) && transformRef == 'meanshape'){
-
-    indx <- which(names(sampleList) == cartoonID)
 
     invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
                                                                           as.matrix(lanArray[,,indx]),
                                                                           type="tps")))
-
-    maskOutlineNew <- maskOutline
-    extPicture <- raster::extent(sampleList[[indx]])
-    maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
 
     maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
   }
@@ -210,10 +211,10 @@ patLanW <- function(sampleList,
       if(!is.null(maskOutline)){
 
         if(transformRef[1] != 'meanshape'){
-          imageTr <- maskOutline(imageTr, maskOutline, refShape = 'target', crop = c(0,0,0,0),
+          imageTr <- maskOutline(imageTr, maskOutlineNew, refShape = 'target', crop = c(0,0,0,0),
                                 maskColor = 255, imageList = sampleList)
 
-          cropEx <- c(min(maskOutline[,1]), max(maskOutline[,1]), min(maskOutline[,2]), max(maskOutline[,2]))
+          cropEx <- c(min(maskOutlineNew[,1]), max(maskOutlineNew[,1]), min(maskOutlineNew[,2]), max(maskOutlineNew[,2]))
 
         }
         if(transformRef[1] == 'meanshape'){
