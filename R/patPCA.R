@@ -208,17 +208,23 @@ patPCA <- function(rList,
 
       if(plotType == 'points' && !is.null(symbolList)){
 
-        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=2)
+        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=2,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       }
 
       if(plotType == 'points' && is.null(symbolList)){
 
-        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=2)
+        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=2,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       }
 
       if(plotType == 'labels'){
 
-        plot(comp$x[,PCx:PCy], col=NA, pch=19)
+        plot(comp$x[,PCx:PCy], col=NA, pch=19,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
         text(comp$x[,PCx:PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
       }
     }
