@@ -158,7 +158,8 @@ patRegRGB <- function(sampleList,
 
       if(!is.null(maskOutline)){
 
-        transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop)
+        transRaster <- maskOutline(transRaster, maskOutline, refShape = 'target', flipOutline = 'y', crop = crop,
+                                   imageList = sampleList)
       }
       transRaster[transRaster == 0] <- NA
 
