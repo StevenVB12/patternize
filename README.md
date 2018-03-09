@@ -62,7 +62,7 @@ landmarkList <- sampleLandmarks(sampleList, resampleFactor = NULL, crop = c(0,0,
 
 If you are working with <i>Heliconius</i> or related butterflies, consider using this landmark scheme:
 
-<img src="https://user-images.githubusercontent.com/6349171/37205077-37d1932a-238b-11e8-85e2-7359f170d485.png" alt="landmarks Heliconius" width="500" align="center"></p>
+<img src="https://user-images.githubusercontent.com/6349171/37205198-c6f2382a-238b-11e8-8276-c7798ed75813.png" alt="landmarks Heliconius" width="500" align="center"></p>
 
 
 <b>Setting RGB value</b>
