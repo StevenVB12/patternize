@@ -60,6 +60,11 @@ But you can also use (setting a resampleFactor > 0 speeds up things, but reduces
 landmarkList <- sampleLandmarks(sampleList, resampleFactor = NULL, crop = c(0,0,0,0))
 ```
 
+If you are working with <i>Heliconius</i> or related butterflies, consider using this landmark scheme:
+
+<img src="https://user-images.githubusercontent.com/6349171/37205077-37d1932a-238b-11e8-85e2-7359f170d485.png" alt="landmarks Heliconius" width="500" align="center"></p>
+
+
 <b>Setting RGB value</b>
 
 You can assign an RGB vector manually (e.g. RGB <- c(255,0,0) for red) or use:
