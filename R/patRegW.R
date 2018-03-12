@@ -110,6 +110,10 @@ patRegW <- function(sampleList,
 
   if(!is.null(maskOutline)){
 
+    if(is.null(cartoonID)){
+      print('Please specify cartoonID')
+    }
+
     indx <- which(names(sampleList) == cartoonID)
 
     maskOutlineNew <- maskOutline

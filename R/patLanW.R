@@ -127,14 +127,19 @@ patLanW <- function(sampleList,
     }
   }
 
-  if(!is.null(maskOutline) || transformRef == 'meanshape'){
+  # Transform the outline for masking if 'meanShape'
+  if(!is.null(cartoonID) && (!is.null(maskOutline) || transformRef == 'meanshape')){
+
     indx <- which(names(sampleList) == cartoonID)
     maskOutlineNew <- maskOutline
     extPicture <- raster::extent(sampleList[[indx]])
     maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
   }
 
-  # Transform the outline for masking if 'meanShape'
+  if(is.null(cartoonID)){
+    maskOutlineNew <- maskOutline
+  }
+
   if(!is.null(maskOutline) && transformRef == 'meanshape'){
 
     invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
