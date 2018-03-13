@@ -6,7 +6,7 @@ Quantifying variation in color patterns to study and compare the consistency of 
 Please do not hesitate to contact me with any questions or suggestions!
 ```
 
-<b>Install patternize in R from CRAN:</b>
+<b>Install patternize in R from CRAN (not up to date at this time!!):</b>
 
 ```
 install.packages("patternize")
