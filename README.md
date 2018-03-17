@@ -106,5 +106,9 @@ IDlist <- c('image1', 'image2')
 extension <- '.jpg'
 colorChecker(IDlist, extension)
 ```
-This calculates a second order polynomial regression between the observed and expected RGB values of the 24 ColorChecker patches and performs the calibration of the image. The function will ask you to define the corners of the ColorChecker like this:
+
+The function is also available as a stand alone app: https://stevenvanbelleghem.shinyapps.io/shiny_colorchecker/
+
+This calculates a second order polynomial regression between the observed and expected RGB values of the 24 ColorChecker patches and performs the calibration of the image. The function will ask you to define the corners of the ColorChecker like this (also works for images taken with a skew angle):
+
 <img src="https://user-images.githubusercontent.com/6349171/37557207-35132aee-29f9-11e8-84b7-04b31850cea1.png" alt="landmarks Heliconius" width="200" align="center"></p>
