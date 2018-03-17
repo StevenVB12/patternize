@@ -99,8 +99,12 @@ Fiji
 
 The ColorChecker (Macbeth ColorChecker) is a color calibration target consisting of a framed arrangement of 24 squares of painted samples. The chart patches are selected to mimic those of natural objects and to have consistent color appearance under a variety of lighting conditions. By including this chart in an image, it can be used to calibrate images taken in different lightning conditions.
 
+You can calibrate images like this:
+
 ```
 IDlist <- c('image1', 'image2')
 extension <- '.jpg'
 colorChecker(IDlist, extension)
 ```
+This calculates a second order polynomial regression between the observed and expected RGB values of the 24 ColorChecker patches and performs the calibration of the image. The function will ask you to define the corners of the ColorChecker like this:
+<img src="https://user-images.githubusercontent.com/6349171/37557207-35132aee-29f9-11e8-84b7-04b31850cea1.png" alt="landmarks Heliconius" width="200" align="center"></p>
