@@ -18,4 +18,3 @@ summary(imageList)
 }
 }
 \keyword{datasets}
-

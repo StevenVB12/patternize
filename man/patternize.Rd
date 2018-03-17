@@ -105,9 +105,7 @@ transformation is used, landmark arrays.
    Intersects a RasterStack with an outline. Everything outside of the outline will be removed
    from the raster.
 }
-\author{
-Steven M. Van Belleghem
-}
+
 \seealso{
 \code{\link[raster]{raster}},
 \code{\link[raster]{stack}},
@@ -126,4 +124,6 @@ Morphometrics. R package version 2.4.1.1. https://github.com/zarquon42b/Morpho} 
 \cite{Simon Barthelmé (2017). imager: Image processing library based on ‘CImg’. R package
 version 0.40.2. https://CRAN.R-project.org/package=imager} \cr
 }
-
+\author{
+Steven M. Van Belleghem
+}

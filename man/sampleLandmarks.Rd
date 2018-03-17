@@ -33,4 +33,3 @@ landmarkList <- sampleLandmarks(imageList)
 }
 
 }
-

@@ -66,4 +66,3 @@ crop = c(100,400,40,250), removebgR = 100, plot = TRUE)
 }
 
 }
-

@@ -22,4 +22,3 @@ image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patterniz
 image_reduced <- redRes(image, 5)
 
 }
-

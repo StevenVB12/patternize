@@ -72,4 +72,3 @@ res = 100, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
 }
 
 }
-

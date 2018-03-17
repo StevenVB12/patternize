@@ -76,4 +76,3 @@ colOffset = 0.15, crop = TRUE, res = 100, adjustCoords = TRUE, plot = 'stack')
 }
 
 }
-

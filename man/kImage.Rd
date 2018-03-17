@@ -27,4 +27,3 @@ image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patterniz
 out <- kImage(image, 6)
 
 }
-

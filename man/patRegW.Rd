@@ -95,4 +95,3 @@ rasterList_regW <- patRegW(imageList, target, plotTransformed = FALSE, cartoonID
 }
 
 }
-

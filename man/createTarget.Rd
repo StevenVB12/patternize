@@ -41,4 +41,3 @@ target <- createTarget(outline_BC0077, imageList[[1]], plot =  TRUE)
 }
 
 }
-

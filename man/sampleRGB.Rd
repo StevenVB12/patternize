@@ -29,4 +29,3 @@ image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patterniz
 RGB <- sampleRGB(image, resampleFactor = 1)
 
 }
-

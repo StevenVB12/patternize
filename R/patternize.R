@@ -99,6 +99,8 @@
 #'    Intersects a RasterStack with an outline. Everything outside of the outline will be removed
 #'    from the raster.
 #'
+#' \code{colorChecker} \cr
+#'    Calibrate images using ColorChecker.
 #'
 #'
 #' @seealso

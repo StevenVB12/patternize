@@ -97,4 +97,3 @@ plotBF = TRUE, plotFinal = TRUE, maskOutline = outline_BC0077, cartoonID = 'BC00
 }
 
 }
-

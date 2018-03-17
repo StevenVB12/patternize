@@ -57,4 +57,3 @@ masked <- maskOutline(imageList[[1]], outline_BC0077, refShape = 'target', flipO
 }
 
 }
-
