@@ -95,3 +95,12 @@ Fiji
 > Save As > XY coordinates
 ```
 
+<b>Calibrate images using ColorChecker</b>
+
+The ColorChecker (Macbeth ColorChecker) is a color calibration target consisting of a framed arrangement of 24 squares of painted samples. The chart patches are selected to mimic those of natural objects and to have consistent color appearance under a variety of lighting conditions. By including this chart in an image, it can be used to calibrate images taken in different lightning conditions.
+
+```
+IDlist <- c('image1', 'image2')
+extension <- '.jpg'
+colorChecker(IDlist, extension)
+```
