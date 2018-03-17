@@ -99,7 +99,7 @@ Fiji
 
 The ColorChecker (Macbeth ColorChecker) is a color calibration target consisting of a framed arrangement of 24 squares of painted samples. The chart patches are selected to mimic those of natural objects and to have consistent color appearance under a variety of lighting conditions. By including this chart in an image, it can be used to calibrate images taken in different lightning conditions.
 
-<img src="https://user-images.githubusercontent.com/6349171/37557345-0a13112c-29fb-11e8-9d55-ebf4ba21a0ea.png" alt="landmarks Heliconius" width="500" align="center"></p>
+<img src="https://user-images.githubusercontent.com/6349171/37557345-0a13112c-29fb-11e8-9d55-ebf4ba21a0ea.png" alt="ColorChecker calibrated" width="500" align="center"></p>
 
 You can calibrate images like this:
 
@@ -113,4 +113,4 @@ The function is also available as a stand alone app: https://stevenvanbelleghem.
 
 This calculates a second order polynomial regression between the observed and expected RGB values of the 24 ColorChecker patches and performs the calibration of the image. The function will ask you to define the corners of the ColorChecker like this (also works for images taken with a skew angle):
 
-<img src="https://user-images.githubusercontent.com/6349171/37557207-35132aee-29f9-11e8-84b7-04b31850cea1.png" alt="landmarks Heliconius" width="200" align="center"></p>
+<img src="https://user-images.githubusercontent.com/6349171/37557207-35132aee-29f9-11e8-84b7-04b31850cea1.png" alt="ColorChecker corners" width="200" align="center"></p>
