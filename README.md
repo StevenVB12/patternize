@@ -99,6 +99,8 @@ Fiji
 
 The ColorChecker (Macbeth ColorChecker) is a color calibration target consisting of a framed arrangement of 24 squares of painted samples. The chart patches are selected to mimic those of natural objects and to have consistent color appearance under a variety of lighting conditions. By including this chart in an image, it can be used to calibrate images taken in different lightning conditions.
 
+<img src="https://user-images.githubusercontent.com/6349171/37557345-0a13112c-29fb-11e8-9d55-ebf4ba21a0ea.png" alt="landmarks Heliconius" width="200" align="center"></p>
+
 You can calibrate images like this:
 
 ```
