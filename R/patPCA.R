@@ -7,9 +7,14 @@
 #' set to zero except for the PC value for which we want to predict the pixel values.
 #'
 #' @param rList List of raster objects.
-#' @param popList List of vectors including sampleIDs for eacht population.
+#' @param popList List of vectors including sampleIDs for each population.
 #' @param colList List of colors for each population.
 #' @param symbolList List with graphical plotting symbols (default = NULL).
+#' @param rListPredict List of raster objects to predict into PCA space (default = NULL).
+#' @param popListPredict List of vectors including sampleIDs for each set of predict samples
+#' (default = NULL). Note to that this also has to be a list if only one population is included.
+#' @param colListPredict List of colors for each set of predict samples (default = NULL).
+#' @param symbolListPredict List with graphical plotting symbols for predict sets (default = NULL).
 #' @param plot Whether to plot the PCA analysis (default = FALSE).
 #' @param plotType Plot 'points' or sample 'labels' (default = 'points')
 #' @param plotChanges Wether to include plots of the changes along the PC axis (default = FALSE).
@@ -51,9 +56,9 @@
 #' @param ylab Optional y-axis label.
 #' @param main Optional main title.
 #'
-#' @return  List including a [1] dataframe of the binary raster values that can be used for
+#' @return  If plot = TRUE: List including a [1] dataframe of the binary raster values that can be used for
 #'    principle component analysis, [2] a dataframe of sample IDs and specified population
-#'    colors and [3] prcomp results.
+#'    colors and [3] prcomp results. If plot = FALSE: prcomp result.
 #'
 #' @seealso \code{\link[stats]{prcomp}}
 #'
@@ -76,6 +81,10 @@ patPCA <- function(rList,
                    popList,
                    colList,
                    symbolList = NULL,
+                   rListPredict = NULL,
+                   popListPredict = NULL,
+                   colListPredict = NULL,
+                   symbolListPredict = NULL,
                    plot = FALSE,
                    plotType = 'points',
                    plotChanges = FALSE,
@@ -106,6 +115,7 @@ patPCA <- function(rList,
                    ylab='',
                    main=''){
 
+  # data for PCA
   for(r in 1:length(rList)){
 
     rList[[r]][is.na(rList[[r]])] <- 0
@@ -119,6 +129,7 @@ patPCA <- function(rList,
       rasDF <- cbind(rasDF, ras)
     }
   }
+
   groupCol <- c()
 
   for(p in 1:length(popList)){
@@ -138,7 +149,7 @@ patPCA <- function(rList,
     }
   }
 
-  groupCol<-as.data.frame(groupCol)
+  groupCol <- as.data.frame(groupCol)
 
   if(!is.null(symbolList)){
     colnames(groupCol) <- c('sampleID', 'col', 'symbol')
@@ -147,14 +158,68 @@ patPCA <- function(rList,
     colnames(groupCol) <- c('sampleID', 'col')
   }
 
+
+  # data for predict
+  if(!is.null(rListPredict)){
+    for(r in 1:length(rListPredict)){
+
+      rListPredict[[r]][is.na(rListPredict[[r]])] <- 0
+      ras <- raster::as.data.frame(rListPredict[[r]])
+      colnames(ras) <- names(rListPredict)[[r]]
+
+      if(r == 1){
+        rasDFPredict <- ras
+      }
+      else{
+        rasDFPredict <- cbind(rasDFPredict, ras)
+      }
+    }
+
+
+    groupColPredict <- c()
+
+    for(p in 1:length(popListPredict)){
+
+      for(ind in 1:length(popListPredict[[p]])){
+
+        if(!is.null(symbolListPredict)){
+
+          groupColPredict <- rbind(groupColPredict, c(popListPredict[[p]][ind], colListPredict[p], symbolListPredict[p]))
+        }
+
+        if(is.null(symbolListPredict)){
+
+          groupColPredict <- rbind(groupColPredict, c(popListPredict[[p]][ind], colListPredict[p]))
+        }
+
+      }
+    }
+
+    groupColPredict <- as.data.frame(groupColPredict)
+
+    if(!is.null(symbolListPredict)){
+      colnames(groupColPredict) <- c('sampleID', 'col', 'symbol')
+    }
+    if(is.null(symbolListPredict)){
+      colnames(groupColPredict) <- c('sampleID', 'col')
+    }
+  }
+
+  # PCA
+  comp <- prcomp(t(rasDF))
+
+  pcdata <- comp$x
+  rotation <- comp$rotation
+
+  summ <- summary(comp)
+
+  # predict samples in PCA
+  if(!is.null(rListPredict)){
+    predicted <- as.data.frame(predict(comp, t(rasDFPredict)))
+  }
+
+
   if(plot == TRUE){
-
-    comp <- prcomp(t(rasDF))
-
-    pcdata <- comp$x
-    rotation <- comp$rotation
-
-    summ <- summary(comp)
 
     if(plotChanges){
 
@@ -206,18 +271,26 @@ patPCA <- function(rList,
 
     if(!plotChanges){
 
-      if(plotType == 'points' && !is.null(symbolList)){
-
-        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=2,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-      }
-
       if(plotType == 'points' && is.null(symbolList)){
 
-        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=2,
+        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=3,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+
+        if(!is.null(rListPredict)){
+          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=2)
+        }
+      }
+
+      if(plotType == 'points' && !is.null(symbolList)){
+
+        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
+             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+
+        if(!is.null(rListPredict)){
+          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=2)
+        }
       }
 
       if(plotType == 'labels'){
@@ -226,6 +299,10 @@ patPCA <- function(rList,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
         text(comp$x[,PCx:PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
+
+        if(!is.null(rListPredict)){
+          text(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
+        }
       }
     }
 
@@ -242,13 +319,22 @@ patPCA <- function(rList,
         plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+
+        if(!is.null(rListPredict)){
+          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=2)
+        }
       }
 
       if(plotType == 'points' && !is.null(symbolList)){
 
-        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=2,
+        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+
+        if(!is.null(rListPredict)){
+          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=2)
+        }
+
       }
 
       if(plotType == 'labels'){
@@ -256,8 +342,11 @@ patPCA <- function(rList,
         plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19,
              xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-
         text(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
+
+        if(!is.null(rListPredict)){
+          text(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
+        }
       }
 
       if(is.null(colpalette)){
@@ -317,9 +406,15 @@ patPCA <- function(rList,
       plot(mapMay, col=colfunc(21), zlim = c(-1,1), legend.only = TRUE, legend.width = 5, horizontal = TRUE,
            smallplot = c(0.3, 1, 0.5, 0.6), legend.args = list(text=legendTitle, side = 3, font = 2, line = 2.5, cex = 1))
     }
+
+    return(list(t(rasDF), groupCol, comp))
   }
 
-  return(list(t(rasDF), groupCol, comp))
+  else{
+    return(comp)
+  }
+
+
 }
 
 

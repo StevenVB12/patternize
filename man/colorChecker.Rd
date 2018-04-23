@@ -2,7 +2,7 @@
 % Please edit documentation in R/colorChecker.R
 \name{colorChecker}
 \alias{colorChecker}
-\title{Calibrates images using ColorChecker.}
+\title{Calibrate images using ColorChecker.}
 \usage{
 colorChecker(IDlist, prepath = NULL, extension = NULL, patchSize = 0.6)
 }
@@ -20,5 +20,5 @@ colorChecker(IDlist, prepath = NULL, extension = NULL, patchSize = 0.6)
 Calibrated image(s) ('filename_calibrated.jpg')
 }
 \description{
-Calibrates images using ColorChecker.
+Calibrate images using ColorChecker.
 }

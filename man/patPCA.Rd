@@ -10,11 +10,12 @@ are predicted by multiplying the rotation matrix (eigenvectors) with a vector th
 the same length as the number of rows in the rotation matrix and in which all values are
 set to zero except for the PC value for which we want to predict the pixel values.}
 \usage{
-patPCA(rList, popList, colList, symbolList = NULL, plot = FALSE,
-  plotType = "points", plotChanges = FALSE, PCx = 1, PCy = 2,
-  plotCartoon = FALSE, refShape = NULL, outline = NULL, lines = NULL,
-  landList = NULL, adjustCoords = FALSE, crop = c(0, 0, 0, 0),
-  flipRaster = NULL, flipOutline = NULL, imageList = NULL,
+patPCA(rList, popList, colList, symbolList = NULL, rListPredict = NULL,
+  popListPredict = NULL, colListPredict = NULL, symbolListPredict = NULL,
+  plot = FALSE, plotType = "points", plotChanges = FALSE, PCx = 1,
+  PCy = 2, plotCartoon = FALSE, refShape = NULL, outline = NULL,
+  lines = NULL, landList = NULL, adjustCoords = FALSE, crop = c(0, 0, 0,
+  0), flipRaster = NULL, flipOutline = NULL, imageList = NULL,
   cartoonID = NULL, colpalette = NULL, normalized = NULL,
   cartoonOrder = "above", lineOrder = "above", cartoonCol = "gray",
   cartoonFill = NULL, plotLandmarks = FALSE, landCol = "black",
@@ -24,11 +25,19 @@ patPCA(rList, popList, colList, symbolList = NULL, plot = FALSE,
 \arguments{
 \item{rList}{List of raster objects.}
 
-\item{popList}{List of vectors including sampleIDs for eacht population.}
+\item{popList}{List of vectors including sampleIDs for each population.}
 
 \item{colList}{List of colors for each population.}
 
 \item{symbolList}{List with graphical plotting symbols (default = NULL).}
+
+\item{rListPredict}{List of raster objects to predict into PCA space (default = NULL).}
+
+\item{popListPredict}{List of vectors including sampleIDs for each set of predict samples (default = NULL).}
+
+\item{colListPredict}{List of colors for each set of predict samples (default = NULL).}
+
+\item{symbolListPredict}{List with graphical plotting symbols for predict sets (default = NULL).}
 
 \item{plot}{Whether to plot the PCA analysis (default = FALSE).}
 
@@ -100,9 +109,9 @@ landmarks (default = FALSE).}
 \item{main}{Optional main title.}
 }
 \value{
-List including a [1] dataframe of the binary raster values that can be used for
+If plot = TRUE: List including a [1] dataframe of the binary raster values that can be used for
    principle component analysis, [2] a dataframe of sample IDs and specified population
-   colors and [3] prcomp results.
+   colors and [3] prcomp results. If plot = FALSE: prcomp result.
 }
 \description{
 This function transforms the individual color pattern rasters as obtained by the main
