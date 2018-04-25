@@ -516,7 +516,7 @@ patDFA <- function(rList,
 
       plot(NULL, xlim=c(0,1), ylim=c(0,1), type="n", axes = FALSE, xlab = '', ylab='')
 
-      plot(mapMay, col=colfunc(21), zlim = c(-1,1), legend.only = TRUE, legend.width = 5, horizontal = TRUE,
+      plot(mapMax, col=colfunc(21), zlim = c(-1,1), legend.only = TRUE, legend.width = 5, horizontal = TRUE,
            smallplot = c(0.3, 1, 0.5, 0.6), legend.args = list(text=legendTitle, side = 3, font = 2, line = 2.5, cex = 1))
     }
 
