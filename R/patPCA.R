@@ -116,6 +116,9 @@ patPCA <- function(rList,
                    main=''){
 
   # data for PCA
+  # make dataframe of rasters
+  print("making dataframe from rasters")
+
   for(r in 1:length(rList)){
 
     rList[[r]][is.na(rList[[r]])] <- 0
@@ -158,9 +161,25 @@ patPCA <- function(rList,
     colnames(groupCol) <- c('sampleID', 'col')
   }
 
+  # PCA
+  print("calculating prcomp")
+
+  comp <- prcomp(t(rasDF))
+
+  pcdata <- comp$x
+  rotation <- comp$rotation
+
+  summ <- summary(comp)
+
+  xmin <- min(pcdata[,PCx])
+  xmax <- max(pcdata[,PCx])
+  ymin <- min(pcdata[,PCy])
+  ymax <- max(pcdata[,PCy])
+
 
   # data for predict
   if(!is.null(rListPredict)){
+    print("making dataframe for predict rasters")
     for(r in 1:length(rListPredict)){
 
       rListPredict[[r]][is.na(rListPredict[[r]])] <- 0
@@ -203,25 +222,26 @@ patPCA <- function(rList,
     if(is.null(symbolListPredict)){
       colnames(groupColPredict) <- c('sampleID', 'col')
     }
-  }
 
-  # PCA
-  comp <- prcomp(t(rasDF))
 
-  pcdata <- comp$x
-  rotation <- comp$rotation
-
-  summ <- summary(comp)
-
-  # predict samples in PCA
-  if(!is.null(rListPredict)){
+    # predict samples in PCA
     predicted <- as.data.frame(predict(comp, t(rasDFPredict)))
+
+    xmin <- min(pcdata[,PCx], predicted[,PCx])
+    xmax <- max(pcdata[,PCx], predicted[,PCx])
+    ymin <- min(pcdata[,PCy], predicted[,PCy])
+    ymax <- max(pcdata[,PCy], predicted[,PCy])
   }
+
+
+
+
 
 
   if(plot == TRUE){
 
     if(plotChanges){
+      print("calculating changes")
 
       PCxmin <- min(pcdata[,PCx])
       PCxmax <- max(pcdata[,PCx])
@@ -269,85 +289,57 @@ patPCA <- function(rList,
       raster::extent(mapMay) <- raster::extent(rList[[1]])
     }
 
+    print("plotting")
+
+    if(plotChanges){
+      mat <- matrix(c(4,1,1,5,1,1,6,2,3), 3, 3, byrow = TRUE)
+      layout(mat, widths=c(1,1,1), heights=c(1,1,1))
+    }
+
     if(!plotChanges){
+      mat <- matrix(c(1,1,1,1,1,1,1,1,1), 3, 3, byrow = TRUE)
+      layout(mat, widths=c(1,1,1), heights=c(1,1,1))
+    }
 
-      if(plotType == 'points' && is.null(symbolList)){
+    if(plotType == 'points' && is.null(symbolList)){
 
-        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=3,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+      plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=3,
+           xlim = c(xmin, xmax), ylim = c(ymin, ymax),
+           xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
 
-        if(!is.null(rListPredict)){
-          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=2)
-        }
+      if(!is.null(rListPredict)){
+        points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=3)
+      }
+    }
+
+    if(plotType == 'points' && !is.null(symbolList)){
+
+      plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
+           xlim = c(xmin, xmax), ylim = c(ymin, ymax),
+           xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+
+      if(!is.null(rListPredict)){
+        points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
       }
 
-      if(plotType == 'points' && !is.null(symbolList)){
+    }
 
-        plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+    if(plotType == 'labels'){
 
-        if(!is.null(rListPredict)){
-          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=2)
-        }
-      }
+      plot(comp$x[,PCx:PCy], col=NA, pch=19,
+           xlim = c(xmin, xmax), ylim = c(ymin, ymax),
+           xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
+           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+      text(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
 
-      if(plotType == 'labels'){
-
-        plot(comp$x[,PCx:PCy], col=NA, pch=19,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-        text(comp$x[,PCx:PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
-
-        if(!is.null(rListPredict)){
-          text(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
-        }
+      if(!is.null(rListPredict)){
+        text(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
       }
     }
 
     if(plotChanges){
-
-      mat <- matrix(c(4,1,1,5,1,1,6,2,3), 3, 3, byrow = TRUE)
-      layout(mat, widths=c(1,1,1), heights=c(1,1,1))
-
-
-      # par(mar=c(4,4,1,1))
-
-      if(plotType == 'points' && is.null(symbolList)){
-
-        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=20, cex=3,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-
-        if(!is.null(rListPredict)){
-          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=2)
-        }
-      }
-
-      if(plotType == 'points' && !is.null(symbolList)){
-
-        plot(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-
-        if(!is.null(rListPredict)){
-          points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=2)
-        }
-
-      }
-
-      if(plotType == 'labels'){
-
-        plot(comp$x[,PCx], comp$x[,PCy], col=NA, pch=19,
-             xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-             ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
-        text(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
-
-        if(!is.null(rListPredict)){
-          text(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
-        }
-      }
 
       if(is.null(colpalette)){
 
@@ -413,8 +405,6 @@ patPCA <- function(rList,
   else{
     return(comp)
   }
-
-
 }
 
 

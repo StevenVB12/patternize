@@ -33,7 +33,8 @@ patPCA(rList, popList, colList, symbolList = NULL, rListPredict = NULL,
 
 \item{rListPredict}{List of raster objects to predict into PCA space (default = NULL).}
 
-\item{popListPredict}{List of vectors including sampleIDs for each set of predict samples (default = NULL).}
+\item{popListPredict}{List of vectors including sampleIDs for each set of predict samples
+(default = NULL). Note to that this also has to be a list if only one population is included.}
 
 \item{colListPredict}{List of colors for each set of predict samples (default = NULL).}
 

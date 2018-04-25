@@ -80,6 +80,12 @@ transformation is used, landmark arrays.
    Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
    analysis including a visualization of the shape changes along the axis.
 
+\code{patDFA} \cr
+   This function transforms the individual color pattern rasters as obtained by the main
+   patternize functions to a dataframe of 0 and 1 values that can be used for Discriminant
+   Function Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
+   analysis including a visualization of the shape changes along the axis.
+
 \code{patArea} \cr
    This fucntion calculates the area in which the color pattern is expressed in each sample
    as the relative proportion using the provided outline of the considered trait or structure.
