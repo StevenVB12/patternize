@@ -1,7 +1,7 @@
 #' This function transforms the individual color pattern rasters as obtained by the main
-#' patternize functions to a dataframe of 0 and 1 values that can be used for Discriminant
-#' Function Analysis (DFA) (\code{\link[MASS]{lda}}). This function also allows to plot the
-#' analysis including a visualization of the shape changes along the axis. .
+#' patternize functions to a dataframe of 0 and 1 values that can be used for constrained
+#' Redundancy Analysis (RDA) (\code{\link[vegan]{rda}}). This function also allows to plot the
+#' analysis including a visualization of the shape changes along the axis.
 #'
 #' @param rList List of raster objects.
 #' @param popList List of vectors including sampleIDs for each population.
@@ -68,12 +68,12 @@
 #' popList <- list(pop1, pop2)
 #' colList <- c("red", "blue")
 #'
-#' pcaOut <- patDFA(rasterList_lanRGB, popList, colList, plot = TRUE)
+#' pcaOut <- patRDA(rasterList_lanRGB, popList, colList, plot = TRUE)
 #'
 #' @export
-#' @import raster MASS
+#' @import raster vegan
 
-patDFA <- function(rList,
+patRDA <- function(rList,
                    popList,
                    colList,
                    symbolList = NULL,
@@ -132,19 +132,42 @@ patDFA <- function(rList,
   print("removing non-variant rows")
   popSub <- list()
   rwN <- list()
-  for(e in 1:length(popList)){
 
-    popSub[[e]] <- rasDF[,popList[[e]]][apply(rasDF[,popList[[e]]], 1, var, na.rm=TRUE) != 0,]
-    rwN[[e]] <- rownames(popSub[[e]])
-  }
+  # 1. remove invariant rows over all data
 
-  cols <- Reduce(intersect, rwN)
+  popSub1 <- rasDF[apply(rasDF, 1, var, na.rm=TRUE) != 0,]
+  cols <- rownames(popSub1)
 
-  for(e in 1:length(popSub)){
-
-    if(e == 1){pcaInVar <- popSub[[e]][cols,]}
-    else{pcaInVar <- cbind(pcaInVar, popSub[[e]][cols,])}
-  }
+  ## This is for lda
+  # 2. add jitter to nonvariant rows within populations
+  # for(e in 1:length(popList)){
+  #   popSub[[e]] <- popSub1[,popList[[e]]]
+  #   cols <- ncol(popSub[[e]])
+  #   for(l in 1:nrow(popSub[[e]])){
+  #     if(mean(as.numeric(popSub[[e]][l,])) == 0){
+  #       list0 <- rep(0,cols)
+  #       indx <- sample(1:cols, 1)
+  #       list0[indx] <- 0.001
+  #       popSub[[e]][l,] <- list0
+  #     }
+  #     if(mean(as.numeric(popSub[[e]][l,])) == 1){
+  #       list0 <- rep(1,cols)
+  #       indx <- sample(1:cols, 1)
+  #       list0[indx] <- 0.999
+  #       popSub[[e]][l,] <- list0
+  #     }
+  #   }
+  #   # popSub[[e]] <- popSub1[,popList[[e]]][apply(popSub1[,popList[[e]]], 1, var, na.rm=TRUE) != 0,]
+  #   # rwN[[e]] <- rownames(popSub[[e]])
+  # }
+  #
+  # # cols <- Reduce(intersect, rwN)
+  #
+  # for(e in 1:length(popSub)){
+  #
+  #   if(e == 1){pcaInVar <- popSub[[e]]}
+  #   else{pcaInVar <- cbind(pcaInVar, popSub[[e]])}
+  # }
 
   # make group vector
   grp <- c()
@@ -153,6 +176,8 @@ patDFA <- function(rList,
 
     grp <- c(grp, rep(p, length(popList[[p]])))
   }
+  grpM <- as.data.frame(cbind(colnames(popSub1),grp))
+  grpM <- as.factor(as.character(grpM[,2]))
 
   # make color and symbol object
   groupCol <- c()
@@ -184,18 +209,25 @@ patDFA <- function(rList,
   }
 
 
-  print("calculating lda")
-  suppressWarnings(ldaOut <- lda(t(pcaInVar), grp))
-  plda <- predict(object = ldaOut, newdata = t(pcaInVar))
-  pcdata <- plda$x
+  print("calculating rda")
+  # suppressWarnings(ldaOut <- lda(t(pcaInVar), grp))
+  # plda <- predict(object = ldaOut, newdata = t(pcaInVar))
+  # pcdata <- plda$x
 
-  if(ncol(pcdata) > 1){
+  ldaOut <- vegan::rda(t(popSub1), grpM)
+  pcdata <- predict(object = ldaOut, x=t(popSub1), y=grpM,  type = "wa")
+
+  sc <- scores(ldaOut, choices = c(1:ncol(pcdata)))
+  # pcdata <- sc$sites
+
+
+  if(length(popList) > 2){
     xmin <- min(pcdata[,PCx])
     xmax <- max(pcdata[,PCx])
     ymin <- min(pcdata[,PCy])
     ymax <- max(pcdata[,PCy])
   }
-  if(ncol(pcdata) == 1){
+  if(length(popList) <= 2){
     xmin <- min(pcdata[,1])
     xmax <- max(pcdata[,1])
   }
@@ -250,16 +282,18 @@ patDFA <- function(rList,
       colnames(groupColPredict) <- c('sampleID', 'col')
     }
 
-    pldaPredict <- predict(object = ldaOut, newdata = t(rasDFPredict[cols,]))
-    pcdataPredict <- pldaPredict$x
+    # pldaPredict <- predict(object = ldaOut, newdata = t(rasDFPredict[cols,]))
+    # pcdataPredict <- pldaPredict$x
 
-    if(ncol(pcdata) > 1){
+    pcdataPredict <- predict(ldaOut, t(rasDFPredict[cols,]), type="wa")
+
+    if(length(popList) > 2){
       xmin <- min(pcdata[,PCx], pcdataPredict[,PCx])
       xmax <- max(pcdata[,PCx], pcdataPredict[,PCx])
       ymin <- min(pcdata[,PCy], pcdataPredict[,PCy])
       ymax <- max(pcdata[,PCy], pcdataPredict[,PCy])
     }
-    if(ncol(pcdata) == 1){
+    if(ncol(pcdata) <= 2){
       xmin <- min(pcdata[,1], pcdataPredict[,1])
       xmax <- max(pcdata[,1], pcdataPredict[,1])
     }
@@ -269,7 +303,10 @@ patDFA <- function(rList,
   if(plot == TRUE){
 
     # amount of the between-group variance that is explained by each linear discriminant
-    importance = ldaOut$svd^2/sum(ldaOut$svd^2)
+    # importance = ldaOut$svd^2/sum(ldaOut$svd^2)
+
+    importance <- summary(eigenvals(ldaOut))
+
 
     if(plotChanges){
       print("calculating changes")
@@ -277,45 +314,48 @@ patDFA <- function(rList,
       PCxmin <- min(pcdata[,PCx])
       PCxmax <- max(pcdata[,PCx])
 
-      if(ncol(pcdata) > 1){
+      if(length(popList) > 2){
         PCymin <- min(pcdata[,PCy])
         PCymax <- max(pcdata[,PCy])
       }
 
 
-      pc.vecMix <- rep(0, dim(pcdata)[2])
+      pc.vecMix <- rep(0, ncol(sc$species))
       pc.vecMix[PCx] <- PCxmin
 
-      pc.vecMax <- rep(0, dim(pcdata)[2])
+      pc.vecMax <- rep(0, ncol(sc$species))
       pc.vecMax[PCx] <- PCxmax
 
-      if(ncol(pcdata) > 1){
-        pc.vecMiy <- rep(0, dim(pcdata)[2])
+      if(length(popList) > 2){
+        pc.vecMiy <- rep(0, ncol(sc$species))
         pc.vecMiy[PCy] <- PCymin
 
-        pc.vecMay <- rep(0, dim(pcdata)[2])
+        pc.vecMay <- rep(0, ncol(sc$species))
         pc.vecMay[PCy] <- PCymax
       }
 
       # fill in empty rows
-      ldaF <- c()
-      rowN <- rownames(ldaOut$scaling)
+      rowN <- rownames(sc$species)
+      colNr <- ncol(sc$species)
+      rowNr <- nrow(rasDF)
+      ldaF <- matrix(0, nrow = rowNr, ncol =colNr)
       n <- 1
       for(e in 1:nrow(rasDF)){
         if(n <= length(rowN)){
-          line <- ldaOut$scaling[n,]
+          line <- sc$species[n,]
           if(rowN[n] == e){
-            ldaF <- rbind(ldaF, line)
+            ldaF[e,] <- line
             n <- n + 1
           }
-          else{
-            ldaF <-rbind(ldaF, rep(0, ncol(ldaOut$scaling)))
-          }
+          # else{
+          #   ldaF[e,] <- rep(0, colN)
+          # }
         }
-        else{
-          ldaF <-rbind(ldaF, rep(0, ncol(ldaOut$scaling)))
-        }
+        # else{
+        #   ldaF <- rep(0, colN)
+        # }
       }
+      # ldaF <- as.data.frame(ldaF)
       rownames(ldaF) <- c(1:nrow(rasDF))
 
 
@@ -325,7 +365,7 @@ patDFA <- function(rList,
       x2Mi <- t(matrix(xMi,ncol = dim(rList[[1]])[1], nrow = dim(rList[[1]])[2]))
       x2Ma <- t(matrix(xMa,ncol = dim(rList[[1]])[1], nrow = dim(rList[[1]])[2]))
 
-      if(ncol(pcdata) > 1){
+      if(length(popList) > 2){
         yMi <- pc.vecMiy %*%  t(ldaF)
         yMa <- pc.vecMay %*%  t(ldaF)
 
@@ -336,7 +376,7 @@ patDFA <- function(rList,
       mapMix <-raster::raster(x2Mi)
       mapMax <-raster::raster(x2Ma)
 
-      if(ncol(pcdata) > 1){
+      if(length(popList) > 2){
         mapMiy <-raster::raster(y2Mi)
         mapMay <-raster::raster(y2Ma)
       }
@@ -344,7 +384,7 @@ patDFA <- function(rList,
       raster::extent(mapMix) <- raster::extent(rList[[1]])
       raster::extent(mapMax) <- raster::extent(rList[[1]])
 
-      if(ncol(pcdata) > 1){
+      if(length(popList) > 2){
         raster::extent(mapMiy) <- raster::extent(rList[[1]])
         raster::extent(mapMay) <- raster::extent(rList[[1]])
       }
@@ -356,7 +396,7 @@ patDFA <- function(rList,
       mat <- matrix(c(4,1,1,5,1,1,6,2,3), 3, 3, byrow = TRUE)
       layout(mat, widths=c(1,1,1), heights=c(1,1,1))
 
-      if(ncol(pcdata) == 1){
+      if(length(popList) <= 2){
         mat <- matrix(c(1,1,1,1,1,1,4,2,3), 3, 3, byrow = TRUE)
         layout(mat, widths=c(1,1,1), heights=c(1,1,1))
       }
@@ -367,13 +407,13 @@ patDFA <- function(rList,
       layout(mat, widths=c(1,1,1), heights=c(1,1,1))
     }
 
-    if(ncol(pcdata) > 1){
+    if(length(popList) > 2){
       if(plotType == 'points' && is.null(symbolList)){
 
         plot(pcdata[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=3,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
-             xlab=paste('DF',PCx,' (', round(importance[PCx]*100, 1), ' %)'),
-             ylab=paste('DF',PCy,' (', round(importance[PCy]*100, 1), ' %)'))
+             xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('rda',PCy,' (', round(importance[2,PCy]*100, 1), ' %)'))
 
         if(!is.null(rListPredict)){
           points(pcdataPredict[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=3)
@@ -384,8 +424,8 @@ patDFA <- function(rList,
 
         plot(pcdata[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
-             xlab=paste('DF',PCx,' (', round(importance[PCx]*100, 1), ' %)'),
-             ylab=paste('DF',PCy,' (', round(importance[PCy]*100, 1), ' %)'))
+             xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('rda',PCy,' (', round(importance[2,PCy]*100, 1), ' %)'))
 
         if(!is.null(rListPredict)){
           points(pcdataPredict[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
@@ -397,8 +437,8 @@ patDFA <- function(rList,
 
         plot(pcdata[,PCx:PCy], col=NA, pch=19,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
-             xlab=paste('DF',PCx,' (', round(importance[PCx]*100, 1), ' %)'),
-             ylab=paste('DF',PCy,' (', round(importance[PCy]*100, 1), ' %)'))
+             xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
+             ylab=paste('rda',PCy,' (', round(importance[2,PCy]*100, 1), ' %)'))
         text(pcdata[,PCx:PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
 
         if(!is.null(rListPredict)){
@@ -408,16 +448,16 @@ patDFA <- function(rList,
     }
 
     # plotting if only two groups
-    if(ncol(pcdata) == 1){
+    if(length(popList) <= 2){
 
-      d1 <- density(pcdata[grp == 1])
-      d2 <- density(pcdata[grp == 2])
+      d1 <- density(pcdata[,1][grp == 1])
+      d2 <- density(pcdata[,1][grp == 2])
 
       if(plotType == 'points' && is.null(symbolList)){
 
         plot(pcdata[,1], rep(0, nrow(pcdata)), col=as.vector(groupCol$col), pch=20, cex=3,
              xlim = c(xmin, xmax), ylim = c(0, max(1, d1$y,d2$y)),
-             xlab = "DF",
+             xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
              ylab = "Density")
         polygon(d1, col=adjustcolor(colList[1], alpha.f = 0.2), border=colList[1])
         polygon(d2, col=adjustcolor(colList[2], alpha.f = 0.2), border=colList[2])
@@ -431,7 +471,7 @@ patDFA <- function(rList,
 
         plot(pcdata[,1], rep(0, nrow(pcdata)), col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
              xlim = c(xmin, xmax), ylim = c(0, max(1, d1$y,d2$y)),
-             xlab = "DF",
+             xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
              ylab = "Density")
         polygon(d1, col=adjustcolor(colList[1], alpha.f = 0.2), border=colList[1])
         polygon(d2, col=adjustcolor(colList[2], alpha.f = 0.2), border=colList[2])
@@ -446,7 +486,7 @@ patDFA <- function(rList,
 
         plot(pcdata[,1], rep(0, nrow(pcdata)), col=NA, pch=19,
              xlim = c(xmin, xmax), ylim = c(0, max(1, d1$y,d2$y)),
-             xlab = "DF",
+             xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
              ylab = "Density")
         polygon(d1, col=adjustcolor(colList[1], alpha.f = 0.2), border=colList[1])
         polygon(d2, col=adjustcolor(colList[2], alpha.f = 0.2), border=colList[2])
@@ -492,7 +532,7 @@ patDFA <- function(rList,
 
       mtext(paste('max DF', PCx, sep=' '), 1)
 
-      if(ncol(pcdata) > 1){
+      if(length(popList) > 2){
         plotHeat(mapMay/max(abs(yMa)), rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
                  adjustCoords = adjustCoords, landList = landList, crop = crop, flipRaster = flipRaster,
                  flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
@@ -524,7 +564,7 @@ patDFA <- function(rList,
       return(list(t(rasDF), groupCol, ldaOut))
     }
     if(!is.null(rListPredict)){
-      return(list(t(rasDF), groupCol, ldaOut, pldaPredict))
+      return(list(t(rasDF), groupCol, ldaOut, pcdataPredict))
     }
 
   }
