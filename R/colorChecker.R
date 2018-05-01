@@ -9,8 +9,11 @@
 #' @return  Calibrated image(s) ('filename_calibrated.jpg')
 #'
 #' @export
-#' @import raster sp imager
-#'
+#' @import raster
+#' @importFrom stats lm
+#' @importFrom graphics locator
+#' @importFrom imager load.image save.image as.cimg width
+#' @importFrom sp Polygons SpatialPolygons SpatialPolygonsDataFrame
 
 colorChecker <- function(IDlist,
                          prepath = NULL,

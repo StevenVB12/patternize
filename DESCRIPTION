@@ -22,7 +22,8 @@ Imports:
     dplyr,
     imager,
     magrittr,
-    purrr
+    purrr,
+    vegan
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

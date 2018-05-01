@@ -22,6 +22,7 @@
 #' @export
 #' @import raster
 #' @importFrom imager as.cimg imsub
+#' @importFrom graphics locator
 
 sampleLandmarks <- function(sampleList,
                             resampleFactor = NULL,

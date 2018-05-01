@@ -80,10 +80,10 @@ transformation is used, landmark arrays.
    Component Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
    analysis including a visualization of the shape changes along the axis.
 
-\code{patDFA} \cr
+\code{patRDA} \cr
    This function transforms the individual color pattern rasters as obtained by the main
-   patternize functions to a dataframe of 0 and 1 values that can be used for Discriminant
-   Function Analysis (\code{\link[stats]{prcomp}}). This function also allows to plot the
+   patternize functions to a dataframe of 0 and 1 values that can be used for constrained
+   Redundancy Analysis (\code{\link[vegan]{rda}}). This function also allows to plot the
    analysis including a visualization of the shape changes along the axis.
 
 \code{patArea} \cr

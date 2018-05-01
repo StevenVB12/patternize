@@ -57,11 +57,14 @@
 #' }
 #'
 #' @export
-#' @import raster Morpho
+#' @import raster
 #' @importFrom imager as.cimg imfill isoblur imgradient imsplit watershed bucketfill clean split_connected highlight enorm parany add
 #' @importFrom purrr discard
 #' @importFrom dplyr sample_n
 #' @importFrom magrittr %>%
+#' @importFrom graphics locator
+#' @importFrom stats lm
+#' @importFrom Morpho procSym computeTransform applyTransform
 
 patLanW <- function(sampleList,
                     landList,

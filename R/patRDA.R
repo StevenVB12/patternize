@@ -72,6 +72,8 @@
 #'
 #' @export
 #' @import raster vegan
+#' @importFrom grDevices adjustcolor
+#' @importFrom stats var
 
 patRDA <- function(rList,
                    popList,

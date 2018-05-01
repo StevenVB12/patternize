@@ -47,10 +47,10 @@
 #' }
 #'
 #' @export
-#' @import raster Morpho
+#' @import raster
 #' @importFrom utils capture.output
 #' @importFrom stats na.omit
-
+#' @importFrom Morpho procSym computeTransform applyTransform
 
 patLanRGB <- function(sampleList,
                       landList,

@@ -60,9 +60,9 @@
 #' }
 #'
 #' @export
-#' @import raster Morpho
+#' @import raster
 #' @importFrom utils capture.output
-
+#' @importFrom Morpho procSym computeTransform applyTransform
 
 patArea <-function(rList,
                    IDlist,

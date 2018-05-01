@@ -61,6 +61,8 @@
 #' @importFrom purrr discard
 #' @importFrom dplyr sample_n
 #' @importFrom magrittr %>%
+#' @importFrom graphics locator
+#' @importFrom stats lm
 
 patRegW <- function(sampleList,
                     target,
