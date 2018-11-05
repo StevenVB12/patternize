@@ -418,7 +418,7 @@ plotHeat <- function(summedRaster,
     }
 
     if(is.null(refShape) || refShape[1] == 'target'){
-      plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=YLIM/XLIM)
+      plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=1)
     }
 
     if(plotCartoon){
@@ -436,15 +436,15 @@ plotHeat <- function(summedRaster,
 
       if(refShape[1] == 'target'){
 
-        polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+        polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
       }
 
       if(refShape[1] == 'mean' || is.matrix(refShape)){
 
-        plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=YLIM/XLIM)
+        plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=1)
 
-        polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+        polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
       }
     }
@@ -457,7 +457,7 @@ plotHeat <- function(summedRaster,
 
           for(e in 1:length(lineList)){
 
-            lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+            lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
           }
         }
@@ -469,7 +469,7 @@ plotHeat <- function(summedRaster,
 
           for(e in 1:length(cartoonLinesTrans)){
 
-            lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+            lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
           }
         }
       }
@@ -478,11 +478,11 @@ plotHeat <- function(summedRaster,
 
     if(plotPCA){
       image(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
-            xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=YLIM/XLIM)
+            xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=1)
     }
     else{
       plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
-           xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=YLIM/XLIM)
+           xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=1)
       plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(21),legend.width=1, legend.shrink=0.75, legend.args=list(text=legendTitle, side=4, font=2, line=2.5, cex=1))
       }
     mtext(side = 1, text = xlab, line = 0)
@@ -492,13 +492,13 @@ plotHeat <- function(summedRaster,
 
       if(refShape[1] == 'target'){
 
-        polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+        polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
       }
 
       if(refShape[1] == 'mean' || is.matrix(refShape)){
 
-        polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+        polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
       }
     }
@@ -511,7 +511,7 @@ plotHeat <- function(summedRaster,
 
           for(e in 1:length(lineList)){
 
-            lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+            lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
           }
         }
@@ -522,7 +522,7 @@ plotHeat <- function(summedRaster,
 
           for(e in 1:length(cartoonLinesTrans)){
 
-            lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+            lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
           }
         }
       }
@@ -569,7 +569,8 @@ plotHeat <- function(summedRaster,
       }
 
       if(is.null(refShape) || refShape[1] == 'target'){
-        plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main, asp=YLIM/XLIM)
+        plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main, asp=1)
+
       }
 
       if(plotCartoon){
@@ -587,15 +588,15 @@ plotHeat <- function(summedRaster,
 
         if(refShape[1] == 'target'){
 
-          polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+          polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
         }
 
         if(refShape[1] == 'mean' || is.matrix(refShape)){
 
-          plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=YLIM/XLIM)
+          plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=1)
 
-          polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+          polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
         }
       }
@@ -608,7 +609,7 @@ plotHeat <- function(summedRaster,
 
             for(e in 1:length(lineList)){
 
-              lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+              lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
             }
           }
@@ -620,7 +621,7 @@ plotHeat <- function(summedRaster,
 
             for(e in 1:length(cartoonLinesTrans)){
 
-              lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+              lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
             }
           }
         }
@@ -628,7 +629,7 @@ plotHeat <- function(summedRaster,
 
       plot(summedRaster[[k]]/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
            xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3),
-           add= TRUE, asp=YLIM/XLIM)
+           add= TRUE, asp=1)
 
       mtext(side = 1, text = xlab, line = 0)
       mtext(side = 2, text = ylab, line = 0)
@@ -637,13 +638,13 @@ plotHeat <- function(summedRaster,
 
         if(refShape[1] == 'target'){
 
-          polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+          polygon(outline, col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
         }
 
         if(refShape[1] == 'mean' || is.matrix(refShape)){
 
-          polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+          polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
         }
       }
@@ -656,7 +657,7 @@ plotHeat <- function(summedRaster,
 
             for(e in 1:length(lineList)){
 
-              lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+              lines(lineList[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
             }
           }
@@ -668,7 +669,7 @@ plotHeat <- function(summedRaster,
 
             for(e in 1:length(cartoonLinesTrans)){
 
-              lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=YLIM/XLIM)
+              lines(cartoonLinesTrans[[e]], col=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
             }
           }
 
@@ -690,6 +691,3 @@ plotHeat <- function(summedRaster,
     }
   }
 }
-
-
-
