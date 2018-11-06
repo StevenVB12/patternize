@@ -4,7 +4,8 @@
 \alias{colorChecker}
 \title{Calibrate images using ColorChecker.}
 \usage{
-colorChecker(IDlist, prepath = NULL, extension = NULL, patchSize = 0.6)
+colorChecker(IDlist, prepath = NULL, extension = NULL,
+  patchSize = 0.6)
 }
 \arguments{
 \item{IDlist}{List of sample IDs.}

@@ -4,7 +4,8 @@
 \alias{sampleLandmarks}
 \title{Sample landmarks in an image.}
 \usage{
-sampleLandmarks(sampleList, resampleFactor = NULL, crop = c(0, 0, 0, 0))
+sampleLandmarks(sampleList, resampleFactor = NULL, crop = c(0, 0, 0,
+  0))
 }
 \arguments{
 \item{sampleList}{RasterStack or list of RasterStack objects as obtained
