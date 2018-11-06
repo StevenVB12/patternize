@@ -691,6 +691,3 @@ plotHeat <- function(summedRaster,
     }
   }
 }
-
-
-
