@@ -356,7 +356,7 @@ colorChecker <- function(IDlist,
     # ColorGauge Micro Analyzer colorChecker
     if(colorCheckerType == 'ColorGauge Micro Analyzer'){
 
-      print("Click on the outer corners of the ColorGauge Micro Analyzer ColorChecker (1: ~brown, 2: ~cyan, 3: ~red, 4: ~purple)")
+      print("Click on the outer corners of the ColorGauge Micro Analyzer ColorChecker (1: ~brown, 2: ~cyan, 3: ~purple, 4: ~red)")
 
       layout(matrix(c(1,1), 2, 1, byrow = TRUE))
       plot(im, xlim = c(0, width(im)))
