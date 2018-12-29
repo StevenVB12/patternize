@@ -5,7 +5,7 @@
 \title{Calibrate images using ColorChecker.}
 \usage{
 colorChecker(IDlist, prepath = NULL, extension = NULL,
-  patchSize = 0.6)
+  colorCheckerType = "X-Rite", fixedCorners = FALSE, patchSize = 0.6)
 }
 \arguments{
 \item{IDlist}{List of sample IDs.}
@@ -13,6 +13,12 @@ colorChecker(IDlist, prepath = NULL, extension = NULL,
 \item{prepath}{Prepath (default = NULL).}
 
 \item{extension}{Extension (default = NULL).}
+
+\item{colorCheckerType}{Type of colorChecker. Options are 'X-Rite ' and 'ColorGauge Micro
+Analyzer' (default = 'X-Rite ').}
+
+\item{fixedCorners}{Specify whether to set the coordinates of the colorChecker corners
+for every image (default = FALSE).}
 
 \item{patchSize}{Proportion of ColorChecker patch that will be used for observed RGB values
 (default = NULL).}

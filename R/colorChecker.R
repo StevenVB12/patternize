@@ -4,7 +4,9 @@
 #' @param prepath Prepath (default = NULL).
 #' @param extension Extension (default = NULL).
 #' @param colorCheckerType Type of colorChecker. Options are 'X-Rite ' and 'ColorGauge Micro
-#' Analyzer' (default = 'X-Rite ')
+#' Analyzer' (default = 'X-Rite ').
+#' @param fixedCorners Specify whether to set the coordinates of the colorChecker corners
+#' for every image (default = FALSE).
 #' @param patchSize Proportion of ColorChecker patch that will be used for observed RGB values
 #' (default = NULL).
 #'
@@ -14,13 +16,14 @@
 #' @import raster
 #' @importFrom stats lm
 #' @importFrom graphics locator
-#' @importFrom imager load.image save.image as.cimg width
+#' @importFrom imager load.image save.image as.cimg width R G B
 #' @importFrom sp Polygons SpatialPolygons SpatialPolygonsDataFrame
 
 colorChecker <- function(IDlist,
                          prepath = NULL,
                          extension = NULL,
                          colorCheckerType = 'X-Rite',
+                         fixedCorners = FALSE,
                          patchSize = 0.6){
 
   prop <- 1- patchSize
@@ -44,7 +47,13 @@ colorChecker <- function(IDlist,
       layout(matrix(c(1,1), 2, 1, byrow = TRUE))
       plot(im, xlim = c(0, width(im)))
 
-      xy <- locator(n=4)
+      if(fixedCorners == FALSE){
+        xy <- locator(n=4)
+      }
+
+      if(fixedCorners == TRUE & n ==1){
+        xy <- locator(n=4)
+      }
 
 
       print('Matching ColorCecker patches...')
@@ -156,9 +165,9 @@ colorChecker <- function(IDlist,
                      c(5,11,17,23),
                      c(6,12,18,24))
 
-      mR <- raster::as.matrix(R(im))*255
-      mG <- raster::as.matrix(G(im))*255
-      mB <- raster::as.matrix(B(im))*255
+      mR <- raster::as.matrix(imager::R(im))*255
+      mG <- raster::as.matrix(imager::G(im))*255
+      mB <- raster::as.matrix(imager::B(im))*255
 
       rR <- raster::raster(mR)
       rG <- raster::raster(mG)
@@ -334,14 +343,14 @@ colorChecker <- function(IDlist,
       dfCal <- as.data.frame(cbind(prR,prG,prB))
 
       print('Rebuilding image...')
-      R = matrix(dfCal$prR, nrow=dim(im)[1])
-      G = matrix(dfCal$prG, nrow=dim(im)[1])
-      B = matrix(dfCal$prB, nrow=dim(im)[1])
+      Ri = matrix(dfCal$prR, nrow=dim(im)[1])
+      Gi = matrix(dfCal$prG, nrow=dim(im)[1])
+      Bi = matrix(dfCal$prB, nrow=dim(im)[1])
 
       imCal = array(dim=dim(im))
-      imCal[,,,1] = R
-      imCal[,,,2] = G
-      imCal[,,,3] = B
+      imCal[,,,1] = Ri
+      imCal[,,,2] = Gi
+      imCal[,,,3] = Bi
 
       imCal <- imager::as.cimg(imCal)
 
@@ -349,7 +358,9 @@ colorChecker <- function(IDlist,
       plot(im)
       plot(imCal)
 
-      todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+      if(fixedCorners == FALSE){
+        todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+      }
     }
 
 
@@ -361,7 +372,13 @@ colorChecker <- function(IDlist,
       layout(matrix(c(1,1), 2, 1, byrow = TRUE))
       plot(im, xlim = c(0, width(im)))
 
-      xy <- locator(n=4)
+      if(fixedCorners == FALSE){
+        xy <- locator(n=4)
+      }
+
+      if(fixedCorners == TRUE & n ==1){
+        xy <- locator(n=4)
+      }
 
       print('Matching ColorCecker patches...')
 
@@ -475,9 +492,9 @@ colorChecker <- function(IDlist,
                      c(5,11,17,23,29),
                      c(6,12,18,24,30))
 
-      mR <- raster::as.matrix(R(im))*255
-      mG <- raster::as.matrix(G(im))*255
-      mB <- raster::as.matrix(B(im))*255
+      mR <- raster::as.matrix(imager::R(im))*255
+      mG <- raster::as.matrix(imager::G(im))*255
+      mB <- raster::as.matrix(imager::B(im))*255
 
       rR <- raster::raster(mR)
       rG <- raster::raster(mG)
@@ -654,14 +671,14 @@ colorChecker <- function(IDlist,
       dfCal <- as.data.frame(cbind(prR,prG,prB))
 
       print('Rebuilding image...')
-      R = matrix(dfCal$prR, nrow=dim(im)[1])
-      G = matrix(dfCal$prG, nrow=dim(im)[1])
-      B = matrix(dfCal$prB, nrow=dim(im)[1])
+      Ri = matrix(dfCal$prR, nrow=dim(im)[1])
+      Gi = matrix(dfCal$prG, nrow=dim(im)[1])
+      Bi = matrix(dfCal$prB, nrow=dim(im)[1])
 
       imCal = array(dim=dim(im))
-      imCal[,,,1] = R
-      imCal[,,,2] = G
-      imCal[,,,3] = B
+      imCal[,,,1] = Ri
+      imCal[,,,2] = Gi
+      imCal[,,,3] = Bi
 
       imCal <- imager::as.cimg(imCal)
 
@@ -669,8 +686,9 @@ colorChecker <- function(IDlist,
       plot(im)
       plot(imCal)
 
-      todo <- readline(prompt="Press [enter] to continue and save image >>> ")
-
+      if(fixedCorners == FALSE){
+        todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+      }
     }
 
     if(is.null(prepath)){
