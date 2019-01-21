@@ -412,39 +412,39 @@ patRDA <- function(rList,
     if(length(popList) > 2){
       if(plotType == 'points' && is.null(symbolList)){
 
-        plot(pcdata[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=3,
+        plot(pcdata[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=20, cex=3,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
              xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('rda',PCy,' (', round(importance[2,PCy]*100, 1), ' %)'))
 
         if(!is.null(rListPredict)){
-          points(pcdataPredict[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=3)
+          points(pcdataPredict[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch=20, cex=3)
         }
       }
 
       if(plotType == 'points' && !is.null(symbolList)){
 
-        plot(pcdata[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
+        plot(pcdata[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
              xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('rda',PCy,' (', round(importance[2,PCy]*100, 1), ' %)'))
 
         if(!is.null(rListPredict)){
-          points(pcdataPredict[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
+          points(pcdataPredict[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
         }
 
       }
 
       if(plotType == 'labels'){
 
-        plot(pcdata[,PCx:PCy], col=NA, pch=19,
+        plot(pcdata[,c(PCx,PCy)], col=NA, pch=19,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
              xlab=paste('rda',PCx,' (', round(importance[2,PCx]*100, 1), ' %)'),
              ylab=paste('rda',PCy,' (', round(importance[2,PCy]*100, 1), ' %)'))
-        text(pcdata[,PCx:PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
+        text(pcdata[,c(PCx,PCy)], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
 
         if(!is.null(rListPredict)){
-          text(pcdataPredict[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
+          text(pcdataPredict[,c(PCx,PCy)], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
         }
       }
     }

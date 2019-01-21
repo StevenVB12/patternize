@@ -303,39 +303,39 @@ patPCA <- function(rList,
 
     if(plotType == 'points' && is.null(symbolList)){
 
-      plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=20, cex=3,
+      plot(comp$x[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=20, cex=3,
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),
            xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
            ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
 
       if(!is.null(rListPredict)){
-        points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=20, cex=3)
+        points(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch=20, cex=3)
       }
     }
 
     if(plotType == 'points' && !is.null(symbolList)){
 
-      plot(comp$x[,PCx:PCy], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
+      plot(comp$x[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),
            xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
            ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
 
       if(!is.null(rListPredict)){
-        points(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
+        points(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
       }
 
     }
 
     if(plotType == 'labels'){
 
-      plot(comp$x[,PCx:PCy], col=NA, pch=19,
+      plot(comp$x[,c(PCx,PCy)], col=NA, pch=19,
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),
            xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
            ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
       text(comp$x[,PCx], comp$x[,PCy], col=as.vector(groupCol$col), as.character(groupCol$sampleID))
 
       if(!is.null(rListPredict)){
-        text(predicted[,PCx:PCy], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
+        text(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), as.character(groupColPredict$sampleID))
       }
     }
 
