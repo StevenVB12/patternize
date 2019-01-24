@@ -15,6 +15,9 @@
 #' (default = NULL). Note to that this also has to be a list if only one population is included.
 #' @param colListPredict List of colors for each set of predict samples (default = NULL).
 #' @param symbolListPredict List with graphical plotting symbols for predict sets (default = NULL).
+#' @param pcaValuesPredict Dataframe of additional (predicted) PCA values.
+#' @param pcaPopListPredict List of population symbols for plotting additional PCA values.
+#' @param pcaColPredict Color for additional PCA values.
 #' @param plot Whether to plot the PCA analysis (default = FALSE).
 #' @param plotType Plot 'points' or sample 'labels' (default = 'points')
 #' @param plotChanges Wether to include plots of the changes along the PC axis (default = FALSE).
@@ -84,6 +87,9 @@ patPCA <- function(rList,
                    rListPredict = NULL,
                    popListPredict = NULL,
                    colListPredict = NULL,
+                   pcaListPredict = NULL,
+                   pcaPopListPredict = NULL,
+                   pcaColPredict = 'red',
                    symbolListPredict = NULL,
                    plot = FALSE,
                    plotType = 'points',
@@ -321,7 +327,11 @@ patPCA <- function(rList,
            ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
 
       if(!is.null(rListPredict)){
-        points(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch=as.numeric(as.vector(groupColPredict$symbol)), cex=3)
+        points(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch = as.numeric(as.vector(groupColPredict$symbol)), cex=3)
+      }
+
+      if(!is.null(pcaListPredict)){
+        points(pcaListPredict[,c(PCx,PCy)], col = pcaColPredict, pch = pcaPopListPredict, cex=3)
       }
 
     }
