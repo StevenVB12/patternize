@@ -8,8 +8,9 @@
 #'    is 'meanshape'.
 #' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
 #'    coordinates (default = FALSE).
-#' @param transformRef ID of reference sample for shape to which color patterns will be transformed
-#'    to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
+#' @param transformRef ID or landmark matrix of reference sample for shape to which color patterns
+#'    will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes
+#'    analysis.
 #' @param resampleFactor Integer for downsampling image used by \code{\link{redRes}}.
 #' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}}
 #'    (default ='tps').
@@ -113,6 +114,7 @@ patLanW <- function(sampleList,
   if(is.matrix(transformRef)){
 
     refShape <- transformRef
+
   }
 
   if(!is.matrix(transformRef)){

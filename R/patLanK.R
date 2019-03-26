@@ -156,7 +156,13 @@ patLanK <- function(sampleList,
     }
 
     image[is.na(image)] <- 255
-    imageKmeans <- kImage(raster::as.array(image), k, startCenter)
+
+    imageKmeans <- tryCatch(kImage(raster::as.array(image), k, startCenter),
+                            error = function(err) {
+                              print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
+                              return(NULL)
+                            })
+    if(is.null(imageKmeans)){next}
 
     image.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]

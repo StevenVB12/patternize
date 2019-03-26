@@ -239,6 +239,15 @@ patPCA <- function(rList,
     ymax <- max(pcdata[,PCy], predicted[,PCy])
   }
 
+  if(!is.null(pcaListPredict)){
+    points(pcaListPredict[,c(PCx,PCy)], col = pcaColPredict, pch = pcaPopListPredict, cex=3)
+
+    xmin <- min(pcaListPredict[,PCx], xmin)
+    xmax <- max(pcaListPredict[,PCx], xmax)
+    ymin <- min(pcaListPredict[,PCy], ymin)
+    ymax <- max(pcaListPredict[,PCy], ymax)
+  }
+
 
 
 

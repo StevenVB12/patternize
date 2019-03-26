@@ -140,7 +140,12 @@ patRegK <- function(sampleList,
     }
 
     if(is.null(removebgK)){
-      imageKmeans <- kImage(raster::as.array(transRaster), k, startCenter)
+      imageKmeans <- tryCatch(kImage(raster::as.array(transRaster), k, startCenter),
+                              error = function(err) {
+                                print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
+                                return(NULL)
+                                })
+      if(is.null(imageKmeans)){next}
     }
 
     if(is.numeric(removebgK)){
@@ -154,7 +159,12 @@ patRegK <- function(sampleList,
       transRaster<-raster::mask(transRaster, toMaskR)
       transRaster[is.na(transRaster)] <- 0
 
-      imageKmeans <- kImage(raster::as.array(transRaster), k, startCenter)
+      imageKmeans <- tryCatch(kImage(raster::as.array(transRaster), k, startCenter),
+                              error = function(err) {
+                                print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
+                                return(NULL)
+                              })
+      if(is.null(imageKmeans)){next}
     }
 
     image.segmented <- imageKmeans[[1]]
@@ -169,7 +179,7 @@ patRegK <- function(sampleList,
       raster::image(t(apply(x2,2,rev)), col=uniqueCols,yaxt='n', xaxt='n')
     }
 
-    print(names(sampleList)[n])
+    # print(names(sampleList)[n])
 
     # Transform images and add to rasterList
 

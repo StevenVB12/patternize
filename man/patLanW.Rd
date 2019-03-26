@@ -25,8 +25,9 @@ is 'meanshape'.}
 \item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel
 coordinates (default = FALSE).}
 
-\item{transformRef}{ID of reference sample for shape to which color patterns will be transformed
-to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.}
+\item{transformRef}{ID or landmark matrix of reference sample for shape to which color patterns
+will be transformed to. Can be 'meanshape' for transforming to mean shape of Procrustes
+analysis.}
 
 \item{resampleFactor}{Integer for downsampling image used by \code{\link{redRes}}.}
 
