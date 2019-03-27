@@ -5,9 +5,9 @@
 \title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using
 k-means clustering.}
 \usage{
-patLanK(sampleList, landList, k = 3, resampleFactor = NULL,
-  crop = FALSE, cropOffset = c(0, 0, 0, 0), res = 300,
-  transformRef = "meanshape", transformType = "tps",
+patLanK(sampleList, landList, k = 3, fixedStartCenter = NULL,
+  resampleFactor = NULL, crop = FALSE, cropOffset = c(0, 0, 0, 0),
+  res = 300, transformRef = "meanshape", transformType = "tps",
   removebgK = NULL, adjustCoords = FALSE, plot = FALSE,
   focal = FALSE, sigma = 3)
 }
@@ -17,6 +17,8 @@ patLanK(sampleList, landList, k = 3, resampleFactor = NULL,
 \item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
 
 \item{k}{Integere for defining number of k-means clusters (default = 3).}
+
+\item{fixedStartCenter}{Specify a dataframe with start centers for k-means clustering.}
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
 

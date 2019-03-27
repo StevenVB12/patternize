@@ -4,6 +4,7 @@
 #' @param sampleList List of RasterStack objects.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param k Integere for defining number of k-means clusters (default = 3).
+#' @param fixedStartCenter Specify a dataframe with start centers for k-means clustering.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param crop Whether to use the landmarks range to crop the image. This can significantly speed
 #'    up the analysis (default = FALSE).
@@ -51,6 +52,7 @@
 patLanK <- function(sampleList,
                     landList,
                     k = 3,
+                    fixedStartCenter = NULL,
                     resampleFactor = NULL,
                     crop = FALSE,
                     cropOffset = c(0,0,0,0),
@@ -147,13 +149,18 @@ patLanK <- function(sampleList,
 
     # k-means clustering of image
 
-    if(n==1){
+    if(n==1 & is.null(fixedStartCenter)){
       startCenter = NULL
     }
 
-    else{
-      startCenter <- K$centers
+    if(!is.null(fixedStartCenter)){
+      startCenter <- fixedStartCenter
+      print(paste('Fixed centers:', startCenter, sep = ' '))
     }
+
+    # else{
+    #   startCenter <- K$centers
+    # }
 
     image[is.na(image)] <- 255
 
@@ -166,6 +173,12 @@ patLanK <- function(sampleList,
 
     image.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]
+
+    if(n==1 & is.null(fixedStartCenter)){
+      startCenter <- K$centers
+      print('start centers of first image:')
+      print(startCenter)
+    }
 
     if(plot){
       x <- image.segmented/255
