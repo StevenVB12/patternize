@@ -2,6 +2,7 @@
 
 export(alignLan)
 export(colorChecker)
+export(createPhenotype)
 export(createTarget)
 export(kImage)
 export(lanArray)
