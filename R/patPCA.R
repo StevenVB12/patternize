@@ -374,7 +374,7 @@ patPCA <- function(rList,
         }
       }
 
-      plotHeat(mapMix, rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
+      plotHeat(mapMix/max(abs(xMi)), rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
                adjustCoords = adjustCoords, landList = landList, crop = crop, flipRaster = flipRaster,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
@@ -383,7 +383,7 @@ patPCA <- function(rList,
 
       mtext(paste('min PC', PCx, sep=' '), 1)
 
-      plotHeat(mapMax, rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
+      plotHeat(mapMax/max(abs(xMa)), rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
                adjustCoords = adjustCoords, landList = landList, crop = crop, flipRaster = flipRaster,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
@@ -392,7 +392,7 @@ patPCA <- function(rList,
 
       mtext(paste('max PC', PCx, sep=' '), 1)
 
-      plotHeat(mapMay, rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
+      plotHeat(mapMay/max(abs(yMa)), rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
                adjustCoords = adjustCoords, landList = landList, crop = crop, flipRaster = flipRaster,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
@@ -401,7 +401,7 @@ patPCA <- function(rList,
 
       mtext(paste('max PC', PCy, sep=' '), 2)
 
-      plotHeat(mapMiy, rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
+      plotHeat(mapMiy/max(abs(yMi)), rList, plotCartoon = plotCartoon, refShape = refShape, outline = outline, lines = lines,
                adjustCoords = adjustCoords, landList = landList, crop = crop, flipRaster = flipRaster,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
