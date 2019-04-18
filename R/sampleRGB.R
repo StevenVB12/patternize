@@ -38,6 +38,7 @@ sampleRGB <- function(image,
 
   # Transform to imager format
   imA <- raster::as.array(image)
+  imA[is.na(imA[])] <- 0
   imR <- as.raster(imA, nrow = dim(image)[1], ncol = dim(image)[2], max = 255)
   im <- imager::as.cimg(imR)
 
@@ -59,7 +60,7 @@ sampleRGB <- function(image,
 
   if(type == 'area'){
 
-    print("Choose a two points to define square area for which you want RGB values.")
+    print("Choose two points to define square area for which you want RGB values.")
 
     xy1 <- locator(n=1)
 

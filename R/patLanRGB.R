@@ -4,6 +4,9 @@
 #' @param sampleList List of RasterStack objects.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param RGB RGB values for color pattern extraction specified as vector.
+#' @param sampleRGB Whether to set RGB for each image manually.
+#' @param sampleRGBtype Whether to pick a point or area (defined by left bottom and top right)
+#'    for sampleRGB.
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param colOffset Color offset for color pattern extraction (default = 0.10).
 #' @param crop Whether to use the landmarks range to crop the image. This can speed up the
@@ -54,7 +57,9 @@
 
 patLanRGB <- function(sampleList,
                       landList,
-                      RGB,
+                      RGB = NULL,
+                      sampleRGB = FALSE,
+                      sampleRGBtype = 'point',
                       resampleFactor = NULL,
                       colOffset = 0.10,
                       crop = FALSE,
@@ -126,7 +131,7 @@ patLanRGB <- function(sampleList,
       imageC <- raster::crop(image, extRaster)
 
       y <- raster::raster(ncol = dim(image)[2], nrow = dim(image)[1])
-      extent(y) <- extRasterOr
+      raster::extent(y) <- extRasterOr
       image <- resample(imageC, y)
     }
 
@@ -138,6 +143,16 @@ patLanRGB <- function(sampleList,
       rrr3 <- raster::focal(image[[3]], gf)
 
       image <- raster::stack(rrr1, rrr2, rrr3)
+    }
+
+    if(sampleRGB == TRUE){
+      if(crop){imageS <- raster::crop(image, extRaster)}
+      RGB <- sampleRGB(imageS, type = sampleRGBtype)
+    }
+    else{
+      if(is.null(RGB)){
+        stop("You forgot to specify the RGB value")
+        }
     }
 
     map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
@@ -227,7 +242,7 @@ patLanRGB <- function(sampleList,
     if(plot == 'stack'){
 
       par(mfrow=c(1,1))
-      if(n == 1){
+      if(n == 1 | sampleRGB){
         plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
       }
 
@@ -243,6 +258,7 @@ patLanRGB <- function(sampleList,
       }
 
       plot(patternRasterP, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+
     }
 
     if(plot == 'compare'){
@@ -274,6 +290,18 @@ patLanRGB <- function(sampleList,
     rasterList[[names(landList)[n]]] <- patternRaster
 
     print(paste('sample', names(landList)[n], 'done and added to rasterList', sep=' '))
+  }
+
+  if(plot == 'compare' | sampleRGB){
+    for(e in 1:length(rasterList)){
+      if(e == 1){
+        plot(1, type="n", xlab='', ylab='', xaxt='n', yaxt='n', axes= FALSE, bty='n')
+      }
+      par(new = TRUE)
+      raster::plot(rasterList[[e]], col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+
+    }
+
   }
 
   return(rasterList)

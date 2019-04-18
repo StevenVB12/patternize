@@ -5,9 +5,10 @@
 \title{Aligns images usings transformations obtained from fixed landmarks and extracts colors
 using a predefined RGB values and cutoff value.}
 \usage{
-patLanRGB(sampleList, landList, RGB, resampleFactor = NULL,
-  colOffset = 0.1, crop = FALSE, cropOffset = c(0, 0, 0, 0),
-  res = 300, transformRef = "meanshape", transformType = "tps",
+patLanRGB(sampleList, landList, RGB = NULL, sampleRGB = FALSE,
+  sampleRGBtype = "point", resampleFactor = NULL, colOffset = 0.1,
+  crop = FALSE, cropOffset = c(0, 0, 0, 0), res = 300,
+  transformRef = "meanshape", transformType = "tps",
   adjustCoords = FALSE, plot = NULL, focal = FALSE, sigma = 3,
   iterations = 0)
 }
@@ -17,6 +18,11 @@ patLanRGB(sampleList, landList, RGB, resampleFactor = NULL,
 \item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
 
 \item{RGB}{RGB values for color pattern extraction specified as vector.}
+
+\item{sampleRGB}{Whether to set RGB for each image manually.}
+
+\item{sampleRGBtype}{Whether to pick a point or area (defined by left bottom and top right)
+for sampleRGB.}
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
 
