@@ -103,7 +103,7 @@ alignReg <- function(sampleList,
       raster::extent(transRaster) <- raster::extent(target)
     }
 
-    transRaster <- raster::flip(transRaster,'y')
+    # transRaster <- raster::flip(transRaster,'y')
 
     if(plotTransformed){
 

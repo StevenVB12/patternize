@@ -4,10 +4,12 @@
 \alias{plotRasterstackAsImage}
 \title{Plot rasterStack as image.}
 \usage{
-plotRasterstackAsImage(rasterStack)
+plotRasterstackAsImage(rasterStack, flipY = FALSE)
 }
 \arguments{
 \item{rasterStack}{A single rasterStack.}
+
+\item{flipY}{Whether to flip the raster along the Y-axis.}
 }
 \description{
 Plot rasterStack as image.
