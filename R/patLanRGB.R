@@ -29,6 +29,8 @@
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #' @param iterations Number of iterations for recalculating average color.
+#' @param imageIDs A list of IDs to match landmarks to images if landmarkList and imageList don't
+#'    have the same length.
 #'
 #' @return  List of raster objects.
 #'
@@ -71,21 +73,24 @@ patLanRGB <- function(sampleList,
                       plot = NULL,
                       focal =  FALSE,
                       sigma = 3,
-                      iterations = 0){
+                      iterations = 0,
+                      imageIDs = NULL){
 
   rasterList <- list()
 
-  if(length(sampleList) != length(landList)){
-    stop("sampleList is not of the same length as lanArray")
-  }
+  if(is.null(imageIDs)){
+    if(length(sampleList) != length(landList)){
+      stop("sampleList is not of the same length as lanArray")
+    }
 
-  for(n in 1:length(sampleList)){
-    if(names(sampleList)[n] != names(landList)[n]){
-      stop("samples are not in the same order in sampleList and lanArray")
+    for(n in 1:length(sampleList)){
+      if(names(sampleList)[n] != names(landList)[n]){
+        stop("samples are not in the same order in sampleList and lanArray")
+      }
     }
   }
 
-  lanArray <- lanArray(landList, adjustCoords, sampleList)
+  lanArray <- lanArray(landList, adjustCoords, sampleList, imageIDs)
 
   if(is.matrix(transformRef)){
 
@@ -110,9 +115,14 @@ patLanRGB <- function(sampleList,
   }
 
 
-  for(n in 1:length(sampleList)){
+  for(n in 1:length(landList)){
 
-    image <- sampleList[[n]]
+    if(is.null(imageIDs)){
+      image <- sampleList[[n]]
+    }
+    if(!is.null(imageIDs)){
+      image <- sampleList[[imageIDs[n]]]
+    }
     extRasterOr <- raster::extent(image)
 
     if(!is.null(resampleFactor)){
@@ -257,7 +267,7 @@ patLanRGB <- function(sampleList,
         patternRasterP <- patternRaster
       }
 
-      plot(patternRasterP, col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
+      plot(patternRasterP, col=rgb(1,0,0,alpha=1/length(landList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
 
     }
 

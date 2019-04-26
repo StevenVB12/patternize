@@ -4,7 +4,8 @@
 \alias{lanArray}
 \title{Build landmark array for \code{\link[Morpho]{Morpho}}.}
 \usage{
-lanArray(sampleList, adjustCoords = FALSE, imageList = NULL)
+lanArray(sampleList, adjustCoords = FALSE, imageList = NULL,
+  imageIDs = NULL)
 }
 \arguments{
 \item{sampleList}{List of landmark matrices as returned by \code{\link{makeList}}.}
@@ -14,6 +15,9 @@ coordinates (default = FALSE).}
 
 \item{imageList}{List of RasterStacks as returned by \code{\link{makeList}} should be given
 when \code{adjustCoords = TRUE}.}
+
+\item{imageIDs}{A list of IDs to match landmarks to images if landmarkList and imageList don't
+have the same length.}
 }
 \value{
 X x Y x n array, where X and Y define the coordinates of the landmark points and n

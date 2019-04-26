@@ -10,7 +10,7 @@ patLanRGB(sampleList, landList, RGB = NULL, sampleRGB = FALSE,
   crop = FALSE, cropOffset = c(0, 0, 0, 0), res = 300,
   transformRef = "meanshape", transformType = "tps",
   adjustCoords = FALSE, plot = NULL, focal = FALSE, sigma = 3,
-  iterations = 0)
+  iterations = 0, imageIDs = NULL)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -57,6 +57,9 @@ original image for each sample ('compare').}
 \item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 
 \item{iterations}{Number of iterations for recalculating average color.}
+
+\item{imageIDs}{A list of IDs to match landmarks to images if landmarkList and imageList don't
+have the same length.}
 }
 \value{
 List of raster objects.
