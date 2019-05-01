@@ -14,8 +14,8 @@
 #' @param popListPredict List of vectors including sampleIDs for each set of predict samples
 #' (default = NULL). Note to that this also has to be a list if only one population is included.
 #' @param colListPredict List of colors for each set of predict samples (default = NULL).
+#' @param pcaListPredict Points to plot within PCA space.
 #' @param symbolListPredict List with graphical plotting symbols for predict sets (default = NULL).
-#' @param pcaValuesPredict Dataframe of additional (predicted) PCA values.
 #' @param pcaPopListPredict List of population symbols for plotting additional PCA values.
 #' @param pcaColPredict Color for additional PCA values.
 #' @param plot Whether to plot the PCA analysis (default = FALSE).

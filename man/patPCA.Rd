@@ -40,6 +40,8 @@ patPCA(rList, popList, colList, symbolList = NULL, rListPredict = NULL,
 
 \item{colListPredict}{List of colors for each set of predict samples (default = NULL).}
 
+\item{pcaListPredict}{Points to plot within PCA space.}
+
 \item{pcaPopListPredict}{List of population symbols for plotting additional PCA values.}
 
 \item{pcaColPredict}{Color for additional PCA values.}
@@ -114,8 +116,6 @@ landmarks (default = FALSE).}
 \item{ylab}{Optional y-axis label.}
 
 \item{main}{Optional main title.}
-
-\item{pcaValuesPredict}{Dataframe of additional (predicted) PCA values.}
 }
 \value{
 If plot = TRUE: List including a [1] dataframe of the binary raster values that can be used for

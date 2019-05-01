@@ -41,6 +41,7 @@
 #' }
 #'
 #' @export
+#' @importFrom grDevices hsv rgb2hsv
 
 patRegK_HSV <- function(sampleList,
                     target,

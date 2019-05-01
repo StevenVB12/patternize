@@ -49,6 +49,7 @@
 #' @import raster
 #' @importFrom utils capture.output
 #' @importFrom Morpho procSym computeTransform applyTransform
+#' @importFrom grDevices hsv rgb2hsv
 
 patLanK_HSV <- function(sampleList,
                     landList,
@@ -187,7 +188,7 @@ patLanK_HSV <- function(sampleList,
 
     if(plot){
       x <- image.segmented
-      cols <- hsv(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+      cols <- hsv(x[,,1], x[,,2], x[,,3])
       uniqueCols <- unique(cols)
       x2 <- match(cols, uniqueCols)
       dim(x2) <- dim(x)[1:2]

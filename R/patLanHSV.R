@@ -52,6 +52,7 @@
 #' @importFrom utils capture.output
 #' @importFrom stats na.omit
 #' @importFrom Morpho procSym computeTransform applyTransform
+#' @importFrom grDevices hsv rgb2hsv
 
 patLanHSV <- function(sampleList,
                       landList,
