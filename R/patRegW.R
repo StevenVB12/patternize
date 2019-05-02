@@ -181,7 +181,7 @@ patRegW <- function(sampleList,
 
       raster::extent(imageTr) <- raster::extent(sourceRasterK)
 
-      imageTr[imageTr == 0] <- NA
+      # imageTr[imageTr == 0] <- NA
 
       # Plot transformed raster
       if(plotTransformed){
