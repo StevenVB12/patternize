@@ -181,15 +181,15 @@ patRegW <- function(sampleList,
 
       raster::extent(imageTr) <- raster::extent(sourceRasterK)
 
-      # imageTr[imageTr == 0] <- NA
+      imageTr[imageTr == 0] <- NA
 
       # Plot transformed raster
       if(plotTransformed){
 
         imageTr <- raster::flip(imageTr, 'y')
 
-        x <- as.array(imageTr)/255
-        cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+        x <- as.array(imageTr)
+        cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=255)
         uniqueCols <- unique(cols)
         x2 <- match(cols, uniqueCols)
         dim(x2) <- dim(x)[1:2]
