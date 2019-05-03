@@ -8,7 +8,9 @@
 #' @param fixedCorners Specify whether to set the coordinates of the colorChecker corners
 #' for every image (default = FALSE).
 #' @param patchSize Proportion of ColorChecker patch that will be used for observed RGB values
-#' (default = NULL).
+#' (default = 0.6).
+#' @param colorCheckerXY Landmark list of colorChecker corners as returned
+#'   by \code{\link[patternize]{makeList}}. The image will not be plotted.
 #'
 #' @return  Calibrated image(s) ('filename_calibrated.jpg')
 #'
@@ -24,7 +26,8 @@ colorChecker <- function(IDlist,
                          extension = NULL,
                          colorCheckerType = 'X-Rite',
                          fixedCorners = FALSE,
-                         patchSize = 0.6){
+                         patchSize = 0.6,
+                         colorCheckerXY = NULL){
 
   prop <- 1- patchSize
 
@@ -41,18 +44,26 @@ colorChecker <- function(IDlist,
 
     # X-Rite colorChecker
     if(colorCheckerType == 'X-Rite'){
-      print("Click on the outer corners of the X-Rite ColorChecker (1: ~brown, 2: ~cyan, 3: ~black, 4: ~white)")
+      if(is.null(colorCheckerXY)){
+        print("Click on the outer corners of the X-Rite ColorChecker (1: ~brown, 2: ~cyan, 3: ~black, 4: ~white)")
 
+        layout(matrix(c(1,1), 2, 1, byrow = TRUE))
+        plot(im, xlim = c(0, width(im)))
 
-      layout(matrix(c(1,1), 2, 1, byrow = TRUE))
-      plot(im, xlim = c(0, width(im)))
+        if(fixedCorners == FALSE){
+          xy <- locator(n=4)
+        }
 
-      if(fixedCorners == FALSE){
-        xy <- locator(n=4)
+        if(fixedCorners == TRUE & n ==1 ){
+          xy <- locator(n=4)
+        }
       }
+      if(!is.null(colorCheckerXY)){
 
-      if(fixedCorners == TRUE & n ==1){
-        xy <- locator(n=4)
+        xy <- list()
+        xy$x <- colorCheckerXY[[n]][,1]
+        xy$y <- colorCheckerXY[[n]][,2]
+
       }
 
 
@@ -354,12 +365,15 @@ colorChecker <- function(IDlist,
 
       imCal <- imager::as.cimg(imCal)
 
-      layout(matrix(c(1,2), 2, 1, byrow = TRUE))
-      plot(im)
-      plot(imCal)
+      if(is.null(colorCheckerXY)){
+        layout(matrix(c(1,2), 2, 1, byrow = TRUE))
+        plot(im)
+        plot(imCal)
 
-      if(fixedCorners == FALSE){
-        todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+
+        if(fixedCorners == FALSE){
+          todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+        }
       }
     }
 
@@ -367,17 +381,27 @@ colorChecker <- function(IDlist,
     # ColorGauge Micro Analyzer colorChecker
     if(colorCheckerType == 'ColorGauge Micro Analyzer'){
 
-      print("Click on the outer corners of the ColorGauge Micro Analyzer ColorChecker (1: ~brown, 2: ~cyan, 3: ~purple, 4: ~red)")
+      if(is.null(colorCheckerXY)){
+        print("Click on the outer corners of the ColorGauge Micro Analyzer ColorChecker (1: ~brown, 2: ~cyan, 3: ~purple, 4: ~red)")
 
-      layout(matrix(c(1,1), 2, 1, byrow = TRUE))
-      plot(im, xlim = c(0, width(im)))
+        layout(matrix(c(1,1), 2, 1, byrow = TRUE))
+        plot(im, xlim = c(0, width(im)))
 
-      if(fixedCorners == FALSE){
-        xy <- locator(n=4)
+        if(fixedCorners == FALSE){
+          xy <- locator(n=4)
+        }
+
+        if(fixedCorners == TRUE & n ==1){
+          xy <- locator(n=4)
+        }
       }
 
-      if(fixedCorners == TRUE & n ==1){
-        xy <- locator(n=4)
+      if(!is.null(colorCheckerXY)){
+
+        xy <- list()
+        xy$x <- colorCheckerXY[[n]][,1]
+        xy$y <- colorCheckerXY[[n]][,2]
+
       }
 
       print('Matching ColorCecker patches...')
@@ -682,12 +706,14 @@ colorChecker <- function(IDlist,
 
       imCal <- imager::as.cimg(imCal)
 
-      layout(matrix(c(1,2), 2, 1, byrow = TRUE))
-      plot(im)
-      plot(imCal)
+      if(is.null(colorCheckerXY)){
+        layout(matrix(c(1,2), 2, 1, byrow = TRUE))
+        plot(im)
+        plot(imCal)
 
-      if(fixedCorners == FALSE){
-        todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+        if(fixedCorners == FALSE){
+          todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+        }
       }
     }
 

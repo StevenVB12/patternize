@@ -5,7 +5,8 @@
 \title{Calibrate images using ColorChecker.}
 \usage{
 colorChecker(IDlist, prepath = NULL, extension = NULL,
-  colorCheckerType = "X-Rite", fixedCorners = FALSE, patchSize = 0.6)
+  colorCheckerType = "X-Rite", fixedCorners = FALSE, patchSize = 0.6,
+  colorCheckerXY = NULL)
 }
 \arguments{
 \item{IDlist}{List of sample IDs.}
@@ -21,7 +22,10 @@ Analyzer' (default = 'X-Rite ').}
 for every image (default = FALSE).}
 
 \item{patchSize}{Proportion of ColorChecker patch that will be used for observed RGB values
-(default = NULL).}
+(default = 0.6).}
+
+\item{colorCheckerXY}{Landmark list of colorChecker corners as returned
+by \code{\link[patternize]{makeList}}. The image will not be plotted.}
 }
 \value{
 Calibrated image(s) ('filename_calibrated.jpg')
