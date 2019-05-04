@@ -69,7 +69,9 @@ colorChecker <- function(IDlist,
 
       print('Matching ColorCecker patches...')
 
-      polygon(xy$x, xy$y, border = "green")
+      if(is.null(colorCheckerXY)){
+        polygon(xy$x, xy$y, border = "green")
+      }
 
       xyDF <- as.data.frame(xy)
 
@@ -268,8 +270,10 @@ colorChecker <- function(IDlist,
       for(e in 1:nrow(xyTot)){
 
         print(paste('Calculating observed RGB values for patch', e, sep = ' '))
-        polygon(c(xyTot$x1[e],xyTot$x2[e],xyTot$x4[e],xyTot$x3[e]),
-                c(xyTot$y1[e],xyTot$y2[e],xyTot$y4[e],xyTot$y3[e]), border = 'red')
+        if(is.null(colorCheckerXY)){
+          polygon(c(xyTot$x1[e],xyTot$x2[e],xyTot$x4[e],xyTot$x3[e]),
+                  c(xyTot$y1[e],xyTot$y2[e],xyTot$y4[e],xyTot$y3[e]), border = 'red')
+        }
 
         outline <- rbind(c(xyTot$x1[e],xyTot$y1[e]),
                          c(xyTot$x2[e],xyTot$y2[e]),
@@ -406,7 +410,9 @@ colorChecker <- function(IDlist,
 
       print('Matching ColorCecker patches...')
 
-      polygon(xy$x, xy$y, border = "green")
+      if(is.null(colorCheckerXY)){
+        polygon(xy$x, xy$y, border = "green")
+      }
 
       xyDF <- as.data.frame(xy)
 
@@ -605,8 +611,11 @@ colorChecker <- function(IDlist,
       for(e in 1:nrow(xyTot)){
 
         print(paste('Calculating observed RGB values for patch', e, sep = ' '))
-        polygon(c(xyTot$x1[e],xyTot$x2[e],xyTot$x4[e],xyTot$x3[e]),
-                c(xyTot$y1[e],xyTot$y2[e],xyTot$y4[e],xyTot$y3[e]), border = 'red')
+
+        if(is.null(colorCheckerXY)){
+          polygon(c(xyTot$x1[e],xyTot$x2[e],xyTot$x4[e],xyTot$x3[e]),
+                  c(xyTot$y1[e],xyTot$y2[e],xyTot$y4[e],xyTot$y3[e]), border = 'red')
+        }
 
         outline <- rbind(c(xyTot$x1[e],xyTot$y1[e]),
                          c(xyTot$x2[e],xyTot$y2[e]),
