@@ -155,21 +155,23 @@ colorChecker <- function(IDlist,
       xySubDF_4Ba <- as.data.frame(xySubBa)
       xySubDF_4Bb <- as.data.frame(xySubBb)
 
-      points(xySubDF_1A, pch=20, col = 'green')
-      points(xySubDF_1Ba, pch=20, col = 'red')
-      points(xySubDF_1Bb, pch=20, col = 'red')
+      if(is.null(colorCheckerXY)){
+        points(xySubDF_1A, pch=20, col = 'green')
+        points(xySubDF_1Ba, pch=20, col = 'red')
+        points(xySubDF_1Bb, pch=20, col = 'red')
 
-      points(xySubDF_2A, pch=20, col = 'green')
-      points(xySubDF_2Ba, pch=20, col = 'red')
-      points(xySubDF_2Bb, pch=20, col = 'red')
+        points(xySubDF_2A, pch=20, col = 'green')
+        points(xySubDF_2Ba, pch=20, col = 'red')
+        points(xySubDF_2Bb, pch=20, col = 'red')
 
-      points(xySubDF_3A, pch=20, col = 'green')
-      points(xySubDF_3Ba, pch=20, col = 'red')
-      points(xySubDF_3Bb, pch=20, col = 'red')
+        points(xySubDF_3A, pch=20, col = 'green')
+        points(xySubDF_3Ba, pch=20, col = 'red')
+        points(xySubDF_3Bb, pch=20, col = 'red')
 
-      points(xySubDF_4A, pch=20, col = 'green')
-      points(xySubDF_4Ba, pch=20, col = 'red')
-      points(xySubDF_4Bb, pch=20, col = 'red')
+        points(xySubDF_4A, pch=20, col = 'green')
+        points(xySubDF_4Ba, pch=20, col = 'red')
+        points(xySubDF_4Bb, pch=20, col = 'red')
+      }
 
       labels <- list(c(1,7,13,19),
                      c(2,8,14,20),
@@ -213,7 +215,9 @@ colorChecker <- function(IDlist,
 
         xySubDF <- as.data.frame(xySub)
 
-        text(xySubDF, label=labels[[e]], col = 'green')
+        if(is.null(colorCheckerXY)){
+          text(xySubDF, label=labels[[e]], col = 'green')
+        }
 
         xySubDFLabel <- cbind(xySubDF, label=labels[[e]])
 
@@ -499,21 +503,23 @@ colorChecker <- function(IDlist,
       xySubDF_4Ba <- as.data.frame(xySubBa)
       xySubDF_4Bb <- as.data.frame(xySubBb)
 
-      points(xySubDF_1A, pch=20, col = 'green')
-      points(xySubDF_1Ba, pch=20, col = 'red')
-      points(xySubDF_1Bb, pch=20, col = 'red')
+      if(is.null(colorCheckerXY)){
+        points(xySubDF_1A, pch=20, col = 'green')
+        points(xySubDF_1Ba, pch=20, col = 'red')
+        points(xySubDF_1Bb, pch=20, col = 'red')
 
-      points(xySubDF_2A, pch=20, col = 'green')
-      points(xySubDF_2Ba, pch=20, col = 'red')
-      points(xySubDF_2Bb, pch=20, col = 'red')
+        points(xySubDF_2A, pch=20, col = 'green')
+        points(xySubDF_2Ba, pch=20, col = 'red')
+        points(xySubDF_2Bb, pch=20, col = 'red')
 
-      points(xySubDF_3A, pch=20, col = 'green')
-      points(xySubDF_3Ba, pch=20, col = 'red')
-      points(xySubDF_3Bb, pch=20, col = 'red')
+        points(xySubDF_3A, pch=20, col = 'green')
+        points(xySubDF_3Ba, pch=20, col = 'red')
+        points(xySubDF_3Bb, pch=20, col = 'red')
 
-      points(xySubDF_4A, pch=20, col = 'green')
-      points(xySubDF_4Ba, pch=20, col = 'red')
-      points(xySubDF_4Bb, pch=20, col = 'red')
+        points(xySubDF_4A, pch=20, col = 'green')
+        points(xySubDF_4Ba, pch=20, col = 'red')
+        points(xySubDF_4Bb, pch=20, col = 'red')
+      }
 
       labels <- list(c(1,7,13,19,25),
                      c(2,8,14,20,26),
@@ -555,7 +561,9 @@ colorChecker <- function(IDlist,
 
         xySubDF <- as.data.frame(xySub)
 
-        text(xySubDF, label=labels[[e]], col = 'green')
+        if(is.null(colorCheckerXY)){
+          text(xySubDF, label=labels[[e]], col = 'green')
+        }
 
         xySubDFLabel <- cbind(xySubDF, label=labels[[e]])
 
