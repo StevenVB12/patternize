@@ -39,6 +39,8 @@
 #' @param main Optional main title.
 #' @param plotPCA Set as TRUE when visualizing shape changes along PCA axis in \
 #'    code{\link[patternize]{patPCA}}.
+#' @param imageIDs A list of IDs to match landmarks to images if landmarkList and imageList don't
+#'    have the same length.
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -129,7 +131,8 @@ plotHeat <- function(summedRaster,
                      xlab='',
                      ylab='',
                      main='',
-                     plotPCA = FALSE){
+                     plotPCA = FALSE,
+                     imageIDs = NULL){
 
   if(!is.list(summedRaster)){
 
@@ -293,7 +296,7 @@ plotHeat <- function(summedRaster,
   if(plotCartoon && refShape[1] != 'target'){
 
     indx <- which(names(imageList) == cartoonID)
-    invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
+    invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList, imageIDs = imageIDs)))
 
     if(is.matrix(refShape)){
       invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,

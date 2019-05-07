@@ -11,7 +11,8 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   imageList = NULL, cartoonOrder = "above", lineOrder = "above",
   cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
   landCol = "black", zlim = c(0, 1), legendTitle = "Proportion",
-  xlab = "", ylab = "", main = "", plotPCA = FALSE)
+  xlab = "", ylab = "", main = "", plotPCA = FALSE,
+  imageIDs = NULL)
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -79,6 +80,9 @@ landmarks (default = FALSE).}
 
 \item{plotPCA}{Set as TRUE when visualizing shape changes along PCA axis in \
 code{\link[patternize]{patPCA}}.}
+
+\item{imageIDs}{A list of IDs to match landmarks to images if landmarkList and imageList don't
+have the same length.}
 }
 \description{
 Plots the color pattern heatmaps from \code{sumRaster} output.
