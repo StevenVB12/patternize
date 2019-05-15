@@ -8,7 +8,8 @@ and extracts colors using a predefined HSV values and cutoff value.}
 patRegHSV(sampleList, target, HSV, resampleFactor = NULL,
   useBlockPercentage = 75, colOffset = 0.1, crop = c(0, 0, 0, 0),
   removebgR = NULL, maskOutline = NULL, plot = FALSE,
-  focal = FALSE, sigma = 3, iterations = 0, ignoreHSVvalue = FALSE)
+  focal = FALSE, sigma = 3, iterations = 0, ignoreHSVvalue = FALSE,
+  patternsToFile = NULL)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -48,6 +49,9 @@ extracted area. This may improve extraction of distinct color pattern, but fail 
 gradually distributed (in color space) patterns.}
 
 \item{ignoreHSVvalue}{Whether to ignore the HSV value (~darkness).}
+
+\item{patternsToFile}{Name of directory to which the color pattern of each individual will be
+outputted (default = NULL).}
 }
 \value{
 List of raster objects.

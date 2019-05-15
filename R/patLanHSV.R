@@ -27,6 +27,8 @@
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #' @param iterations Number of iterations for recalculating average color.
 #' @param ignoreHSVvalue Whether to ignore the HSV value (~darkness).
+#' @param patternsToFile Name of directory to which the color pattern of each individual will be
+#'    outputted (default = NULL).
 #'
 #' @return  List of raster objects.
 #'
@@ -69,7 +71,8 @@ patLanHSV <- function(sampleList,
                       focal =  FALSE,
                       sigma = 3,
                       iterations = 0,
-                      ignoreHSVvalue = FALSE){
+                      ignoreHSVvalue = FALSE,
+                      patternsToFile = NULL){
 
   rasterList <- list()
 
@@ -285,6 +288,19 @@ patLanHSV <- function(sampleList,
       dim(x2) <- dim(x)[1:2]
       raster::image(apply(x2, 1, rev), col=uniqueCols, yaxt='n', xaxt='n')
 
+    }
+
+    if(!is.null(patternsToFile)){
+
+      dir.create(file.path(patternsToFile), showWarnings = FALSE)
+
+      png(paste(patternsToFile, '/', names(sampleList)[n], '.png', sep=''))
+
+      plot(1, type="n", axes = FALSE, xlab='', ylab='', main = names(sampleList)[n])
+      par(new = TRUE)
+      raster::plot(transRaster, col=rgb(1,0,0,alpha=1), legend = FALSE)
+
+      dev.off()
     }
 
     rasterList[[names(landList)[n]]] <- patternRaster

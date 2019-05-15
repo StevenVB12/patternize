@@ -10,7 +10,7 @@ patLanRGB(sampleList, landList, RGB = NULL, sampleRGB = FALSE,
   crop = FALSE, cropOffset = c(0, 0, 0, 0), res = 300,
   transformRef = "meanshape", transformType = "tps",
   adjustCoords = FALSE, plot = NULL, focal = FALSE, sigma = 3,
-  iterations = 0, imageIDs = NULL)
+  iterations = 0, imageIDs = NULL, patternsToFile = NULL)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -60,6 +60,9 @@ original image for each sample ('compare').}
 
 \item{imageIDs}{A list of IDs to match landmarks to images if landmarkList and imageList don't
 have the same length.}
+
+\item{patternsToFile}{Name of directory to which the color pattern of each individual will be
+outputted (default = NULL).}
 }
 \value{
 List of raster objects.

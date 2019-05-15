@@ -24,6 +24,8 @@
 #'    RGB value for pattern extraction will be iteratively recalculated to be the average of the
 #'    extracted area. This may improve extraction of distinct color pattern, but fail for more
 #'    gradually distributed (in color space) patterns.
+#' @param patternsToFile Name of directory to which the color pattern of each individual will be
+#'    outputted (default = NULL).
 #'
 #' @return List of raster objects.
 #'
@@ -58,7 +60,8 @@ patRegRGB <- function(sampleList,
                       plot = FALSE,
                       focal =  FALSE,
                       sigma = 3,
-                      iterations = 0){
+                      iterations = 0,
+                      patternsToFile = NULL){
 
   rasterList <- list()
 
@@ -198,6 +201,19 @@ patRegRGB <- function(sampleList,
       dim(x2) <- dim(x)[1:2]
       raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
 
+    }
+
+    if(!is.null(patternsToFile)){
+
+      dir.create(file.path(patternsToFile), showWarnings = FALSE)
+
+      png(paste(patternsToFile, '/', names(sampleList)[n], '.png', sep=''))
+
+      plot(1, type="n", axes = FALSE, xlab='', ylab='', main = names(sampleList)[n])
+      par(new = TRUE)
+      raster::plot(transRaster, col=rgb(1,0,0,alpha=1), legend = FALSE)
+
+      dev.off()
     }
 
     rasterList[[names(sampleList)[n]]] <- transRaster

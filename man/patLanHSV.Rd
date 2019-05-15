@@ -9,7 +9,7 @@ patLanHSV(sampleList, landList, HSV, resampleFactor = NULL,
   colOffset = 0.1, crop = FALSE, cropOffset = c(0, 0, 0, 0),
   res = 300, transformRef = "meanshape", transformType = "tps",
   adjustCoords = FALSE, plot = NULL, focal = FALSE, sigma = 3,
-  iterations = 0, ignoreHSVvalue = FALSE)
+  iterations = 0, ignoreHSVvalue = FALSE, patternsToFile = NULL)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -53,6 +53,9 @@ original image for each sample ('compare').}
 \item{iterations}{Number of iterations for recalculating average color.}
 
 \item{ignoreHSVvalue}{Whether to ignore the HSV value (~darkness).}
+
+\item{patternsToFile}{Name of directory to which the color pattern of each individual will be
+outputted (default = NULL).}
 }
 \value{
 List of raster objects.

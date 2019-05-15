@@ -31,6 +31,8 @@
 #' @param iterations Number of iterations for recalculating average color.
 #' @param imageIDs A list of IDs to match landmarks to images if landmarkList and imageList don't
 #'    have the same length.
+#' @param patternsToFile Name of directory to which the color pattern of each individual will be
+#'    outputted (default = NULL).
 #'
 #' @return  List of raster objects.
 #'
@@ -74,7 +76,8 @@ patLanRGB <- function(sampleList,
                       focal =  FALSE,
                       sigma = 3,
                       iterations = 0,
-                      imageIDs = NULL){
+                      imageIDs = NULL,
+                      patternsToFile = NULL){
 
   rasterList <- list()
 
@@ -311,8 +314,22 @@ patLanRGB <- function(sampleList,
       raster::plot(rasterList[[e]], col=rgb(1,0,0,alpha=1/length(sampleList)), legend = FALSE, xaxt='n', yaxt='n', axes= FALSE, bty='n')
 
     }
-
   }
+
+  if(!is.null(patternsToFile)){
+
+    dir.create(file.path(patternsToFile), showWarnings = FALSE)
+
+    png(paste(patternsToFile, '/', names(sampleList)[n], '.png', sep=''))
+
+    plot(1, type="n", axes = FALSE, xlab='', ylab='', main = names(sampleList)[n])
+    par(new = TRUE)
+    raster::plot(transRaster, col=rgb(1,0,0,alpha=1), legend = FALSE)
+
+    dev.off()
+  }
+
+
 
   return(rasterList)
 }
