@@ -16,7 +16,9 @@
 #' @import rgdal
 #' @importFrom stats kmeans
 
-kImage <- function(image, k = 5, startCenter = NULL){
+kImage <- function(image,
+                   k = 5,
+                   startCenter = NULL){
 
   if(class(image) == "RasterStack"){
     image <- raster::as.array(image)
@@ -29,12 +31,16 @@ kImage <- function(image, k = 5, startCenter = NULL){
   )
 
   if(is.null(startCenter)){
-    K = kmeans(df,k, nstart = 3)
+    K = kmeans(na.omit(df),k, nstart = 3)
   }
   else{
-    K = kmeans(df,startCenter)
+    K = kmeans(na.omit(df),startCenter)
   }
-  df$label = K$cluster
+  df$label <- NA
+  df$label[which(!is.na(df$red))] <- K$cluster
+
+  # df[is.na(df)] <- 0
+  # df$label = K$cluster
 
   # Replace color of each pixel with mean RGB value of cluster
 
@@ -48,7 +54,7 @@ kImage <- function(image, k = 5, startCenter = NULL){
   # merge color codes on df
 
   df$order = 1:nrow(df)
-  df = merge(df, colors)
+  df = merge(df, colors, all = TRUE)
   df = df[order(df$order),]
   df$order = NULL
 

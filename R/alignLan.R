@@ -35,10 +35,22 @@ alignLan <- function(sampleList,
                      transformRef = 'meanshape',
                      transformType = 'tps',
                      maskOutline = NULL,
+                     inverse = FALSE,
                      cartoonID = NULL,
                      plotTransformed = FALSE){
 
   rasterList <- list()
+
+  if(is.list(maskOutline)){
+    maskOutlineList <- maskOutline
+    maskOutline <- maskOutline[[1]]
+    inverseList <- inverse
+    inverse <- inverse[[1]]
+  }
+
+  if(!is.null(cartoonID)){
+    imageEx <- raster::extent(sampleList[[cartoonID]])
+  }
 
   # Check whether sampleList and landList have the same length
   if(length(sampleList) != length(landList)){
@@ -98,6 +110,11 @@ alignLan <- function(sampleList,
     maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
   }
 
+  if(transformRef[1] != 'meanshape'){
+
+    maskOutlineNew[,2] <- imageEx[4] - maskOutlineNew[,2]
+  }
+
 
   # Run the loop for each sample
   for(n in 1:length(sampleList)){
@@ -123,7 +140,9 @@ alignLan <- function(sampleList,
 
     r <- raster::raster(nrow = dim(image)[1], ncol = dim(image)[2])
 
+
     raster::extent(r) <- c(min(imageT[,1]),max(imageT[,1]),min(imageT[,2]),max(imageT[,2]))
+
 
     # Rasterize the transformed image and fill in NA values using
     imageT1r <- raster::rasterize(imageT, field = imageDF1[,3], r, fun = mean)
@@ -143,10 +162,18 @@ alignLan <- function(sampleList,
     if(!is.null(maskOutline)){
 
       if(transformRef[1] != 'meanshape'){
+
         imageTr <- maskOutline(imageTr, maskOutlineNew, refShape = 'target', crop = c(0,0,0,0),
-                               maskColor = 255, imageList = sampleList, adjustCoords = TRUE, cartoonID = cartoonID)
+                               maskColor = 0, imageList = sampleList, cartoonID = cartoonID, inverse = inverse)
 
         cropEx <- c(min(maskOutlineNew[,1]), max(maskOutlineNew[,1]), min(maskOutlineNew[,2]), max(maskOutlineNew[,2]))
+
+        if(exists('maskOutlineList')){
+          for(e in 2:length(maskOutlineList)){
+            imageTr <- maskOutline(imageTr, maskOutlineList[[e]], refShape = 'target', crop = c(0,0,0,0),
+                                   maskColor = 0, imageList = sampleList, cartoonID = cartoonID, inverse = inverseList[[e]])
+          }
+        }
 
       }
       if(transformRef[1] == 'meanshape'){

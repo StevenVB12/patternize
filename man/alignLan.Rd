@@ -7,7 +7,8 @@
 alignLan(sampleList, landList, IDlist = NULL, adjustCoords = FALSE,
   resampleFactor = NULL, res = c(300, 300),
   transformRef = "meanshape", transformType = "tps",
-  maskOutline = NULL, cartoonID = NULL, plotTransformed = FALSE)
+  maskOutline = NULL, inverse = FALSE, cartoonID = NULL,
+  plotTransformed = FALSE)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

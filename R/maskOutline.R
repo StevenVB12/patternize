@@ -20,6 +20,7 @@
 #' @param imageList List of image as obtained from \code{\link[patternize]{makeList}} should
 #'    be given if one wants to flip the outline or adjust landmark coordinates.
 #' @param maskColor Color the masked area gets. Set to 0 for black (default) or 255 for white.
+#' @param inverse If TRUE, areas withing the outline will be masked.
 #'
 #' @examples
 #'
@@ -46,7 +47,8 @@ maskOutline <-function(RasterStack,
                        flipRaster = NULL,
                        flipOutline = NULL,
                        imageList = NULL,
-                       maskColor = 0){
+                       maskColor = 0,
+                       inverse = FALSE){
 
   if(is.list(imageList)){
 
@@ -54,6 +56,9 @@ maskOutline <-function(RasterStack,
   }
   else{
     imageEx <- raster::extent(imageList)
+  }
+  if(!is.null(cartoonID)){
+    imageEx <- raster::extent(imageList[[cartoonID]])
   }
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){
@@ -170,7 +175,7 @@ maskOutline <-function(RasterStack,
     }
   }
 
-  RasterStack <- raster::mask(RasterStack, rr)
+  RasterStack <- raster::mask(RasterStack, rr, inverse = inverse)
   RasterStack[is.na(RasterStack)] <- maskColor
 
   return(RasterStack)

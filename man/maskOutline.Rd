@@ -8,7 +8,7 @@ from the raster.}
 maskOutline(RasterStack, outline, refShape, landList = NULL,
   adjustCoords = FALSE, cartoonID = NULL, IDlist = NULL,
   crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
-  imageList = NULL, maskColor = 0)
+  imageList = NULL, maskColor = 0, inverse = FALSE)
 }
 \arguments{
 \item{RasterStack}{RasterStack to be masked.}
@@ -41,6 +41,8 @@ between raster and outline coordinates).}
 be given if one wants to flip the outline or adjust landmark coordinates.}
 
 \item{maskColor}{Color the masked area gets. Set to 0 for black (default) or 255 for white.}
+
+\item{inverse}{If TRUE, areas withing the outline will be masked.}
 }
 \description{
 Intersects a RasterStack with an outline. Everything outside of the outline will be removed
