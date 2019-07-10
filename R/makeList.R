@@ -4,6 +4,8 @@
 #' @param type 'landmark' or 'image' depending on what type of list to make.
 #' @param prepath Prepath (default = NULL).
 #' @param extension Extension (default = NULL).
+#' @param format ImageJ (Fiji) or tps format (default = 'imageJ').
+#' @param tpsFile Provide filename of tps file ff format is 'tps'.
 #'
 #' @return Landmark or RasterStack list.
 #'
@@ -20,34 +22,38 @@
 #'
 #' @export
 #' @importFrom utils read.table
-
+#' @importFrom geomorph readland.tps
 
 makeList <- function(IDlist,
                      type,
                      prepath = NULL,
-                     extension = NULL){
+                     extension = NULL,
+                     format = 'imageJ',
+                     tpsFile = NULL){
 
   objectList <- list()
 
   for(n in 1:length(IDlist)){
 
-    print(paste('sample', n,  IDlist[n], 'added to list', sep=' '))
+    if(format == 'imageJ'){
+      print(paste('sample', n,  IDlist[n], 'added to list', sep=' '))
 
-    if(type == 'landmark'){
+      if(type == 'landmark'){
 
-      if(is.null(prepath)){
-        landmarks <- read.table(paste(IDlist[n], extension, sep=''), header = FALSE,
-                                stringsAsFactors = FALSE, colClasses = c('numeric', 'numeric'))
+        if(is.null(prepath)){
+          landmarks <- read.table(paste(IDlist[n], extension, sep=''), header = FALSE,
+                                  stringsAsFactors = FALSE, colClasses = c('numeric', 'numeric'))
+        }
+        else{
+          landmarks <- read.table(paste(prepath,'/',IDlist[n], extension, sep=''), header = FALSE,
+                                  stringsAsFactors = FALSE, colClasses = c('numeric', 'numeric'))
+        }
+
+        landmarks <- as.matrix(landmarks)
+        colnames(landmarks) <- NULL
+
+        objectList[[IDlist[n]]] <- landmarks
       }
-      else{
-        landmarks <- read.table(paste(prepath,'/',IDlist[n], extension, sep=''), header = FALSE,
-                                stringsAsFactors = FALSE, colClasses = c('numeric', 'numeric'))
-      }
-
-      landmarks <- as.matrix(landmarks)
-      colnames(landmarks) <- NULL
-
-      objectList[[IDlist[n]]] <- landmarks
     }
 
 
@@ -62,6 +68,13 @@ makeList <- function(IDlist,
 
       objectList[[IDlist[n]]] <- image
     }
+  }
+
+  if(type == 'landmark' & format == 'tps'){
+
+    objectListX <- readland.tps(tpsFile, specID = 'imageID', warnmsg = FALSE)
+    objectList <- lapply(1:dim(objectListX)[3],function(i) objectListX[,,i])
+    names(objectList) <- IDlist
   }
 
   return(objectList)

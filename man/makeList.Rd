@@ -4,7 +4,8 @@
 \alias{makeList}
 \title{Build list of landmarks or RasterStacks from images using filepath and file extension.}
 \usage{
-makeList(IDlist, type, prepath = NULL, extension = NULL)
+makeList(IDlist, type, prepath = NULL, extension = NULL,
+  format = "imageJ", tpsFile = NULL)
 }
 \arguments{
 \item{IDlist}{List of sample IDs.}
@@ -14,6 +15,10 @@ makeList(IDlist, type, prepath = NULL, extension = NULL)
 \item{prepath}{Prepath (default = NULL).}
 
 \item{extension}{Extension (default = NULL).}
+
+\item{format}{ImageJ (Fiji) or tps format (default = 'imageJ').}
+
+\item{tpsFile}{Provide filename of tps file ff format is 'tps'.}
 }
 \value{
 Landmark or RasterStack list.
