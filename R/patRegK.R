@@ -164,7 +164,7 @@ patRegK <- function(sampleList,
       raster::extent(toMaskR) <- raster::extent(transRaster)
 
       transRaster<-raster::mask(transRaster, toMaskR)
-      transRaster[is.na(transRaster)] <- 0
+      transRaster[is.na(transRaster)] <- NA
 
       imageKmeans <- tryCatch(kImage(raster::as.array(transRaster), k, startCenter),
                               error = function(err) {
@@ -184,6 +184,7 @@ patRegK <- function(sampleList,
     }
 
     if(plot){
+      image.segmented[is.na(image.segmented)] <- 0
       x <- image.segmented/255
       cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
       uniqueCols <- unique(cols)

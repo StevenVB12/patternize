@@ -41,6 +41,7 @@
 #'    code{\link[patternize]{patPCA}}.
 #' @param imageIDs A list of IDs to match landmarks to images if landmarkList and imageList don't
 #'    have the same length.
+#' @param ImageJ (Fiji) or tps format (default = 'imageJ').
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -132,7 +133,12 @@ plotHeat <- function(summedRaster,
                      ylab='',
                      main='',
                      plotPCA = FALSE,
-                     imageIDs = NULL){
+                     imageIDs = NULL,
+                     format = 'imageJ'){
+
+  if(format == 'tps'){
+    outline[,2] <- (raster::extent(imagelist[[cartoonID]])[4]-outline[,2])
+  }
 
   if(!is.list(summedRaster)){
 

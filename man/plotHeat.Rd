@@ -12,7 +12,7 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
   landCol = "black", zlim = c(0, 1), legendTitle = "Proportion",
   xlab = "", ylab = "", main = "", plotPCA = FALSE,
-  imageIDs = NULL)
+  imageIDs = NULL, format = "imageJ")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -83,6 +83,8 @@ code{\link[patternize]{patPCA}}.}
 
 \item{imageIDs}{A list of IDs to match landmarks to images if landmarkList and imageList don't
 have the same length.}
+
+\item{ImageJ}{(Fiji) or tps format (default = 'imageJ').}
 }
 \description{
 Plots the color pattern heatmaps from \code{sumRaster} output.

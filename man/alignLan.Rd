@@ -8,7 +8,7 @@ alignLan(sampleList, landList, IDlist = NULL, adjustCoords = FALSE,
   resampleFactor = NULL, res = c(300, 300),
   transformRef = "meanshape", transformType = "tps",
   maskOutline = NULL, inverse = FALSE, cartoonID = NULL,
-  plotTransformed = FALSE)
+  plotTransformed = FALSE, format = "imageJ")
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -40,6 +40,8 @@ the color extraction (default = NULL).}
 (should be set when transformRef = 'meanShape').}
 
 \item{plotTransformed}{Plot transformed image (default = FALSE).}
+
+\item{ImageJ}{(Fiji) or tps format (default = 'imageJ').}
 }
 \value{
 List of aligned RasterStack objects.

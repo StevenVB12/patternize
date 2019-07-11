@@ -19,6 +19,7 @@
 #' @param cartoonID ID of the sample for which the cartoon was drawn and will be used for masking
 #'    (should be set when transformRef = 'meanShape').
 #' @param plotTransformed Plot transformed image (default = FALSE).
+#' @param ImageJ (Fiji) or tps format (default = 'imageJ').
 #'
 #' @return List of aligned RasterStack objects.
 #'
@@ -37,16 +38,34 @@ alignLan <- function(sampleList,
                      maskOutline = NULL,
                      inverse = FALSE,
                      cartoonID = NULL,
-                     plotTransformed = FALSE){
+                     plotTransformed = FALSE,
+                     format = 'imageJ'){
 
   rasterList <- list()
 
-  if(is.list(maskOutline)){
+  if(!is.data.frame(maskOutline)){
     maskOutlineList <- maskOutline
     maskOutline <- maskOutline[[1]]
     inverseList <- inverse
     inverse <- inverse[[1]]
+
+    if(format == 'tps'){
+      maskOutline[,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutline[,2])
+
+      for(e in 2:length(maskOutlineList)){
+        maskOutlineList[[e]][,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutlineList[[e]][,2])
+      }
+    }
   }
+
+  else{
+    maskOutline <- as.matrix(maskOutline)
+    if(format == 'tps'){
+      maskOutline[,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutline[,2])
+    }
+  }
+
+
 
   if(!is.null(cartoonID)){
     imageEx <- raster::extent(sampleList[[cartoonID]])
@@ -110,7 +129,7 @@ alignLan <- function(sampleList,
     maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
   }
 
-  if(transformRef[1] != 'meanshape'){
+  if(transformRef[1] != 'meanshape' & !is.null(cartoonID)){
 
     maskOutlineNew[,2] <- imageEx[4] - maskOutlineNew[,2]
   }

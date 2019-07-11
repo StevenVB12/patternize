@@ -171,7 +171,7 @@ patRegK_HSV <- function(sampleList,
       raster::extent(toMaskR) <- raster::extent(transRaster)
 
       transRaster<-raster::mask(transRaster, toMaskR)
-      transRaster[is.na(transRaster)] <- 0
+      transRaster[is.na(transRaster)] <- NA
 
       # convert RGB values to HSV values
       transRaster <- raster::overlay(transRaster, fun = rgb2hsv)
@@ -194,6 +194,7 @@ patRegK_HSV <- function(sampleList,
     }
 
     if(plot){
+      image.segmented[is.na(image.segmented)] <- 0
       x <- image.segmented
       cols <- hsv(x[,,1], x[,,2], x[,,3])
       uniqueCols <- unique(cols)

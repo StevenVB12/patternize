@@ -144,7 +144,7 @@ patLanK <- function(sampleList,
       toMaskR[toMaskR == 0] <- NA
 
       image<-raster::mask(image, toMaskR, inverse = T)
-      image[is.na(image)] <- 0
+      # image[is.na(image)] <- 0
     }
 
     # k-means clustering of image
@@ -162,7 +162,8 @@ patLanK <- function(sampleList,
     #   startCenter <- K$centers
     # }
 
-    image[is.na(image)] <- 255
+    # image[is.na(image)] <- 255
+
 
     imageKmeans <- tryCatch(kImage(raster::as.array(image), k, startCenter),
                             error = function(err) {
@@ -181,6 +182,7 @@ patLanK <- function(sampleList,
     }
 
     if(plot){
+      image.segmented[is.na(image.segmented)] <- 0
       x <- image.segmented/255
       cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
       uniqueCols <- unique(cols)

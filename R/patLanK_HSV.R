@@ -147,7 +147,7 @@ patLanK_HSV <- function(sampleList,
       toMaskR[toMaskR == 0] <- NA
 
       image<-raster::mask(image, toMaskR, inverse = T)
-      image[is.na(image)] <- 0
+      # image[is.na(image)] <- 0
     }
 
     # k-means clustering of image
@@ -165,7 +165,7 @@ patLanK_HSV <- function(sampleList,
     #   startCenter <- K$centers
     # }
 
-    image[is.na(image)] <- 255
+    # image[is.na(image)] <- 255
 
     # convert RGB values to HSV values
     image <- raster::overlay(image, fun = rgb2hsv)
@@ -187,6 +187,7 @@ patLanK_HSV <- function(sampleList,
     }
 
     if(plot){
+      image.segmented[is.na(image.segmented)] <- 0
       x <- image.segmented
       cols <- hsv(x[,,1], x[,,2], x[,,3])
       uniqueCols <- unique(cols)

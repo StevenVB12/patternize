@@ -41,12 +41,13 @@ kImageHSV <- function(image,
   }
 
   if(is.null(startCenter)){
-    K = kmeans(df,k, nstart = 3)
+    K = kmeans(na.omit(df),k, nstart = 3)
   }
   else{
-    K = kmeans(df,startCenter)
+    K = kmeans(na.omit(df),startCenter)
   }
-  df$label = K$cluster
+  df$label <- NA
+  df$label[which(!is.na(df$red))] <- K$cluster
 
   # Replace color of each pixel with mean RGB value of cluster
 
@@ -67,7 +68,7 @@ kImageHSV <- function(image,
   # merge color codes on df
 
   df$order = 1:nrow(df)
-  df = merge(df, colors)
+  df = merge(df, colors, all = TRUE)
   df = df[order(df$order),]
   df$order = NULL
 
