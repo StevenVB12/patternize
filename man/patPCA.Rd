@@ -22,7 +22,7 @@ patPCA(rList, popList, colList, symbolList = NULL, rListPredict = NULL,
   cartoonOrder = "above", lineOrder = "above", cartoonCol = "gray",
   cartoonFill = NULL, plotLandmarks = FALSE, landCol = "black",
   zlim = c(-1, 1), legendTitle = "Predicted", xlab = "", ylab = "",
-  main = "")
+  main = "", ...)
 }
 \arguments{
 \item{rList}{List of raster objects.}

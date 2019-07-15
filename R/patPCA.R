@@ -119,7 +119,8 @@ patPCA <- function(rList,
                    legendTitle = 'Predicted',
                    xlab='',
                    ylab='',
-                   main=''){
+                   main='',
+                   ...){
 
   # data for PCA
   # make dataframe of rasters
@@ -318,10 +319,10 @@ patPCA <- function(rList,
 
     if(plotType == 'points' && is.null(symbolList)){
 
-      plot(comp$x[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=20, cex=3,
+      plot(comp$x[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=20,
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),
            xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'), ...)
 
       if(!is.null(rListPredict)){
         points(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch=20, cex=3)
@@ -330,10 +331,10 @@ patPCA <- function(rList,
 
     if(plotType == 'points' && !is.null(symbolList)){
 
-      plot(comp$x[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)), cex=3,
+      plot(comp$x[,c(PCx,PCy)], col=as.vector(groupCol$col), pch=as.numeric(as.vector(groupCol$symbol)),
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),
            xlab=paste('PC',PCx,' (', round(summ$importance[2,PCx]*100, 1), ' %)'),
-           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'))
+           ylab=paste('PC',PCy,' (', round(summ$importance[2,PCy]*100, 1), ' %)'), ...)
 
       if(!is.null(rListPredict)){
         points(predicted[,c(PCx,PCy)], col = as.vector(groupColPredict$col), pch = as.numeric(as.vector(groupColPredict$symbol)), cex=3)
