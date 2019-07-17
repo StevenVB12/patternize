@@ -17,7 +17,7 @@ setMask <- function(summedRaster,
 
   plotHeat(summedRaster, IDlist, ...)
 
-  print("Choose points to identify patterns. Click outside image area to stop.")
+  print("Choose points to mask patterns. Click outside image area to stop.")
 
   n = 1
 
