@@ -4,14 +4,14 @@
 \alias{alignLan}
 \title{Align images using landmarks}
 \usage{
-alignLan(sampleList, landList, IDlist = NULL, adjustCoords = FALSE,
+alignLan(imageList, landList, IDlist = NULL, adjustCoords = FALSE,
   resampleFactor = NULL, res = c(300, 300),
   transformRef = "meanshape", transformType = "tps",
   maskOutline = NULL, inverse = FALSE, cartoonID = NULL,
   plotTransformed = FALSE, format = "imageJ")
 }
 \arguments{
-\item{sampleList}{List of RasterStack objects.}
+\item{imageList}{List of RasterStack objects.}
 
 \item{landList}{Landmark list as returned by \code{\link[patternize]{makeList}}.}
 

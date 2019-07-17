@@ -137,7 +137,7 @@ plotHeat <- function(summedRaster,
                      format = 'imageJ'){
 
   if(format == 'tps'){
-    outline[,2] <- (raster::extent(imagelist[[cartoonID]])[4]-outline[,2])
+    outline[,2] <- (raster::extent(imageList[[cartoonID]])[4]-outline[,2])
   }
 
   if(!is.list(summedRaster)){

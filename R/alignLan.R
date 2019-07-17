@@ -1,6 +1,6 @@
 #' Align images using landmarks
 #'
-#' @param sampleList List of RasterStack objects.
+#' @param imageList List of RasterStack objects.
 #' @param landList Landmark list as returned by \code{\link[patternize]{makeList}}.
 #' @param IDlist List of sample IDs should be specified when masking outline and transformRef
 #'    is 'meanshape'.
@@ -27,7 +27,7 @@
 #' @import raster
 #' @importFrom Morpho procSym computeTransform applyTransform
 
-alignLan <- function(sampleList,
+alignLan <- function(imageList,
                      landList,
                      IDlist = NULL,
                      adjustCoords = FALSE,
@@ -50,7 +50,7 @@ alignLan <- function(sampleList,
     inverse <- inverse[[1]]
 
     if(format == 'tps'){
-      maskOutline[,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutline[,2])
+      maskOutline[,2] <- (raster::extent(imageList[[cartoonID]])[4]-maskOutline[,2])
 
       for(e in 2:length(maskOutlineList)){
         maskOutlineList[[e]][,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutlineList[[e]][,2])
@@ -61,29 +61,29 @@ alignLan <- function(sampleList,
   else{
     maskOutline <- as.matrix(maskOutline)
     if(format == 'tps'){
-      maskOutline[,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutline[,2])
+      maskOutline[,2] <- (raster::extent(imageList[[cartoonID]])[4]-maskOutline[,2])
     }
   }
 
 
 
   if(!is.null(cartoonID)){
-    imageEx <- raster::extent(sampleList[[cartoonID]])
+    imageEx <- raster::extent(imageList[[cartoonID]])
   }
 
-  # Check whether sampleList and landList have the same length
-  if(length(sampleList) != length(landList)){
-    stop("sampleList is not of the same length as lanArray")
+  # Check whether imageList and landList have the same length
+  if(length(imageList) != length(landList)){
+    stop("imageList is not of the same length as lanArray")
   }
 
-  for(n in 1:length(sampleList)){
-    if(names(sampleList)[n] != names(landList)[n]){
-      stop("samples are not in the same order in sampleList and lanArray")
+  for(n in 1:length(imageList)){
+    if(names(imageList)[n] != names(landList)[n]){
+      stop("samples are not in the same order in imageList and lanArray")
     }
   }
 
   # Make landmark array
-  lanArray <- lanArray(landList, adjustCoords, sampleList)
+  lanArray <- lanArray(landList, adjustCoords, imageList)
 
 
   # Set the reference shape
@@ -110,9 +110,9 @@ alignLan <- function(sampleList,
   # Transform the outline for masking if 'meanShape'
   if(!is.null(cartoonID) && (!is.null(maskOutline) || transformRef == 'meanshape')){
 
-    indx <- which(names(sampleList) == cartoonID)
+    indx <- which(names(imageList) == cartoonID)
     maskOutlineNew <- maskOutline
-    extPicture <- raster::extent(sampleList[[indx]])
+    extPicture <- raster::extent(imageList[[indx]])
     maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
   }
 
@@ -136,9 +136,9 @@ alignLan <- function(sampleList,
 
 
   # Run the loop for each sample
-  for(n in 1:length(sampleList)){
+  for(n in 1:length(imageList)){
 
-    image <- sampleList[[n]]
+    image <- imageList[[n]]
     extRaster <- raster::extent(image)
 
     # Reduce resolution
@@ -183,14 +183,14 @@ alignLan <- function(sampleList,
       if(transformRef[1] != 'meanshape'){
 
         imageTr <- maskOutline(imageTr, maskOutlineNew, refShape = 'target', crop = c(0,0,0,0),
-                               maskColor = 0, imageList = sampleList, cartoonID = cartoonID, inverse = inverse)
+                               maskColor = 0, imageList = imageList, cartoonID = cartoonID, inverse = inverse)
 
         cropEx <- c(min(maskOutlineNew[,1]), max(maskOutlineNew[,1]), min(maskOutlineNew[,2]), max(maskOutlineNew[,2]))
 
         if(exists('maskOutlineList')){
           for(e in 2:length(maskOutlineList)){
             imageTr <- maskOutline(imageTr, maskOutlineList[[e]], refShape = 'target', crop = c(0,0,0,0),
-                                   maskColor = 0, imageList = sampleList, cartoonID = cartoonID, inverse = inverseList[[e]])
+                                   maskColor = 0, imageList = imageList, cartoonID = cartoonID, inverse = inverseList[[e]])
           }
         }
 
@@ -198,7 +198,7 @@ alignLan <- function(sampleList,
       if(transformRef[1] == 'meanshape'){
 
         imageTr <- maskOutline(imageTr, outline = maskOutline, refShape = 'mean',
-                               IDlist = IDlist, landList = landList, imageList = sampleList,
+                               IDlist = IDlist, landList = landList, imageList = imageList,
                                adjustCoords = TRUE, cartoonID = cartoonID)
 
         cropEx <- c(min(maskOutlineMean[,1]), max(maskOutlineMean[,1]), min(maskOutlineMean[,2]), max(maskOutlineMean[,2]))
