@@ -33,12 +33,14 @@
 #'    landmarks (default = FALSE).
 #' @param landCol Color for ploting landmarks (default = 'black').
 #' @param zlim z-axis limit (default = c(0,1))
+#' @param legend Whether to plot legend with heatmaps.
 #' @param legendTitle Title of the raster legend (default = 'Proportion')
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
 #' @param main Optional main title.
-#' @param plotPCA Set as TRUE when visualizing shape changes along PCA axis in \
-#'    code{\link[patternize]{patPCA}}.
+#' @param plotType Set as 'PCA' when visualizing shape changes along PCA axis in \
+#'    code{\link[patternize]{patPCA}}, as 'one' when visualizing single image or as 'multi' for multi
+#'    plotting or when setting customized margins (default = 'multi').
 #' @param imageIDs A list of IDs to match landmarks to images if landmarkList and imageList don't
 #'    have the same length.
 #' @param ImageJ (Fiji) or tps format (default = 'imageJ').
@@ -128,11 +130,12 @@ plotHeat <- function(summedRaster,
                      plotLandmarks = FALSE,
                      landCol = 'black',
                      zlim = c(0,1),
+                     legend = TRUE,
                      legendTitle = 'Proportion',
                      xlab='',
                      ylab='',
                      main='',
-                     plotPCA = FALSE,
+                     plotType = 'multi',
                      imageIDs = NULL,
                      format = 'imageJ'){
 
@@ -419,10 +422,10 @@ plotHeat <- function(summedRaster,
       }
     }
 
-    if(!plotPCA){
+    if(plotType == 'one'){
       par(mfrow = c(1,1), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
     }
-    else{
+    if(plotType == 'PCA'){
       par(mar=c(4,4,2,2))
     }
 
@@ -485,14 +488,20 @@ plotHeat <- function(summedRaster,
     }
 
 
-    if(plotPCA){
+    if(plotType == 'PCA'){
+
       image(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
             xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=1)
     }
     else{
+
       plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
            xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=1)
-      plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(21),legend.width=1, legend.shrink=0.75, legend.args=list(text=legendTitle, side=4, font=2, line=2.5, cex=1))
+
+      if(legend == TRUE){
+        plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(21),legend.width=1, legend.shrink=0.75,
+             legend.args=list(text=legendTitle, side=4, font=2, line=2.5, cex=1))
+        }
       }
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)

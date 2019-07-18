@@ -10,9 +10,9 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
   imageList = NULL, cartoonOrder = "above", lineOrder = "above",
   cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
-  landCol = "black", zlim = c(0, 1), legendTitle = "Proportion",
-  xlab = "", ylab = "", main = "", plotPCA = FALSE,
-  imageIDs = NULL, format = "imageJ")
+  landCol = "black", zlim = c(0, 1), legend = TRUE,
+  legendTitle = "Proportion", xlab = "", ylab = "", main = "",
+  plotType = "multi", imageIDs = NULL, format = "imageJ")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -70,6 +70,8 @@ landmarks (default = FALSE).}
 
 \item{zlim}{z-axis limit (default = c(0,1))}
 
+\item{legend}{Whether to plot legend with heatmaps.}
+
 \item{legendTitle}{Title of the raster legend (default = 'Proportion')}
 
 \item{xlab}{Optional x-axis label.}
@@ -78,8 +80,9 @@ landmarks (default = FALSE).}
 
 \item{main}{Optional main title.}
 
-\item{plotPCA}{Set as TRUE when visualizing shape changes along PCA axis in \
-code{\link[patternize]{patPCA}}.}
+\item{plotType}{Set as 'PCA' when visualizing shape changes along PCA axis in \
+code{\link[patternize]{patPCA}}, as 'one' when visualizing single image or as 'multi' for multi
+plotting or when setting customized margins (default = 'multi').}
 
 \item{imageIDs}{A list of IDs to match landmarks to images if landmarkList and imageList don't
 have the same length.}
