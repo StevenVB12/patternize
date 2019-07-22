@@ -8,7 +8,7 @@ alignLan(imageList, landList, IDlist = NULL, adjustCoords = FALSE,
   resampleFactor = NULL, res = c(300, 300),
   transformRef = "meanshape", transformType = "tps",
   maskOutline = NULL, inverse = FALSE, cartoonID = NULL,
-  plotTransformed = FALSE, format = "imageJ")
+  refImage = NULL, plotTransformed = FALSE, format = "imageJ")
 }
 \arguments{
 \item{imageList}{List of RasterStack objects.}
@@ -38,6 +38,8 @@ the color extraction (default = NULL).}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn and will be used for masking
 (should be set when transformRef = 'meanShape').}
+
+\item{refImage}{Image (RasterStack) used for target. Use raster::stack('filename').}
 
 \item{plotTransformed}{Plot transformed image (default = FALSE).}
 

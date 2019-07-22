@@ -18,6 +18,7 @@
 #'    the color extraction (default = NULL).
 #' @param cartoonID ID of the sample for which the cartoon was drawn and will be used for masking
 #'    (should be set when transformRef = 'meanShape').
+#' @param refImage Image (RasterStack) used for target. Use raster::stack('filename').
 #' @param plotTransformed Plot transformed image (default = FALSE).
 #' @param ImageJ (Fiji) or tps format (default = 'imageJ').
 #'
@@ -38,10 +39,23 @@ alignLan <- function(imageList,
                      maskOutline = NULL,
                      inverse = FALSE,
                      cartoonID = NULL,
+                     refImage = NULL,
                      plotTransformed = FALSE,
                      format = 'imageJ'){
 
   rasterList <- list()
+
+  if(!is.null(cartoonID)){
+    if(cartoonID %in% names(imageList)){
+      imageEx <- raster::extent(imageList[[cartoonID]])
+    }
+  }
+  else if(!is.null(refImage)){
+    imageEx <- raster::extent(refImage)
+  }
+  else{
+    stop("if cartoonID not in image list, please provide image to refImage argument.")
+  }
 
   if(!is.data.frame(maskOutline)){
     maskOutlineList <- maskOutline
@@ -50,10 +64,10 @@ alignLan <- function(imageList,
     inverse <- inverse[[1]]
 
     if(format == 'tps'){
-      maskOutline[,2] <- (raster::extent(imageList[[cartoonID]])[4]-maskOutline[,2])
+      maskOutline[,2] <- (imageEx[4]-maskOutline[,2])
 
       for(e in 2:length(maskOutlineList)){
-        maskOutlineList[[e]][,2] <- (raster::extent(imagelist[[cartoonID]])[4]-maskOutlineList[[e]][,2])
+        maskOutlineList[[e]][,2] <- (imageEx[4]-maskOutlineList[[e]][,2])
       }
     }
   }
@@ -61,14 +75,8 @@ alignLan <- function(imageList,
   else{
     maskOutline <- as.matrix(maskOutline)
     if(format == 'tps'){
-      maskOutline[,2] <- (raster::extent(imageList[[cartoonID]])[4]-maskOutline[,2])
+      maskOutline[,2] <- (imageEx[4]-maskOutline[,2])
     }
-  }
-
-
-
-  if(!is.null(cartoonID)){
-    imageEx <- raster::extent(imageList[[cartoonID]])
   }
 
   # Check whether imageList and landList have the same length
@@ -110,10 +118,8 @@ alignLan <- function(imageList,
   # Transform the outline for masking if 'meanShape'
   if(!is.null(cartoonID) && (!is.null(maskOutline) || transformRef == 'meanshape')){
 
-    indx <- which(names(imageList) == cartoonID)
     maskOutlineNew <- maskOutline
-    extPicture <- raster::extent(imageList[[indx]])
-    maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
+    maskOutlineNew[,2] <- imageEx[4]-maskOutlineNew[,2]
   }
 
   if(is.null(cartoonID)){
