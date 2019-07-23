@@ -7,9 +7,9 @@
 alignLan(imageList, landList, IDlist = NULL, adjustCoords = FALSE,
   resampleFactor = NULL, res = c(300, 300),
   transformRef = "meanshape", transformType = "tps",
-  maskOutline = NULL, removebg = NULL, inverse = FALSE,
-  cartoonID = NULL, refImage = NULL, plotTransformed = FALSE,
-  format = "imageJ")
+  maskOutline = NULL, removebg = NULL, removebgColOffset = 0.1,
+  inverse = FALSE, cartoonID = NULL, refImage = NULL,
+  plotTransformed = FALSE, format = "imageJ")
 }
 \arguments{
 \item{imageList}{List of RasterStack objects.}
@@ -37,9 +37,10 @@ analysis.}
 \item{maskOutline}{When outline is specified, everything outside of the outline will be masked for
 the color extraction (default = NULL). This can be a list of multiple outlines.}
 
-\item{removebg}{Integer indicating the range of RGB treshold to remove from image (e.g. 100
-removes pixels with average RGB > 100; default = NULL). This works only
-to remove a white background.}
+\item{removebg}{Integer or RGB vector indicating the range of RGB threshold to remove from
+image (e.g. 100 removes pixels with average RGB > 100; default = NULL).}
+
+\item{removebgColOffset}{Color offset for color background extraction (default = 0.10).}
 
 \item{inverse}{If TRUE, areas withing the outline will be masked. If maskOutline is a list, this
 should also be a list.}

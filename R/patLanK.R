@@ -18,9 +18,9 @@
 #'    to. Can be 'meanshape' for transforming to mean shape of Procrustes analysis.
 #' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}}
 #'    (default ='tps').
-#' @param removebgK Integer indicating the range RGB treshold to remove from image (e.g. 100
-#'    removes pixels with average RGB > 100; default = NULL) for k-means analysis. This works only
-#'    to remove a white background.
+#' @param removebg Integer or RGB vector indicating the range of RGB threshold to remove from
+#'    image (e.g. 100 removes pixels with average RGB > 100; default = NULL).
+#' @param removebgColOffset Color offset for color background extraction (default = 0.10).
 #' @param adjustCoords Adjust landmark coordinates in case they are reversed compared to pixel
 #'    coordinates (default = FALSE).
 #' @param plot Whether to plot transformed color patterns while processing (default = FALSE).
@@ -41,7 +41,7 @@
 #' # Note that this example only aligns two images with the target,
 #' # remove [1:2] to run a full examples.
 #' rasterList_lanK <- patLanK(imageList[1:2], landmarkList[1:2], k = 4, crop = TRUE,
-#' res = 100, removebgK = 100, adjustCoords = TRUE, plot = TRUE)
+#' res = 100, removebg = 100, adjustCoords = TRUE, plot = TRUE)
 #' }
 #'
 #' @export
@@ -59,7 +59,8 @@ patLanK <- function(sampleList,
                     res = 300,
                     transformRef = 'meanshape',
                     transformType='tps',
-                    removebgK = NULL,
+                    removebg = NULL,
+                    removebgColOffset = 0.1,
                     adjustCoords = FALSE,
                     plot = FALSE,
                     focal =  FALSE,
@@ -135,9 +136,14 @@ patLanK <- function(sampleList,
       image <- raster::stack(rrr1, rrr2, rrr3)
     }
 
-    if(is.vector(removebgK)){
+    if(is.vector(removebg)){
 
-      toMask <- apply(raster::as.array(image), 1:2, function(x) all(x > removebgK))
+      if(length(removebg) > 1){
+        toMask <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-removebg) < removebgColOffset*255))
+      }
+      else{
+        toMask <- apply(raster::as.array(image), 1:2, function(x) all(x > removebg))
+      }
 
       toMaskR <- raster::raster(as.matrix(toMask))
       raster::extent(toMaskR) <- raster::extent(image)

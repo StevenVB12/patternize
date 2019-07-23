@@ -16,9 +16,9 @@
 #'    (default ='tps').
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL). This can be a list of multiple outlines.
-#' @param removebg Integer indicating the range of RGB treshold to remove from image (e.g. 100
-#'    removes pixels with average RGB > 100; default = NULL). This works only
-#'    to remove a white background.
+#' @param removebg Integer or RGB vector indicating the range of RGB threshold to remove from
+#'    image (e.g. 100 removes pixels with average RGB > 100; default = NULL).
+#' @param removebgColOffset Color offset for color background extraction (default = 0.10).
 #' @param inverse If TRUE, areas withing the outline will be masked. If maskOutline is a list, this
 #'    should also be a list.
 #' @param cartoonID ID of the sample for which the cartoon was drawn and will be used for masking
@@ -43,6 +43,7 @@ alignLan <- function(imageList,
                      transformType = 'tps',
                      maskOutline = NULL,
                      removebg = NULL,
+                     removebgColOffset = 0.1,
                      inverse = FALSE,
                      cartoonID = NULL,
                      refImage = NULL,
@@ -167,7 +168,12 @@ alignLan <- function(imageList,
 
     if(is.vector(removebg)){
 
-      toMask <- apply(raster::as.array(image), 1:2, function(x) all(x > removebg))
+      if(length(removebg) > 1){
+        toMask <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-removebg) < removebgColOffset*255))
+      }
+      else{
+        toMask <- apply(raster::as.array(image), 1:2, function(x) all(x > removebg))
+      }
 
       toMaskR <- raster::raster(as.matrix(toMask))
       raster::extent(toMaskR) <- raster::extent(image)
@@ -243,8 +249,10 @@ alignLan <- function(imageList,
     if(plotTransformed){
 
       # imageTr <- raster::flip(imageTr, 'y')
+      imageTr2 <- imageTr
+      imageTr2[is.na(imageTr2)] <- 0
 
-      x <- as.array(imageTr)/255
+      x <- as.array(imageTr2)/255
       cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
       uniqueCols <- unique(cols)
       x2 <- match(cols, uniqueCols)

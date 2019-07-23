@@ -68,7 +68,7 @@ patK <- function(sampleList,
     #   startCenter <- K$centers
     # }
 
-    image[is.na(image)] <- 255
+    # image[is.na(image)] <- 255
 
     if(!is.null(maskToNA)){
       image[image == maskToNA] <- NA
