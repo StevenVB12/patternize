@@ -48,7 +48,7 @@
 #'
 #' @export
 #' @import raster
-#' @importFrom grDevices hsv rgb2hsv
+#' @importFrom grDevices hsv rgb2hsv dev.off png
 
 patRegHSV <- function(sampleList,
                       target,

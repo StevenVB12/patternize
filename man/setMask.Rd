@@ -12,6 +12,8 @@ setMask(summedRaster, IDlist, filename, ...)
 \item{IDlist}{List of sample IDs.}
 
 \item{filename}{Name of file to which mask will be written.}
+
+\item{...}{additional arguments for plotHeat function.}
 }
 \value{
 file

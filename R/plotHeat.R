@@ -23,6 +23,7 @@
 #' @param flipOutline Whether to flip plot along x, y or xy axis.
 #' @param imageList List of images should be given if one wants to flip the outline or adjust
 #'    landmark coordinates.
+#' @param refImage Image (RasterStack) used for target. Use raster::stack('filename').
 #' @param cartoonOrder Whether to plot the cartoon outline 'above' or 'under' the pattern raster
 #'    (default = 'above'). Set to 'under' for filled outlines.
 #' @param lineOrder Whether to plot the cartoon lines 'above' or 'under' the pattern raster
@@ -43,7 +44,7 @@
 #'    plotting or when setting customized margins (default = 'multi').
 #' @param imageIDs A list of IDs to match landmarks to images if landmarkList and imageList don't
 #'    have the same length.
-#' @param ImageJ (Fiji) or tps format (default = 'imageJ').
+#' @param format ImageJ (Fiji) or tps format (default = 'imageJ').
 #'
 #' @examples
 #' data(rasterList_lanRGB)
@@ -58,7 +59,7 @@
 #'
 #' plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target',
 #' outline = outline_BC0077, lines = lines_BC0077, crop = c(100,400,40,250),
-#' flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under',
+#' flipRaster = 'xy', imageList = imageList, cartoonOrder = 'under', cartoonID = 'BC0077',
 #' cartoonFill = 'black', main = 'registration_example')
 #'
 #' \dontrun{
@@ -123,6 +124,7 @@ plotHeat <- function(summedRaster,
                      flipRaster = NULL,
                      flipOutline = NULL,
                      imageList = NULL,
+                     refImage = NULL,
                      cartoonOrder = 'above',
                      lineOrder = 'above',
                      cartoonCol = 'gray',
@@ -139,9 +141,7 @@ plotHeat <- function(summedRaster,
                      imageIDs = NULL,
                      format = 'imageJ'){
 
-  if(format == 'tps'){
-    outline[,2] <- (raster::extent(imageList[[cartoonID]])[4]-outline[,2])
-  }
+
 
   if(!is.list(summedRaster)){
 
@@ -153,6 +153,22 @@ plotHeat <- function(summedRaster,
 
     rasterEx <- raster::extent(summedRaster[[1]])
 
+  }
+
+  if(!is.null(cartoonID)){
+    if(cartoonID %in% names(imageList)){
+      imageExRef <- raster::extent(imageList[[cartoonID]])
+    }
+  }
+  else if(!is.null(refImage)){
+    imageExRef <- raster::extent(refImage)
+  }
+  else{
+    stop("if cartoonID not in image list, please provide image to refImage argument.")
+  }
+
+  if(format == 'tps'){
+    outline[,2] <- (imageExRef[4]-outline[,2])
   }
 
   if(is.null(colpalette)){
@@ -307,9 +323,17 @@ plotHeat <- function(summedRaster,
     indx <- which(names(imageList) == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList, imageIDs = imageIDs)))
 
+    if(is.character(refShape)){
+      indx <- which(names(landList) == cartoonID)
+      transRefLan <- as.matrix(lanArray[,,indx])
+    }
+    else{
+      transRefLan <- refShape
+    }
+
     if(is.matrix(refShape)){
       invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
-                                                                            as.matrix(landArray[,,indx]),
+                                                                            as.matrix(transRefLan),
                                                                             type="tps")))
     }
 
@@ -320,7 +344,7 @@ plotHeat <- function(summedRaster,
       refShape <- transformed$mshape
 
       invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
-                                                                            as.matrix(landArray[,,indx]),
+                                                                            as.matrix(transRefLan),
                                                                             type="tps")))
     }
 

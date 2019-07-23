@@ -521,7 +521,7 @@ patRDA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotPCA = TRUE)
+               ylab=ylab, main=main, plotType = 'PCA')
 
       mtext(paste('min DF', PCx, sep=' '), 1)
 
@@ -530,7 +530,7 @@ patRDA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotPCA = TRUE)
+               ylab=ylab, main=main, plotType = 'PCA')
 
       mtext(paste('max DF', PCx, sep=' '), 1)
 
@@ -540,7 +540,7 @@ patRDA <- function(rList,
                  flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                  normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                  cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-                 ylab=ylab, main=main, plotPCA = TRUE)
+                 ylab=ylab, main=main, plotType = 'PCA')
 
         mtext(paste('max DF', PCy, sep=' '), 2)
 
@@ -549,7 +549,7 @@ patRDA <- function(rList,
                  flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                  normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                  cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-                 ylab=ylab, main=main, plotPCA = TRUE)
+                 ylab=ylab, main=main, plotType = 'PCA')
 
         mtext(paste('min DF', PCy, sep=' '), 2)
       }

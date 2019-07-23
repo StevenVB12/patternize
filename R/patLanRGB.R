@@ -58,6 +58,7 @@
 #' @importFrom utils capture.output
 #' @importFrom stats na.omit
 #' @importFrom Morpho procSym computeTransform applyTransform
+#' @importFrom grDevices dev.off png
 
 patLanRGB <- function(sampleList,
                       landList,
@@ -324,7 +325,7 @@ patLanRGB <- function(sampleList,
 
     plot(1, type="n", axes = FALSE, xlab='', ylab='', main = names(sampleList)[n])
     par(new = TRUE)
-    raster::plot(transRaster, col=rgb(1,0,0,alpha=1), legend = FALSE)
+    raster::plot(patternRaster, col=rgb(1,0,0,alpha=1), legend = FALSE)
 
     dev.off()
   }

@@ -58,6 +58,7 @@
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
 #' @param main Optional main title.
+#' @param ... additional arguments for PCA plot function.
 #'
 #' @return  If plot = TRUE: List including a [1] dataframe of the binary raster values that can be used for
 #'    principle component analysis, [2] a dataframe of sample IDs and specified population
@@ -380,7 +381,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotPCA = TRUE)
+               ylab=ylab, main=main, plotType = 'PCA')
 
       mtext(paste('min PC', PCx, sep=' '), 1)
 
@@ -389,7 +390,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotPCA = TRUE)
+               ylab=ylab, main=main, plotType = 'PCA')
 
       mtext(paste('max PC', PCx, sep=' '), 1)
 
@@ -398,7 +399,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotPCA = TRUE)
+               ylab=ylab, main=main, plotType = 'PCA')
 
       mtext(paste('max PC', PCy, sep=' '), 2)
 
@@ -407,7 +408,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotPCA = TRUE)
+               ylab=ylab, main=main, plotType = 'PCA')
 
       mtext(paste('min PC', PCy, sep=' '), 2)
 

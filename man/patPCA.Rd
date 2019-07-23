@@ -116,6 +116,8 @@ landmarks (default = FALSE).}
 \item{ylab}{Optional y-axis label.}
 
 \item{main}{Optional main title.}
+
+\item{...}{additional arguments for PCA plot function.}
 }
 \value{
 If plot = TRUE: List including a [1] dataframe of the binary raster values that can be used for

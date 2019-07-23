@@ -47,6 +47,7 @@
 #'
 #' @export
 #' @import raster
+#' @importFrom grDevices dev.off png
 
 patRegRGB <- function(sampleList,
                       target,

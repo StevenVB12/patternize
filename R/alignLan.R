@@ -15,12 +15,17 @@
 #' @param transformType Transformation type as used by \code{\link[Morpho]{computeTransform}}
 #'    (default ='tps').
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
-#'    the color extraction (default = NULL).
+#'    the color extraction (default = NULL). This can be a list of multiple outlines.
+#' @param removebg Integer indicating the range of RGB treshold to remove from image (e.g. 100
+#'    removes pixels with average RGB > 100; default = NULL). This works only
+#'    to remove a white background.
+#' @param inverse If TRUE, areas withing the outline will be masked. If maskOutline is a list, this
+#'    should also be a list.
 #' @param cartoonID ID of the sample for which the cartoon was drawn and will be used for masking
 #'    (should be set when transformRef = 'meanShape').
 #' @param refImage Image (RasterStack) used for target. Use raster::stack('filename').
 #' @param plotTransformed Plot transformed image (default = FALSE).
-#' @param ImageJ (Fiji) or tps format (default = 'imageJ').
+#' @param format ImageJ (Fiji) or tps format (default = 'imageJ').
 #'
 #' @return List of aligned RasterStack objects.
 #'
@@ -37,6 +42,7 @@ alignLan <- function(imageList,
                      transformRef = 'meanshape',
                      transformType = 'tps',
                      maskOutline = NULL,
+                     removebg = NULL,
                      inverse = FALSE,
                      cartoonID = NULL,
                      refImage = NULL,
@@ -128,8 +134,15 @@ alignLan <- function(imageList,
 
   if(!is.null(maskOutline) && transformRef == 'meanshape'){
 
+    if(is.character(transformRef)){
+      indx <- which(names(landList) == cartoonID)
+      transRefLan <- as.matrix(lanArray[,,indx])
+    }
+    else{
+      transRefLan <- transformRef
+    }
     invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
-                                                                          as.matrix(lanArray[,,indx]),
+                                                                          as.matrix(transRefLan),
                                                                           type='tps')))
 
     maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
@@ -150,6 +163,18 @@ alignLan <- function(imageList,
     # Reduce resolution
     if(!is.null(resampleFactor)){
       image <- redRes(image, resampleFactor)
+    }
+
+    if(is.vector(removebg)){
+
+      toMask <- apply(raster::as.array(image), 1:2, function(x) all(x > removebg))
+
+      toMaskR <- raster::raster(as.matrix(toMask))
+      raster::extent(toMaskR) <- raster::extent(image)
+      toMaskR[toMaskR == 0] <- NA
+
+      image <- raster::mask(image, toMaskR, inverse = TRUE)
+      # image[is.na(image)] <- 0
     }
 
     # Transform image using landmarks
@@ -181,7 +206,7 @@ alignLan <- function(imageList,
 
     imageTr <- raster::stack(imageT1rf, imageT2rf, imageT3rf)
 
-    imageTr[is.na(imageTr)] <- 255
+    # imageTr[is.na(imageTr)] <- 255
 
     # MaskOutline
     if(!is.null(maskOutline)){

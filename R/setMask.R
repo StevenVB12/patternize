@@ -3,12 +3,14 @@
 #' @param summedRaster Summed raster of extracted patterns.
 #' @param IDlist List of sample IDs.
 #' @param filename Name of file to which mask will be written.
+#' @param ... additional arguments for plotHeat function.
 #'
 #' @return file
 #'
 #' @export
 #' @import raster
 #' @importFrom graphics locator
+#' @importFrom utils write.table
 
 setMask <- function(summedRaster,
                     IDlist,

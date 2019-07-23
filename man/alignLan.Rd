@@ -7,8 +7,9 @@
 alignLan(imageList, landList, IDlist = NULL, adjustCoords = FALSE,
   resampleFactor = NULL, res = c(300, 300),
   transformRef = "meanshape", transformType = "tps",
-  maskOutline = NULL, inverse = FALSE, cartoonID = NULL,
-  refImage = NULL, plotTransformed = FALSE, format = "imageJ")
+  maskOutline = NULL, removebg = NULL, inverse = FALSE,
+  cartoonID = NULL, refImage = NULL, plotTransformed = FALSE,
+  format = "imageJ")
 }
 \arguments{
 \item{imageList}{List of RasterStack objects.}
@@ -34,7 +35,14 @@ analysis.}
 (default ='tps').}
 
 \item{maskOutline}{When outline is specified, everything outside of the outline will be masked for
-the color extraction (default = NULL).}
+the color extraction (default = NULL). This can be a list of multiple outlines.}
+
+\item{removebg}{Integer indicating the range of RGB treshold to remove from image (e.g. 100
+removes pixels with average RGB > 100; default = NULL). This works only
+to remove a white background.}
+
+\item{inverse}{If TRUE, areas withing the outline will be masked. If maskOutline is a list, this
+should also be a list.}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn and will be used for masking
 (should be set when transformRef = 'meanShape').}
@@ -43,7 +51,7 @@ the color extraction (default = NULL).}
 
 \item{plotTransformed}{Plot transformed image (default = FALSE).}
 
-\item{ImageJ}{(Fiji) or tps format (default = 'imageJ').}
+\item{format}{ImageJ (Fiji) or tps format (default = 'imageJ').}
 }
 \value{
 List of aligned RasterStack objects.
