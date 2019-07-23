@@ -18,11 +18,11 @@ patPCA(rList, popList, colList, symbolList = NULL, rListPredict = NULL,
   plotCartoon = FALSE, refShape = NULL, outline = NULL,
   lines = NULL, landList = NULL, adjustCoords = FALSE, crop = c(0,
   0, 0, 0), flipRaster = NULL, flipOutline = NULL, imageList = NULL,
-  cartoonID = NULL, colpalette = NULL, normalized = NULL,
-  cartoonOrder = "above", lineOrder = "above", cartoonCol = "gray",
-  cartoonFill = NULL, plotLandmarks = FALSE, landCol = "black",
-  zlim = c(-1, 1), legendTitle = "Predicted", xlab = "", ylab = "",
-  main = "", ...)
+  cartoonID = NULL, refImage = NULL, colpalette = NULL,
+  normalized = NULL, cartoonOrder = "above", lineOrder = "above",
+  cartoonCol = "gray", cartoonFill = NULL, plotLandmarks = FALSE,
+  landCol = "black", zlim = c(-1, 1), legendTitle = "Predicted",
+  xlab = "", ylab = "", main = "", ...)
 }
 \arguments{
 \item{rList}{List of raster objects.}
@@ -85,6 +85,8 @@ between raster and outline coordinates).}
 landmark coordinates.}
 
 \item{cartoonID}{ID of the sample for which the cartoon was drawn.}
+
+\item{refImage}{Image (RasterStack) used for target. Use raster::stack('filename').}
 
 \item{colpalette}{Vector of colors for color palette
 (default = c("white","lightblue","blue","green", "yellow","red"))}

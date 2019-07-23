@@ -35,6 +35,7 @@
 #' @param landList Landmark landmarkList.
 #' @param adjustCoords Adjust landmark coordinates.
 #' @param cartoonID ID of the sample for which the cartoon was drawn.
+#' @param refImage Image (RasterStack) used for target. Use raster::stack('filename').
 #' @param normalized Set this to true in case the summed rasters are already devided by the
 #'    sample number.
 #' @param crop Vector c(xmin, xmax, ymin, ymax) that specifies the pixel coordinates to crop
@@ -108,6 +109,7 @@ patPCA <- function(rList,
                    flipOutline = NULL,
                    imageList = NULL,
                    cartoonID = NULL,
+                   refImage = NULL,
                    colpalette = NULL,
                    normalized = NULL,
                    cartoonOrder = 'above',
@@ -381,7 +383,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotType = 'PCA')
+               ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
       mtext(paste('min PC', PCx, sep=' '), 1)
 
@@ -390,7 +392,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotType = 'PCA')
+               ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
       mtext(paste('max PC', PCx, sep=' '), 1)
 
@@ -399,7 +401,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotType = 'PCA')
+               ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
       mtext(paste('max PC', PCy, sep=' '), 2)
 
@@ -408,7 +410,7 @@ patPCA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotType = 'PCA')
+               ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
       mtext(paste('min PC', PCy, sep=' '), 2)
 
