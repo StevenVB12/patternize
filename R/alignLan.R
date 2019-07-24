@@ -197,7 +197,7 @@ alignLan <- function(imageList,
     r <- raster::raster(nrow = dim(image)[1], ncol = dim(image)[2])
 
 
-    raster::extent(r) <- c(min(imageT[,1]),max(imageT[,1]),min(imageT[,2]),max(imageT[,2]))
+    raster::extent(r) <- imageEx #c(min(imageT[,1]),max(imageT[,1]),min(imageT[,2]),max(imageT[,2]))
 
 
     # Rasterize the transformed image and fill in NA values using

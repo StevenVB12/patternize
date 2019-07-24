@@ -164,7 +164,9 @@ plotHeat <- function(summedRaster,
     imageExRef <- raster::extent(refImage)
   }
   else{
-    stop("if cartoonID not in image list, please provide image to refImage argument.")
+    if(plotCartoon != FALSE){
+      stop("if cartoonID not in image list, please provide image to refImage argument.")
+    }
   }
 
   if(format == 'tps'){
