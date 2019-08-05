@@ -6,7 +6,7 @@
 \usage{
 colorChecker(IDlist, prepath = NULL, extension = NULL,
   colorCheckerType = "X-Rite", fixedCorners = FALSE, patchSize = 0.6,
-  colorCheckerXY = NULL)
+  colorCheckerXY = NULL, fixedModel = NULL, resampleFactor)
 }
 \arguments{
 \item{IDlist}{List of sample IDs.}
@@ -26,6 +26,12 @@ for every image (default = FALSE).}
 
 \item{colorCheckerXY}{Landmark list of colorChecker corners as returned
 by \code{\link[patternize]{makeList}}. The image will not be plotted.}
+
+\item{fixedModel}{Precalculated model to adjust colors. Should be a listof a model for R, G
+and B (the colorChecker function gives as output such a list obtained from the last image
+in the analysis).}
+
+\item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
 }
 \value{
 Calibrated image(s) ('filename_calibrated.jpg')

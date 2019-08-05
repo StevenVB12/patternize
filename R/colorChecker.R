@@ -11,6 +11,10 @@
 #' (default = 0.6).
 #' @param colorCheckerXY Landmark list of colorChecker corners as returned
 #'   by \code{\link[patternize]{makeList}}. The image will not be plotted.
+#' @param fixedModel Precalculated model to adjust colors. Should be a listof a model for R, G
+#'   and B (the colorChecker function gives as output such a list obtained from the last image
+#'   in the analysis).
+#' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #'
 #' @return  Calibrated image(s) ('filename_calibrated.jpg')
 #'
@@ -18,7 +22,7 @@
 #' @import raster
 #' @importFrom stats lm
 #' @importFrom graphics locator
-#' @importFrom imager load.image save.image as.cimg width R G B
+#' @importFrom imager load.image save.image as.cimg width R G B resize
 #' @importFrom sp Polygons SpatialPolygons SpatialPolygonsDataFrame
 
 colorChecker <- function(IDlist,
@@ -27,7 +31,9 @@ colorChecker <- function(IDlist,
                          colorCheckerType = 'X-Rite',
                          fixedCorners = FALSE,
                          patchSize = 0.6,
-                         colorCheckerXY = NULL){
+                         colorCheckerXY = NULL,
+                         fixedModel = NULL,
+                         resampleFactor){
 
   prop <- 1- patchSize
 
@@ -42,13 +48,43 @@ colorChecker <- function(IDlist,
       im <- imager::load.image(paste(prepath,'/',IDlist[n], extension, sep=''))
     }
 
+    # Reduce resolution
+    if(!is.null(resampleFactor)){
+
+      imRed <- imager::resize(im,round(width(im)/resampleFactor),round(height(im)/resampleFactor))
+
+    }
+    else{
+      imRed <- im
+    }
+
+    mR <- raster::as.matrix(imager::R(imRed))*255
+    mG <- raster::as.matrix(imager::G(imRed))*255
+    mB <- raster::as.matrix(imager::B(imRed))*255
+
+    # mR_O <- raster::as.matrix(imager::R(im))*255
+    # mG_O <- raster::as.matrix(imager::G(im))*255
+    # mB_O <- raster::as.matrix(imager::B(im))*255
+
+    rR <- raster::raster(mR)
+    rG <- raster::raster(mG)
+    rB <- raster::raster(mB)
+
+    extent(rR) <- c(0, dim(imRed)[2], 0, dim(imRed)[1])
+    extent(rG) <- c(0, dim(imRed)[2], 0, dim(imRed)[1])
+    extent(rB) <- c(0, dim(imRed)[2], 0, dim(imRed)[1])
+
+    rR <- flip(t(rR),'y')
+    rG <- flip(t(rG),'y')
+    rB <- flip(t(rB),'y')
+
     # X-Rite colorChecker
-    if(colorCheckerType == 'X-Rite'){
+    if(colorCheckerType == 'X-Rite' & is.null(fixedModel)){
       if(is.null(colorCheckerXY)){
         print("Click on the outer corners of the X-Rite ColorChecker (1: ~brown, 2: ~cyan, 3: ~black, 4: ~white)")
 
         layout(matrix(c(1,1), 2, 1, byrow = TRUE))
-        plot(im, xlim = c(0, width(im)))
+        plot(imRed, xlim = c(0, width(imRed)))
 
         if(fixedCorners == FALSE){
           xy <- locator(n=4)
@@ -179,23 +215,6 @@ colorChecker <- function(IDlist,
                      c(4,10,16,22),
                      c(5,11,17,23),
                      c(6,12,18,24))
-
-      mR <- raster::as.matrix(imager::R(im))*255
-      mG <- raster::as.matrix(imager::G(im))*255
-      mB <- raster::as.matrix(imager::B(im))*255
-
-      rR <- raster::raster(mR)
-      rG <- raster::raster(mG)
-      rB <- raster::raster(mB)
-
-      extent(rR) <- c(0, dim(im)[2], 0, dim(im)[1])
-      extent(rG) <- c(0, dim(im)[2], 0, dim(im)[1])
-      extent(rB) <- c(0, dim(im)[2], 0, dim(im)[1])
-
-      rR <- flip(t(rR),'y')
-      rG <- flip(t(rG),'y')
-      rB <- flip(t(rB),'y')
-
 
 
       xyTot <- c()
@@ -362,11 +381,11 @@ colorChecker <- function(IDlist,
       dfCal <- as.data.frame(cbind(prR,prG,prB))
 
       print('Rebuilding image...')
-      Ri = matrix(dfCal$prR, nrow=dim(im)[1])
-      Gi = matrix(dfCal$prG, nrow=dim(im)[1])
-      Bi = matrix(dfCal$prB, nrow=dim(im)[1])
+      Ri = matrix(dfCal$prR, nrow=dim(imRed)[1])
+      Gi = matrix(dfCal$prG, nrow=dim(imRed)[1])
+      Bi = matrix(dfCal$prB, nrow=dim(imRed)[1])
 
-      imCal = array(dim=dim(im))
+      imCal = array(dim=dim(imRed))
       imCal[,,,1] = Ri
       imCal[,,,2] = Gi
       imCal[,,,3] = Bi
@@ -375,11 +394,14 @@ colorChecker <- function(IDlist,
 
       if(is.null(colorCheckerXY)){
         layout(matrix(c(1,2), 2, 1, byrow = TRUE))
-        plot(im)
-        plot(imCal)
+
+          plot(imRed)
+          plot(imCal)
 
 
-        if(fixedCorners == FALSE){
+
+
+        if(fixedCorners == FALSE & is.null(fixedModel)){
           todo <- readline(prompt="Press [enter] to continue and save image >>> ")
         }
       }
@@ -387,13 +409,13 @@ colorChecker <- function(IDlist,
 
 
     # ColorGauge Micro Analyzer colorChecker
-    if(colorCheckerType == 'ColorGauge Micro Analyzer'){
+    if(colorCheckerType == 'ColorGauge Micro Analyzer' & is.null(fixedModel)){
 
       if(is.null(colorCheckerXY)){
         print("Click on the outer corners of the ColorGauge Micro Analyzer ColorChecker (1: ~brown, 2: ~cyan, 3: ~purple, 4: ~red)")
 
         layout(matrix(c(1,1), 2, 1, byrow = TRUE))
-        plot(im, xlim = c(0, width(im)))
+        plot(imRed, xlim = c(0, width(imRed)))
 
         if(fixedCorners == FALSE){
           xy <- locator(n=4)
@@ -528,21 +550,21 @@ colorChecker <- function(IDlist,
                      c(5,11,17,23,29),
                      c(6,12,18,24,30))
 
-      mR <- raster::as.matrix(imager::R(im))*255
-      mG <- raster::as.matrix(imager::G(im))*255
-      mB <- raster::as.matrix(imager::B(im))*255
-
-      rR <- raster::raster(mR)
-      rG <- raster::raster(mG)
-      rB <- raster::raster(mB)
-
-      extent(rR) <- c(0, dim(im)[2], 0, dim(im)[1])
-      extent(rG) <- c(0, dim(im)[2], 0, dim(im)[1])
-      extent(rB) <- c(0, dim(im)[2], 0, dim(im)[1])
-
-      rR <- flip(t(rR),'y')
-      rG <- flip(t(rG),'y')
-      rB <- flip(t(rB),'y')
+      # mR <- raster::as.matrix(imager::R(im))*255
+      # mG <- raster::as.matrix(imager::G(im))*255
+      # mB <- raster::as.matrix(imager::B(im))*255
+      #
+      # rR <- raster::raster(mR)
+      # rG <- raster::raster(mG)
+      # rB <- raster::raster(mB)
+      #
+      # extent(rR) <- c(0, dim(im)[2], 0, dim(im)[1])
+      # extent(rG) <- c(0, dim(im)[2], 0, dim(im)[1])
+      # extent(rB) <- c(0, dim(im)[2], 0, dim(im)[1])
+      #
+      # rR <- flip(t(rR),'y')
+      # rG <- flip(t(rG),'y')
+      # rB <- flip(t(rB),'y')
 
       xyTot <- c()
       for(e in 1:nrow(xySubDF_1A)){
@@ -725,13 +747,49 @@ colorChecker <- function(IDlist,
 
       if(is.null(colorCheckerXY)){
         layout(matrix(c(1,2), 2, 1, byrow = TRUE))
-        plot(im)
+
+        plot(imRed)
         plot(imCal)
 
-        if(fixedCorners == FALSE){
+
+        if(fixedCorners == FALSE & is.null(fixedModel)){
           todo <- readline(prompt="Press [enter] to continue and save image >>> ")
         }
       }
+    }
+
+
+    if(!is.null(fixedModel)){
+
+      modelR <- fixedModel[[1]]
+      modelG <- fixedModel[[2]]
+      modelB <- fixedModel[[3]]
+
+      dfIm = data.frame(
+        imR = matrix(mR, ncol=1),
+        imG = matrix(mG, ncol=1),
+        imB = matrix(mB, ncol=1)
+      )
+
+      print('Calibrating colors...')
+      prR <- predict(modelR, dfIm)
+      prG <- predict(modelG, dfIm)
+      prB <- predict(modelB, dfIm)
+
+      dfCal <- as.data.frame(cbind(prR,prG,prB))
+
+      print('Rebuilding image...')
+      Ri = matrix(dfCal$prR, nrow=dim(imRed)[1])
+      Gi = matrix(dfCal$prG, nrow=dim(imRed)[1])
+      Bi = matrix(dfCal$prB, nrow=dim(imRed)[1])
+
+      imCal = array(dim=dim(imRed))
+      imCal[,,,1] = Ri
+      imCal[,,,2] = Gi
+      imCal[,,,3] = Bi
+
+      imCal <- imager::as.cimg(imCal)
+
     }
 
     if(is.null(prepath)){
@@ -741,4 +799,6 @@ colorChecker <- function(IDlist,
       im <- imager::save.image(imCal, paste(prepath,'/',IDlist[n], '_calibrated', extension, sep=''), quality = 1)
     }
   }
+
+  return(list(modelR,modelG,modelB))
 }
