@@ -22,7 +22,7 @@
 #' @import raster
 #' @importFrom stats lm
 #' @importFrom graphics locator
-#' @importFrom imager load.image save.image as.cimg width R G B resize
+#' @importFrom imager load.image save.image as.cimg width R G B resize width height
 #' @importFrom sp Polygons SpatialPolygons SpatialPolygonsDataFrame
 
 colorChecker <- function(IDlist,
