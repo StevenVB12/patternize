@@ -5,7 +5,8 @@
 \title{\code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is
 used by \code{patLanK} and \code{patRegK}.}
 \usage{
-kImage(image, k = 5, startCenter = NULL)
+kImage(image, k = 5, startCenter = NULL, maskToNA = NULL,
+  kmeansOnAll = FALSE)
 }
 \arguments{
 \item{image}{Image imported as a RasterStack for k-means clustering.}
@@ -13,6 +14,11 @@ kImage(image, k = 5, startCenter = NULL)
 \item{k}{Integer for number of k-means clusters (default = 3).}
 
 \item{startCenter}{A matrix of cluster centres to start k-means clustering from (default = NULL).}
+
+\item{maskToNA}{Replace the color value used for masking (i.e. 0 or 255) with NA.}
+
+\item{kmeansOnAll}{Whether to perform the kmeans clusters on the combined set of pixels of all images
+first (default = FALSE).}
 }
 \value{
 List including the k-means clustered \code{RasterSatck} returned as an array and object

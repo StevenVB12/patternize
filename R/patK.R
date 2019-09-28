@@ -10,6 +10,8 @@
 #' @param focal Whether to perform Gaussian blurring (default = FALSE).
 #' @param sigma Size of sigma for Gaussian blurring (default = 3).
 #' @param maskToNA Replace the color value used for masking (i.e. 0 or 255) with NA.
+#' @param kmeansOnAll Whether to perform the kmeans clusters on the combined set of pixels of all images
+#'    first (default = FALSE).
 #'
 #' @return  List of summed raster for each k-means cluster objects.
 #'
@@ -26,9 +28,20 @@ patK <- function(sampleList,
                  plot = FALSE,
                  focal =  FALSE,
                  sigma = 3,
-                 maskToNA = NULL){
+                 maskToNA = NULL,
+                 kmeansOnAll = FALSE){
 
   rasterList <- list()
+
+  if(is.null(fixedStartCenter)){
+    startCenter = NULL
+  }
+
+  if(!is.null(fixedStartCenter)){
+    startCenter <- fixedStartCenter
+    print('Fixed centers:')
+    print(startCenter)
+  }
 
   for(n in 1:length(sampleList)){
 
@@ -53,96 +66,116 @@ patK <- function(sampleList,
       image <- maskOutline(image, maskOutline, refShape = 'target', flipOutline = 'y', imageList = sampleList)
     )
 
-    # k-means clustering of image
-
-    if(n==1 & is.null(fixedStartCenter)){
-      startCenter = NULL
-    }
-
-    if(!is.null(fixedStartCenter)){
-      startCenter <- fixedStartCenter
-      print(paste('Fixed centers:', startCenter, sep = ' '))
-    }
-
-    # else{
-    #   startCenter <- K$centers
-    # }
-
-    # image[is.na(image)] <- 255
-
     if(!is.null(maskToNA)){
       image[image == maskToNA] <- NA
 
     }
 
-    # imageKmeans <- tryCatch(kImage(raster::as.array(image), k, startCenter),
-    #                         error = function(err) {
-    #                           print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
-    #                           return(NULL)
-    #                         })
-    imageKmeans <- kImage(raster::as.array(image), k, startCenter)
-    if(is.null(imageKmeans)){next}
+    # k-means clustering of image
 
-    image.segmented <- imageKmeans[[1]]
-    K <- imageKmeans[[2]]
+    if(kmeansOnAll == FALSE){
 
-    if(n==1 & is.null(fixedStartCenter)){
-      startCenter <- K$centers
-      print('start centers of first image:')
-      print(startCenter)
+      imageKmeans <- tryCatch(kImage(raster::as.array(image), k, startCenter),
+                              error = function(err) {
+                                print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
+                                return(NULL)
+                              })
+      # imageKmeans <- kImage(raster::as.array(image), k, startCenter)
+      if(is.null(imageKmeans)){next}
+
+      image.segmented <- imageKmeans[[1]]
+      K <- imageKmeans[[2]]
+
+      if(n==1 & is.null(fixedStartCenter)){
+        startCenter <- K$centers
+        print('start centers of first image:')
+        print(startCenter)
+      }
+
+      if(plot){
+        image.segmented[is.na(image.segmented)] <- 0
+        x <- image.segmented/255
+        cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+        uniqueCols <- unique(cols)
+        x2 <- match(cols, uniqueCols)
+        dim(x2) <- dim(x)[1:2]
+        raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
+      }
+
+
+      e=0
+
+      rasterListInd <- list()
+
+      for(i in 1:nrow(K$centers)){
+
+        e=e+1
+
+        rgb <- K$centers[i,]
+
+        map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
+        mapR <- raster::raster(map)
+        raster::extent(mapR) <- extRasterOr
+
+        rasterListInd[[e]] <- mapR
+
+
+        rasterList[[names(sampleList)[n]]] <- rasterListInd
+      }
+
+      print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))
     }
-
-    if(plot){
-      image.segmented[is.na(image.segmented)] <- 0
-      x <- image.segmented/255
-      cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
-      uniqueCols <- unique(cols)
-      x2 <- match(cols, uniqueCols)
-      dim(x2) <- dim(x)[1:2]
-      raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
-    }
-
-
-    e=0
-
-    rasterListInd <- list()
-
-    for(i in 1:nrow(K$centers)){
-
-      e=e+1
-
-      rgb <- K$centers[i,]
-
-      map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
-      mapR <- raster::raster(map)
-      raster::extent(mapR) <- extRasterOr
-      #
-      # mapDF <- raster::as.data.frame(mapR, xy = TRUE)
-      #
-      # mapDFs <- subset(mapDF, mapDF$layer == TRUE)
-      #
-      # invisible(capture.output(transMatrix <- Morpho::computeTransform(refShape, as.matrix(lanArray[,,n]), type = transformType)))
-      #
-      # invisible(capture.output(mapTransformed <- Morpho::applyTransform(as.matrix(mapDFs[1:2]), transMatrix)))
-      #
-      # r <- raster::raster(ncol = res, nrow = res)
-      #
-      # raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
-      #                                     max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
-      #                                     min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
-      #                                     max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
-      #
-      # patternRaster <- raster::rasterize(mapTransformed, field = 1, r)
-
-      rasterListInd[[e]] <- mapR
-
-
-      rasterList[[names(sampleList)[n]]] <- rasterListInd
-    }
-
-    print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))
   }
 
+  if(kmeansOnAll == TRUE){
+
+    imageKmeans <- kImage(sampleList, k, startCenter, maskToNA, kmeansOnAll)
+
+    images.segmented <- imageKmeans[[1]]
+    K <- imageKmeans[[2]]
+
+    startCenter <- K$centers
+
+    print('k-means centers of all images:')
+    print(startCenter)
+
+    for(n in 1:length(images.segmented)){
+
+      image.segmented <- images.segmented[[n]]
+
+      if(plot){
+        image.segmented[is.na(image.segmented)] <- 0
+        x <- image.segmented/255
+        cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+        uniqueCols <- unique(cols)
+        x2 <- match(cols, uniqueCols)
+        dim(x2) <- dim(x)[1:2]
+        raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
+      }
+
+      e=0
+
+      rasterListInd <- list()
+
+      for(i in 1:nrow(K$centers)){
+
+        e=e+1
+
+        rgb <- K$centers[i,]
+
+        map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
+        mapR <- raster::raster(map)
+        raster::extent(mapR) <- extRasterOr
+
+        rasterListInd[[e]] <- mapR
+
+
+        rasterList[[names(sampleList)[n]]] <- rasterListInd
+      }
+      print(paste('sample', names(sampleList)[n], 'done and added to rasterList', sep=' '))
+    }
+
+  }
   return(rasterList)
 
 }

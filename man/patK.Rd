@@ -6,7 +6,7 @@
 \usage{
 patK(sampleList, k = 3, fixedStartCenter = NULL,
   resampleFactor = NULL, maskOutline = NULL, plot = FALSE,
-  focal = FALSE, sigma = 3, maskToNA = NULL)
+  focal = FALSE, sigma = 3, maskToNA = NULL, kmeansOnAll = FALSE)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}
@@ -27,6 +27,9 @@ the color extraction (default = NULL).}
 \item{sigma}{Size of sigma for Gaussian blurring (default = 3).}
 
 \item{maskToNA}{Replace the color value used for masking (i.e. 0 or 255) with NA.}
+
+\item{kmeansOnAll}{Whether to perform the kmeans clusters on the combined set of pixels of all images
+first (default = FALSE).}
 }
 \value{
 List of summed raster for each k-means cluster objects.

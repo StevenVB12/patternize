@@ -6,6 +6,7 @@
 #' @param extension Extension (default = NULL).
 #' @param format ImageJ (Fiji) or tps format (default = 'imageJ').
 #' @param tpsFile Provide filename of tps file ff format is 'tps'.
+#' @param skipLandmark Vector of rownumbers of landmarks to skip.
 #'
 #' @return Landmark or RasterStack list.
 #'
@@ -29,9 +30,14 @@ makeList <- function(IDlist,
                      prepath = NULL,
                      extension = NULL,
                      format = 'imageJ',
-                     tpsFile = NULL){
+                     tpsFile = NULL,
+                     skipLandmark = NULL){
 
   objectList <- list()
+
+  if(!is.null(skipLandmark)){
+    skipLandmark <- -1*skipLandmark
+  }
 
   for(n in 1:length(IDlist)){
 
@@ -51,6 +57,10 @@ makeList <- function(IDlist,
 
         landmarks <- as.matrix(landmarks)
         colnames(landmarks) <- NULL
+
+        if(!is.null(skipLandmark)){
+          landmarks <- landmarks[skipLandmark,]
+        }
 
         objectList[[IDlist[n]]] <- landmarks
       }
