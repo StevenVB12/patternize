@@ -11,9 +11,9 @@ plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
   imageList = NULL, refImage = NULL, cartoonOrder = "above",
   lineOrder = "above", cartoonCol = "gray", cartoonFill = NULL,
   plotLandmarks = FALSE, landCol = "black", zlim = c(0, 1),
-  legend = TRUE, legendTitle = "Proportion", xlab = "", ylab = "",
-  main = "", plotType = "multi", imageIDs = NULL,
-  format = "imageJ")
+  legend = TRUE, legendTitle = "Proportion", legend.side = 4,
+  xlab = "", ylab = "", main = "", plotType = "multi",
+  imageIDs = NULL, format = "imageJ")
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}
@@ -76,6 +76,8 @@ landmarks (default = FALSE).}
 \item{legend}{Whether to plot legend with heatmaps.}
 
 \item{legendTitle}{Title of the raster legend (default = 'Proportion')}
+
+\item{legend.side}{Side to plot legend (default = 4)}
 
 \item{xlab}{Optional x-axis label.}
 

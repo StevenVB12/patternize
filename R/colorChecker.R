@@ -33,7 +33,7 @@ colorChecker <- function(IDlist,
                          patchSize = 0.6,
                          colorCheckerXY = NULL,
                          fixedModel = NULL,
-                         resampleFactor){
+                         resampleFactor = NULL){
 
   prop <- 1- patchSize
 

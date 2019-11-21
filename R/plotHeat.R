@@ -36,6 +36,7 @@
 #' @param zlim z-axis limit (default = c(0,1))
 #' @param legend Whether to plot legend with heatmaps.
 #' @param legendTitle Title of the raster legend (default = 'Proportion')
+#' @param legend.side Side to plot legend (default = 4)
 #' @param xlab Optional x-axis label.
 #' @param ylab Optional y-axis label.
 #' @param main Optional main title.
@@ -134,6 +135,7 @@ plotHeat <- function(summedRaster,
                      zlim = c(0,1),
                      legend = TRUE,
                      legendTitle = 'Proportion',
+                     legend.side = 4,
                      xlab='',
                      ylab='',
                      main='',
@@ -526,7 +528,7 @@ plotHeat <- function(summedRaster,
 
       if(legend == TRUE){
         plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(21),legend.width=1, legend.shrink=0.75,
-             legend.args=list(text=legendTitle, side=4, font=2, line=2.5, cex=1))
+             legend.args=list(text=legendTitle, side=legend.side, font=2, line=2.5, cex=1))
         }
       }
     mtext(side = 1, text = xlab, line = 0)
@@ -672,7 +674,7 @@ plotHeat <- function(summedRaster,
       }
 
       plot(summedRaster[[k]]/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
-           xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=4, line=3),
+           xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=legend.side, line=3),
            add= TRUE, asp=1)
 
       mtext(side = 1, text = xlab, line = 0)
