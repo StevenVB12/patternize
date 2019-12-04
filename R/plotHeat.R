@@ -146,15 +146,38 @@ plotHeat <- function(summedRaster,
 
 
   if(!is.list(summedRaster)){
-
     rasterEx <- raster::extent(summedRaster)
-
+  }
+  else{
+    rasterEx <- raster::extent(summedRaster[[1]])
   }
 
+  if(is.null(cartoonID)){
+    imageEx <- raster::extent(imageList[[1]])
+  }
   else{
+    imageEx <- raster::extent(imageList[[cartoonID]])
+  }
 
-    rasterEx <- raster::extent(summedRaster[[1]])
+  exDiff <- abs(rasterEx[4]-imageEx[4])-rasterEx[3]
+  outline[,2] <- outline[,2] + exDiff
 
+  if(!is.null(lines)){
+
+    lineList <- list()
+
+    for(e in 1:length(lines)){
+
+      lineList[[e]] <- read.table(lines[e], header = FALSE)
+
+    }
+  }
+
+  if(!is.null(lines)){
+    for(e in 1:length(lineList)){
+
+      lineList[[e]][[2]] <- lineList[[e]][[2]] + exDiff
+    }
   }
 
   if(!is.null(cartoonID)){
@@ -193,16 +216,6 @@ plotHeat <- function(summedRaster,
 
   }
 
-  if(!is.null(lines)){
-
-    lineList <- list()
-
-    for(e in 1:length(lines)){
-
-      lineList[[e]] <- read.table(lines[e], header = FALSE)
-
-    }
-  }
 
   if(normalized){
     divide <- 1
@@ -213,7 +226,6 @@ plotHeat <- function(summedRaster,
 
   if(!is.null(flipOutline) || !is.null(flipRaster)){
 
-    imageEx <- raster::extent(imageList[[1]])
 
     if(refShape[1] != 'mean' && !is.matrix(refShape)){
 
@@ -431,7 +443,7 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(refShape[1] == 'target'){
+      if(refShape[1] == 'target' || is.matrix(refShape)){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -591,11 +603,12 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(refShape[1] == 'target'){
+      if(refShape[1] == 'target' || is.matrix(refShape)){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
     }
+
 
     par(mfrow=c(2,trunc((length(summedRaster)+1)/2)), mai=c(0.05,0.8,0.15,0.8), oma=c(1,1,1,1)+1)
 

@@ -6,7 +6,7 @@
 \usage{
 colorChecker(IDlist, prepath = NULL, extension = NULL,
   colorCheckerType = "X-Rite", fixedCorners = FALSE, patchSize = 0.6,
-  colorCheckerXY = NULL, fixedModel = NULL, resampleFactor)
+  colorCheckerXY = NULL, fixedModel = NULL, resampleFactor = NULL)
 }
 \arguments{
 \item{IDlist}{List of sample IDs.}

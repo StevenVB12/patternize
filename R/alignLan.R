@@ -149,7 +149,7 @@ alignLan <- function(imageList,
     maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
   }
 
-  if(transformRef[1] != 'meanshape' & !is.null(cartoonID)){
+  if(!is.null(maskOutline) && transformRef[1] != 'meanshape' & !is.null(cartoonID)){
 
     maskOutlineNew[,2] <- imageEx[4] - maskOutlineNew[,2]
   }
