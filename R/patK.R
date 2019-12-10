@@ -39,7 +39,7 @@ patK <- function(sampleList,
 
   if(!is.null(fixedStartCenter)){
     startCenter <- fixedStartCenter
-    print('Fixed centers:')
+    print('Fixed start centers:')
     print(startCenter)
   }
 
@@ -134,10 +134,14 @@ patK <- function(sampleList,
     images.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]
 
+    # if(!is.null(fixedStartCenter)){
+    #   print('start centers of all images:')
+    #   print(startCenter)
+    # }
     startCenter <- K$centers
-
-    print('k-means centers of all images:')
+    print('final k-means centers of all images:')
     print(startCenter)
+
 
     for(n in 1:length(images.segmented)){
 
