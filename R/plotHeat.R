@@ -156,7 +156,12 @@ plotHeat <- function(summedRaster,
     imageEx <- raster::extent(imageList[[1]])
   }
   else{
-    imageEx <- raster::extent(imageList[[cartoonID]])
+    if(cartoonID %in% names(imageList)){
+      imageEx <- raster::extent(imageList[[cartoonID]])
+    }
+    else{
+      imageEx <- raster::extent(imageList[[1]])
+    }
   }
 
   exDiff <- abs(rasterEx[4]-imageEx[4])-rasterEx[3]
