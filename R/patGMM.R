@@ -1,8 +1,7 @@
-#' Extract colors using k-means clustering (for pre-aligned images).
+#' Extract colors using GMM clustering (for pre-aligned images).
 #'
 #' @param sampleList List of RasterStack objects.
-#' @param k Integere for defining number of k-means clusters (default = 3).
-#' @param fixedStartCenter Specify a dataframe with start centers for k-means clustering.
+#' @param k Integere for defining number of clusters (default = 3).
 #' @param resampleFactor Integer for downsampling used by \code{\link{redRes}}.
 #' @param maskOutline When outline is specified, everything outside of the outline will be masked for
 #'    the color extraction (default = NULL).
@@ -20,9 +19,8 @@
 #' @import raster
 #' @importFrom utils capture.output
 
-patK <- function(sampleList,
+patGMM <- function(sampleList,
                  k = 3,
-                 fixedStartCenter = NULL,
                  resampleFactor = NULL,
                  maskOutline = NULL,
                  plot = FALSE,
@@ -33,15 +31,6 @@ patK <- function(sampleList,
 
   rasterList <- list()
 
-  if(is.null(fixedStartCenter)){
-    startCenter = NULL
-  }
-
-  if(!is.null(fixedStartCenter)){
-    startCenter <- fixedStartCenter
-    print('Fixed start centers:')
-    print(startCenter)
-  }
 
   for(n in 1:length(sampleList)){
 
@@ -75,22 +64,18 @@ patK <- function(sampleList,
 
     if(kmeansOnAll == FALSE){
 
-      imageKmeans <- tryCatch(kImage(raster::as.array(image), k, startCenter, maskToNA),
-                              error = function(err) {
-                                print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
-                                return(NULL)
-                              })
-      # imageKmeans <- kImage(raster::as.array(image), k, startCenter)
+      # imageKmeans <- tryCatch(GMMImage(raster::as.array(image), k),
+      #                         error = function(err) {
+      #                           print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
+      #                           return(NULL)
+      #                         })
+      imageKmeans <- GMMImage(raster::as.array(image), k)
       if(is.null(imageKmeans)){next}
 
       image.segmented <- imageKmeans[[1]]
-      K <- imageKmeans[[2]]
+      gmm <- imageKmeans[[2]]
 
-      if(n==1 & is.null(fixedStartCenter)){
-        startCenter <- K$centers
-        print('start centers of first image:')
-        print(startCenter)
-      }
+
 
       if(plot){
         image.segmented[is.na(image.segmented)] <- 0
@@ -107,11 +92,11 @@ patK <- function(sampleList,
 
       rasterListInd <- list()
 
-      for(i in 1:nrow(K$centers)){
+      for(i in 1:nrow(gmm$centroids)){
 
         e=e+1
 
-        rgb <- K$centers[i,]
+        rgb <- gmm$centroids[i,]
 
         map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
         mapR <- raster::raster(map)
@@ -129,18 +114,11 @@ patK <- function(sampleList,
 
   if(kmeansOnAll == TRUE){
 
-    imageKmeans <- kImage(sampleList, k, startCenter, maskToNA, kmeansOnAll)
+    imageKmeans <- GMMImage(sampleList, k, maskToNA, kmeansOnAll)
 
     images.segmented <- imageKmeans[[1]]
-    K <- imageKmeans[[2]]
+    gmm <- imageKmeans[[2]]
 
-    # if(!is.null(fixedStartCenter)){
-    #   print('start centers of all images:')
-    #   print(startCenter)
-    # }
-    startCenter <- K$centers
-    print('final k-means centers of all images:')
-    print(startCenter)
 
 
     for(n in 1:length(images.segmented)){
@@ -161,11 +139,11 @@ patK <- function(sampleList,
 
       rasterListInd <- list()
 
-      for(i in 1:nrow(K$centers)){
+      for(i in 1:nrow(gmm$centroids)){
 
         e=e+1
 
-        rgb <- K$centers[i,]
+        rgb <- gmm$centroids[i,]
 
         map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
         mapR <- raster::raster(map)

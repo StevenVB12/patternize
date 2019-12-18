@@ -24,7 +24,8 @@ Imports:
     purrr,
     vegan,
     RNiftyReg,
-    geomorph
+    geomorph,
+    ClusterR
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

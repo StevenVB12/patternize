@@ -12,6 +12,7 @@
 #' @param maskToNA Replace the color value used for masking (i.e. 0 or 255) with NA.
 #' @param kmeansOnAll Whether to perform the kmeans clusters on the combined set of pixels of all images
 #'    first (default = FALSE).
+#' @param ignoreHSVvalue Whether to ignore the HSV value (~darkness).
 #'
 #' @return  List of summed raster for each k-means cluster objects.
 #'
@@ -19,8 +20,9 @@
 #' @export
 #' @import raster
 #' @importFrom utils capture.output
+#' @importFrom grDevices hsv rgb2hsv
 
-patK <- function(sampleList,
+patK_HSV <- function(sampleList,
                  k = 3,
                  fixedStartCenter = NULL,
                  resampleFactor = NULL,
@@ -29,7 +31,8 @@ patK <- function(sampleList,
                  focal =  FALSE,
                  sigma = 3,
                  maskToNA = NULL,
-                 kmeansOnAll = FALSE){
+                 kmeansOnAll = FALSE,
+                 ignoreHSVvalue = FALSE){
 
   rasterList <- list()
 
@@ -46,6 +49,9 @@ patK <- function(sampleList,
   for(n in 1:length(sampleList)){
 
     image <- sampleList[[n]]
+
+
+
     extRasterOr <- raster::extent(image)
 
     if(!is.null(resampleFactor)){
@@ -66,16 +72,24 @@ patK <- function(sampleList,
       image <- maskOutline(image, maskOutline, refShape = 'target', flipOutline = 'y', imageList = sampleList)
     )
 
-    if(!is.null(maskToNA)){
-      image[image == maskToNA] <- NA
 
-    }
 
     # k-means clustering of image
 
     if(kmeansOnAll == FALSE){
 
-      imageKmeans <- tryCatch(kImage(raster::as.array(image), k, startCenter, maskToNA),
+      # convert RGB values to HSV values
+
+      image <- raster::overlay(image, fun = rgb2hsv)
+
+      if(!is.null(maskToNA)){
+        image[image == maskToNA] <- NA
+
+      }
+
+      imageKmeans <- kImageHSV(raster::as.array(image), k, startCenter, ignoreHSVvalue = ignoreHSVvalue)
+
+      imageKmeans <- tryCatch(kImageHSV(raster::as.array(image), k, startCenter, ignoreHSVvalue = ignoreHSVvalue),
                               error = function(err) {
                                 print(paste('sample', names(sampleList)[n], 'k-clustering failed and skipped', sep = ' '))
                                 return(NULL)
@@ -94,8 +108,8 @@ patK <- function(sampleList,
 
       if(plot){
         image.segmented[is.na(image.segmented)] <- 0
-        x <- image.segmented/255
-        cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+        x <- image.segmented
+        cols <- hsv(x[,,1], x[,,2], x[,,3])
         uniqueCols <- unique(cols)
         x2 <- match(cols, uniqueCols)
         dim(x2) <- dim(x)[1:2]
@@ -111,7 +125,13 @@ patK <- function(sampleList,
 
         e=e+1
 
-        rgb <- K$centers[i,]
+        if(ignoreHSVvalue == FALSE){
+          rgb <- K$centers[i,]
+        }
+        else{
+          rgb <- K$centers[i,]
+          rgb <- c(rgb, 1)
+        }
 
         map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
         mapR <- raster::raster(map)
@@ -129,7 +149,7 @@ patK <- function(sampleList,
 
   if(kmeansOnAll == TRUE){
 
-    imageKmeans <- kImage(sampleList, k, startCenter, maskToNA, kmeansOnAll)
+    imageKmeans <- kImageHSV(sampleList, k, startCenter, maskToNA, kmeansOnAll, ignoreHSVvalue)
 
     images.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]
@@ -149,13 +169,14 @@ patK <- function(sampleList,
 
       if(plot){
         image.segmented[is.na(image.segmented)] <- 0
-        x <- image.segmented/255
-        cols <- rgb(x[,,1], x[,,2], x[,,3], maxColorValue=1)
+        x <- image.segmented
+        cols <- hsv(x[,,1], x[,,2], x[,,3])
         uniqueCols <- unique(cols)
         x2 <- match(cols, uniqueCols)
         dim(x2) <- dim(x)[1:2]
         raster::image(t(apply(x2, 2, rev)), col=uniqueCols, yaxt='n', xaxt='n')
       }
+
 
       e=0
 
@@ -165,7 +186,13 @@ patK <- function(sampleList,
 
         e=e+1
 
-        rgb <- K$centers[i,]
+        if(ignoreHSVvalue == FALSE){
+          rgb <- K$centers[i,]
+        }
+        else{
+          rgb <- K$centers[i,]
+          rgb <- c(rgb, 0.5)
+        }
 
         map <- apply(image.segmented, 1:2, function(x) all(x-rgb == 0))
         mapR <- raster::raster(map)
