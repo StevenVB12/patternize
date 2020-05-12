@@ -52,6 +52,7 @@ alignLan <- function(imageList,
 
   rasterList <- list()
 
+
   if(!is.null(cartoonID)){
     if(cartoonID %in% names(imageList)){
       imageEx <- raster::extent(imageList[[cartoonID]])
@@ -154,6 +155,14 @@ alignLan <- function(imageList,
     maskOutlineNew[,2] <- imageEx[4] - maskOutlineNew[,2]
   }
 
+  # Function used in focal to calculate average for NA values in tranformed matrix
+  fill.na <- function(x, i=5) {
+    if( is.na(x)[i] ) {
+      return( round(mean(x, na.rm=TRUE),0) )
+    } else {
+      return( round(x[i],0) )
+    }
+  }
 
   # Run the loop for each sample
   for(n in 1:length(imageList)){
