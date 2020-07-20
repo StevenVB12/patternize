@@ -153,7 +153,12 @@ plotHeat <- function(summedRaster,
   }
 
   if(is.null(cartoonID)){
-    imageEx <- raster::extent(imageList[[1]])
+    if(!is.list(summedRaster)){
+      imageEx <- raster::extent(summedRaster)
+    }
+    else{
+      imageEx <- raster::extent(summedRaster[[1]])
+    }
   }
   else{
     if(cartoonID %in% names(imageList)){

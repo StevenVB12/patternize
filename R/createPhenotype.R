@@ -59,7 +59,8 @@ createPhenotype <- function(PCAdata,
                             lineOrder = 'above',
                             cartoonCol = 'gray',
                             cartoonFill = NULL,
-                            legendTitle = 'Proportion'){
+                            legendTitle = 'Proportion',
+                            zlim = NULL){
 
   pc <- PCAdata$x
   rotation <- PCAdata$rotation
@@ -75,11 +76,20 @@ createPhenotype <- function(PCAdata,
 
   raster::extent(pc.pred.image.raster) <- raster::extent(rasterList[[1]])
 
-  plotHeat(pc.pred.image.raster, IDlist, plotCartoon = TRUE, refShape = refShape, outline = outline, lines = lines,
-           adjustCoords = TRUE, landList = landList, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
-           cartoonFill = 'black', cartoonOrder = 'under',
-           zlim = c(min(raster::values(pc.pred.image.raster)),max(raster::values(pc.pred.image.raster))),
-           normalized = normalized)
+  if(is.null(zlim)){
+    plotHeat(pc.pred.image.raster, IDlist, plotCartoon = TRUE, refShape = refShape, outline = outline, lines = lines,
+             adjustCoords = TRUE, landList = landList, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
+             cartoonFill = 'black', cartoonOrder = 'under',
+             zlim = c(min(raster::values(pc.pred.image.raster)),max(raster::values(pc.pred.image.raster))),
+             normalized = normalized)
+  }
+  else{
+    plotHeat(pc.pred.image.raster, IDlist, plotCartoon = TRUE, refShape = refShape, outline = outline, lines = lines,
+             adjustCoords = TRUE, landList = landList, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
+             cartoonFill = 'black', cartoonOrder = 'under',
+             zlim = zlim,
+             normalized = normalized)
+  }
 }
 
 

@@ -11,7 +11,7 @@ createPhenotype(PCAdata, PCApredict, IDlist, rasterList,
   crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
   imageList = NULL, cartoonOrder = "above", lineOrder = "above",
   cartoonCol = "gray", cartoonFill = NULL,
-  legendTitle = "Proportion")
+  legendTitle = "Proportion", zlim = NULL)
 }
 \arguments{
 \item{PCAdata}{Output of PCA analysis. List item 3 of patPCA.}
