@@ -540,16 +540,16 @@ plotHeat <- function(summedRaster,
 
     if(plotType == 'PCA'){
 
-      image(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
+      image(summedRaster/divide, col=colfunc(99), xaxt='n', yaxt='n', box=F, axes=F,
             xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=1)
     }
     else{
 
-      plot(summedRaster/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
+      plot(summedRaster/divide, col=colfunc(99), xaxt='n', yaxt='n', box=F, axes=F,
            xlim = XLIM, ylim= YLIM, zlim=zlim, add= TRUE, useRaster= FALSE, legend = FALSE, asp=1)
 
       if(legend == TRUE){
-        plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(21),legend.width=1, legend.shrink=0.75,
+        plot(summedRaster/divide, legend.only=TRUE, zlim=zlim, col=colfunc(99),legend.width=1, legend.shrink=0.75,
              legend.args=list(text=legendTitle, side=legend.side, font=2, line=2.5, cex=1))
         }
       }
@@ -696,7 +696,7 @@ plotHeat <- function(summedRaster,
         }
       }
 
-      plot(summedRaster[[k]]/divide, col=colfunc(21), xaxt='n', yaxt='n', box=F, axes=F,
+      plot(summedRaster[[k]]/divide, col=colfunc(99), xaxt='n', yaxt='n', box=F, axes=F,
            xlim = XLIM, ylim= YLIM, zlim=zlim, legend.args=list(text=legendTitle, side=legend.side, line=3),
            add= TRUE, asp=1)
 
