@@ -172,14 +172,14 @@ patLanRGB <- function(sampleList,
     map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
     if(all(map == FALSE, na.rm =T)){
-      warning("The RGB range does not seem to overlap with any of the RGB values in the image")
+      print(paste("The RGB range does not seem to overlap with any of the RGB values in the image", names(landList)[n], sep = ' '))
     }
 
-    if(iterations > 0){
-      if(all(map == FALSE, na.rm =T)){
-        warning("Iterations can't be performed")
-      }
-    }
+    # if(iterations > 0){
+    #   if(all(map == FALSE, na.rm =T)){
+    #     warning("Iterations can't be performed")
+    #   }
+    # }
 
     if(!all(map == FALSE, na.rm =T)){
 
@@ -235,22 +235,11 @@ patLanRGB <- function(sampleList,
 
     else{
 
-      if(transformRef == 'meanshape' || is.matrix(transformRef)){
-
-        patternRaster <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[3]/100,
-                                        max(refShape[,1])+3*max(refShape[,1])*cropOffset[4]/100,
-                                        min(refShape[,2])-3*max(refShape[,2])*cropOffset[1]/100,
-                                        max(refShape[,2])+3*max(refShape[,2])*cropOffset[2]/100)
-      }
-
-      else{
-
         patternRaster <- raster::raster(extent(min(refShape[,1])-max(refShape[,1])*cropOffset[1]/100,
                                                max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
                                                min(refShape[,2])-max(refShape[,2])*cropOffset[3]/100,
                                                max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100),
                                         ncol = res, nrow = res, vals = rep(NA, res*res))
-      }
     }
 
     if(plot == 'stack'){
