@@ -171,17 +171,17 @@ patLanRGB <- function(sampleList,
 
     map <- apply(raster::as.array(image), 1:2, function(x) all(abs(x-RGB) < colOffset*255))
 
-    if(all(map == FALSE)){
+    if(all(map == FALSE, na.rm =T)){
       warning("The RGB range does not seem to overlap with any of the RGB values in the image")
     }
 
     if(iterations > 0){
-      if(all(map == FALSE)){
+      if(all(map == FALSE, na.rm =T)){
         warning("Iterations can't be performed")
       }
     }
 
-    if(!all(map == FALSE)){
+    if(!all(map == FALSE, na.rm =T)){
 
       x <- 1
       while(x <= iterations){
