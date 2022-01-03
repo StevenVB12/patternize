@@ -4,14 +4,31 @@
 \alias{createPhenotype}
 \title{Plot color pattern prediction for specified PCA values}
 \usage{
-createPhenotype(PCAdata, PCApredict, IDlist, rasterList,
-  colpalette = NULL, plotCartoon = FALSE, refShape = NULL,
-  outline = NULL, lines = NULL, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, normalized = TRUE,
-  crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
-  imageList = NULL, cartoonOrder = "above", lineOrder = "above",
-  cartoonCol = "gray", cartoonFill = NULL,
-  legendTitle = "Proportion", zlim = NULL)
+createPhenotype(
+  PCAdata,
+  PCApredict,
+  IDlist,
+  rasterList,
+  colpalette = NULL,
+  plotCartoon = FALSE,
+  refShape = NULL,
+  outline = NULL,
+  lines = NULL,
+  landList = NULL,
+  adjustCoords = FALSE,
+  cartoonID = NULL,
+  normalized = TRUE,
+  crop = c(0, 0, 0, 0),
+  flipRaster = NULL,
+  flipOutline = NULL,
+  imageList = NULL,
+  cartoonOrder = "above",
+  lineOrder = "above",
+  cartoonCol = "gray",
+  cartoonFill = NULL,
+  legendTitle = "Proportion",
+  zlim = NULL
+)
 }
 \arguments{
 \item{PCAdata}{Output of PCA analysis. List item 3 of patPCA.}
@@ -68,7 +85,9 @@ landmark coordinates.}
 
 \item{cartoonFill}{Fill color for outline of cartoon (default = NULL).}
 
-\item{legendTitle}{Title of the raster legend (default = 'Proportion')}
+\item{legendTitle}{Title of the raster legend (default = 'Proportion').}
+
+\item{zlim}{zlim values for predicted pattern.}
 }
 \description{
 Plot color pattern prediction for specified PCA values

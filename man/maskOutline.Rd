@@ -5,10 +5,21 @@
 \title{Intersects a RasterStack with an outline. Everything outside of the outline will be removed
 from the raster.}
 \usage{
-maskOutline(RasterStack, outline, refShape, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, IDlist = NULL,
-  crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
-  imageList = NULL, maskColor = 0, inverse = FALSE)
+maskOutline(
+  RasterStack,
+  outline,
+  refShape,
+  landList = NULL,
+  adjustCoords = FALSE,
+  cartoonID = NULL,
+  IDlist = NULL,
+  crop = c(0, 0, 0, 0),
+  flipRaster = NULL,
+  flipOutline = NULL,
+  imageList = NULL,
+  maskColor = 0,
+  inverse = FALSE
+)
 }
 \arguments{
 \item{RasterStack}{RasterStack to be masked.}

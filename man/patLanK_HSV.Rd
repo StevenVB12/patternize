@@ -5,11 +5,24 @@
 \title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using
 k-means clustering.}
 \usage{
-patLanK_HSV(sampleList, landList, k = 3, fixedStartCenter = NULL,
-  resampleFactor = NULL, crop = FALSE, cropOffset = c(0, 0, 0, 0),
-  res = 300, transformRef = "meanshape", transformType = "tps",
-  removebgK = NULL, adjustCoords = FALSE, plot = FALSE,
-  focal = FALSE, sigma = 3, ignoreHSVvalue = FALSE)
+patLanK_HSV(
+  sampleList,
+  landList,
+  k = 3,
+  fixedStartCenter = NULL,
+  resampleFactor = NULL,
+  crop = FALSE,
+  cropOffset = c(0, 0, 0, 0),
+  res = 300,
+  transformRef = "meanshape",
+  transformType = "tps",
+  removebgK = NULL,
+  adjustCoords = FALSE,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3,
+  ignoreHSVvalue = FALSE
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

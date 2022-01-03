@@ -4,16 +4,40 @@
 \alias{plotHeat}
 \title{Plots the color pattern heatmaps from \code{sumRaster} output.}
 \usage{
-plotHeat(summedRaster, IDlist, colpalette = NULL, plotCartoon = FALSE,
-  refShape = NULL, outline = NULL, lines = NULL, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, normalized = FALSE,
-  crop = c(0, 0, 0, 0), flipRaster = NULL, flipOutline = NULL,
-  imageList = NULL, refImage = NULL, cartoonOrder = "above",
-  lineOrder = "above", cartoonCol = "gray", cartoonFill = NULL,
-  plotLandmarks = FALSE, landCol = "black", zlim = c(0, 1),
-  legend = TRUE, legendTitle = "Proportion", legend.side = 4,
-  xlab = "", ylab = "", main = "", plotType = "multi",
-  imageIDs = NULL, format = "imageJ")
+plotHeat(
+  summedRaster,
+  IDlist,
+  colpalette = NULL,
+  plotCartoon = FALSE,
+  refShape = NULL,
+  outline = NULL,
+  lines = NULL,
+  landList = NULL,
+  adjustCoords = FALSE,
+  cartoonID = NULL,
+  normalized = FALSE,
+  crop = c(0, 0, 0, 0),
+  flipRaster = NULL,
+  flipOutline = NULL,
+  imageList = NULL,
+  refImage = NULL,
+  cartoonOrder = "above",
+  lineOrder = "above",
+  cartoonCol = "gray",
+  cartoonFill = NULL,
+  plotLandmarks = FALSE,
+  landCol = "black",
+  zlim = c(0, 1),
+  legend = TRUE,
+  legendTitle = "Proportion",
+  legend.side = 4,
+  xlab = "",
+  ylab = "",
+  main = "",
+  plotType = "multi",
+  imageIDs = NULL,
+  format = "imageJ"
+)
 }
 \arguments{
 \item{summedRaster}{Summed raster or summedRasterList.}

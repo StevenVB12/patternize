@@ -5,11 +5,24 @@
 \title{Aligns images usings transformations obtained from fixed landmarks and extracts colors using
 k-means clustering.}
 \usage{
-patLanK(sampleList, landList, k = 3, fixedStartCenter = NULL,
-  resampleFactor = NULL, crop = FALSE, cropOffset = c(0, 0, 0, 0),
-  res = 300, transformRef = "meanshape", transformType = "tps",
-  removebg = NULL, removebgColOffset = 0.1, adjustCoords = FALSE,
-  plot = FALSE, focal = FALSE, sigma = 3)
+patLanK(
+  sampleList,
+  landList,
+  k = 3,
+  fixedStartCenter = NULL,
+  resampleFactor = NULL,
+  crop = FALSE,
+  cropOffset = c(0, 0, 0, 0),
+  res = 300,
+  transformRef = "meanshape",
+  transformType = "tps",
+  removebg = NULL,
+  removebgColOffset = 0.1,
+  adjustCoords = FALSE,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

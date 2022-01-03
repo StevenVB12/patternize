@@ -5,8 +5,7 @@
 \title{\code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is
 used by \code{patLanK} and \code{patRegK}.}
 \usage{
-kImage(image, k = 5, startCenter = NULL, maskToNA = NULL,
-  kmeansOnAll = FALSE)
+kImage(image, k = 5, startCenter = NULL, maskToNA = NULL, kmeansOnAll = FALSE)
 }
 \arguments{
 \item{image}{Image imported as a RasterStack for k-means clustering.}

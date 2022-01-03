@@ -23,8 +23,3 @@ List including the clustered \code{RasterSatck} returned as an array and object
 \description{
 \code{\link[ClusterR]{GMM}} clustering of image imported as a RasterStack.
 }
-\examples{
-image <- raster::stack(system.file("extdata", "BC0077.jpg", package = "patternize"))
-out <- GMMImage(image, 6)
-
-}

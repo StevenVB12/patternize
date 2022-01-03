@@ -33,7 +33,8 @@
 #'    (default = 'above').
 #' @param cartoonCol Outline and line color for cartoon (deafault = 'gray').
 #' @param cartoonFill Fill color for outline of cartoon (default = NULL).
-#' @param legendTitle Title of the raster legend (default = 'Proportion')
+#' @param legendTitle Title of the raster legend (default = 'Proportion').
+#' @param zlim zlim values for predicted pattern.
 #'
 #' @export
 #' @import raster
@@ -86,9 +87,7 @@ createPhenotype <- function(PCAdata,
   else{
     plotHeat(pc.pred.image.raster, IDlist, plotCartoon = TRUE, refShape = refShape, outline = outline, lines = lines,
              adjustCoords = TRUE, landList = landList, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
-             cartoonFill = 'black', cartoonOrder = 'under',
-             zlim = zlim,
-             normalized = normalized)
+             cartoonFill = 'black', cartoonOrder = 'under', zlim = zlim, normalized = normalized)
   }
 }
 

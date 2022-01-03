@@ -5,9 +5,20 @@
 \title{This fucntion calculates the area in which the color pattern is expressed in each sample as the
 relative proportion using the provided outline of the considered trait or structure.}
 \usage{
-patArea(rList, IDlist, refShape, type, outline = NULL, landList = NULL,
-  adjustCoords = FALSE, cartoonID = NULL, crop = c(0, 0, 0, 0),
-  flipRaster = NULL, flipOutline = NULL, imageList = NULL)
+patArea(
+  rList,
+  IDlist,
+  refShape,
+  type,
+  outline = NULL,
+  landList = NULL,
+  adjustCoords = FALSE,
+  cartoonID = NULL,
+  crop = c(0, 0, 0, 0),
+  flipRaster = NULL,
+  flipOutline = NULL,
+  imageList = NULL
+)
 }
 \arguments{
 \item{rList}{List of RasterLayers as obtained from the main patternize functions.}

@@ -4,8 +4,10 @@
 \name{rasterList_regK}
 \alias{rasterList_regK}
 \title{rasterList_regK}
-\format{A list of RasterLayers including the red color pattern extracted from 5 Heliconius
-   erato hydara dorsal forewings using \code{patRegK}.}
+\format{
+A list of RasterLayers including the red color pattern extracted from 5 Heliconius
+   erato hydara dorsal forewings using \code{patRegK}.
+}
 \usage{
 rasterList_regK
 }

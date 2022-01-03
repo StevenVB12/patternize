@@ -4,10 +4,19 @@
 \alias{patK_HSV}
 \title{Extract colors using k-means clustering (for pre-aligned images).}
 \usage{
-patK_HSV(sampleList, k = 3, fixedStartCenter = NULL,
-  resampleFactor = NULL, maskOutline = NULL, plot = FALSE,
-  focal = FALSE, sigma = 3, maskToNA = NULL, kmeansOnAll = FALSE,
-  ignoreHSVvalue = FALSE)
+patK_HSV(
+  sampleList,
+  k = 3,
+  fixedStartCenter = NULL,
+  resampleFactor = NULL,
+  maskOutline = NULL,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3,
+  maskToNA = NULL,
+  kmeansOnAll = FALSE,
+  ignoreHSVvalue = FALSE
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

@@ -5,10 +5,22 @@
 \title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
 and extracts colors using k-means clustering.}
 \usage{
-patRegK(sampleList, target, k = 3, fixedStartCenter = NULL,
-  resampleFactor = NULL, useBlockPercentage = 75, crop = c(0, 0, 0,
-  0), removebgR = NULL, removebgK = NULL, maskOutline = NULL,
-  maskColor = 0, plot = FALSE, focal = FALSE, sigma = 3)
+patRegK(
+  sampleList,
+  target,
+  k = 3,
+  fixedStartCenter = NULL,
+  resampleFactor = NULL,
+  useBlockPercentage = 75,
+  crop = c(0, 0, 0, 0),
+  removebgR = NULL,
+  removebgK = NULL,
+  maskOutline = NULL,
+  maskColor = 0,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

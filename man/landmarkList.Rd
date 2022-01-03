@@ -4,7 +4,9 @@
 \name{landmarkList}
 \alias{landmarkList}
 \title{landmarkList}
-\format{A list of landmarks for 5 Heliconius erato hydara dorsal forewings.}
+\format{
+A list of landmarks for 5 Heliconius erato hydara dorsal forewings.
+}
 \usage{
 landmarkList
 }

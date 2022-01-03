@@ -4,9 +4,18 @@
 \alias{patK}
 \title{Extract colors using k-means clustering (for pre-aligned images).}
 \usage{
-patK(sampleList, k = 3, fixedStartCenter = NULL,
-  resampleFactor = NULL, maskOutline = NULL, plot = FALSE,
-  focal = FALSE, sigma = 3, maskToNA = NULL, kmeansOnAll = FALSE)
+patK(
+  sampleList,
+  k = 3,
+  fixedStartCenter = NULL,
+  resampleFactor = NULL,
+  maskOutline = NULL,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3,
+  maskToNA = NULL,
+  kmeansOnAll = FALSE
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

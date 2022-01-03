@@ -4,8 +4,7 @@
 \alias{sampleRGB}
 \title{Interactive function to sample RGB value from pixel or square area in an image.}
 \usage{
-sampleRGB(image, resampleFactor = NULL, crop = c(0, 0, 0, 0),
-  type = "point")
+sampleRGB(image, resampleFactor = NULL, crop = c(0, 0, 0, 0), type = "point")
 }
 \arguments{
 \item{image}{Image imported as a RasterStack.}

@@ -12,6 +12,8 @@
 #'    is the sample size.
 #'
 #' @examples
+#'
+#' \dontrun{
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #'
 #' prepath <- system.file("extdata",  package = 'patternize')
@@ -20,6 +22,7 @@
 #' landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 #'
 #' landmarkArray <- lanArray(landmarkList)
+#' }
 #'
 #' @export
 

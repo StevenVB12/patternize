@@ -4,7 +4,9 @@
 \name{imageList}
 \alias{imageList}
 \title{imageList}
-\format{A list of 5 \code{RasterStack} objects of Heliconius erato hydara dorsal forewings.}
+\format{
+A list of 5 \code{RasterStack} objects of Heliconius erato hydara dorsal forewings.
+}
 \usage{
 imageList
 }

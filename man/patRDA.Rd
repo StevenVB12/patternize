@@ -7,17 +7,45 @@ patternize functions to a dataframe of 0 and 1 values that can be used for const
 Redundancy Analysis (RDA) (\code{\link[vegan]{rda}}). This function also allows to plot the
 analysis including a visualization of the shape changes along the axis.}
 \usage{
-patRDA(rList, popList, colList, symbolList = NULL, rListPredict = NULL,
-  popListPredict = NULL, colListPredict = NULL,
-  symbolListPredict = NULL, plot = FALSE, plotType = "points",
-  plotChanges = FALSE, PCx = 1, PCy = 2, plotCartoon = FALSE,
-  refShape = NULL, outline = NULL, lines = NULL, landList = NULL,
-  adjustCoords = FALSE, crop = c(0, 0, 0, 0), flipRaster = NULL,
-  flipOutline = NULL, imageList = NULL, cartoonID = NULL,
-  colpalette = NULL, normalized = NULL, cartoonOrder = "above",
-  lineOrder = "above", cartoonCol = "gray", cartoonFill = NULL,
-  plotLandmarks = FALSE, landCol = "black", zlim = c(-1, 1),
-  legendTitle = "Predicted", xlab = "", ylab = "", main = "")
+patRDA(
+  rList,
+  popList,
+  colList,
+  symbolList = NULL,
+  rListPredict = NULL,
+  popListPredict = NULL,
+  colListPredict = NULL,
+  symbolListPredict = NULL,
+  plot = FALSE,
+  plotType = "points",
+  plotChanges = FALSE,
+  PCx = 1,
+  PCy = 2,
+  plotCartoon = FALSE,
+  refShape = NULL,
+  outline = NULL,
+  lines = NULL,
+  landList = NULL,
+  adjustCoords = FALSE,
+  crop = c(0, 0, 0, 0),
+  flipRaster = NULL,
+  flipOutline = NULL,
+  imageList = NULL,
+  cartoonID = NULL,
+  colpalette = NULL,
+  normalized = NULL,
+  cartoonOrder = "above",
+  lineOrder = "above",
+  cartoonCol = "gray",
+  cartoonFill = NULL,
+  plotLandmarks = FALSE,
+  landCol = "black",
+  zlim = c(-1, 1),
+  legendTitle = "Predicted",
+  xlab = "",
+  ylab = "",
+  main = ""
+)
 }
 \arguments{
 \item{rList}{List of raster objects.}

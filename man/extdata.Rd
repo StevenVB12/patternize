@@ -3,7 +3,8 @@
 \name{extdata}
 \alias{extdata}
 \title{External patternize data}
-\format{Raw JPG images, landmark and cartoon data.
+\format{
+Raw JPG images, landmark and cartoon data.
 \describe{
   \item{BC0077.JPG}{jpeg image}
   \item{BC0071.JPG}{jpeg image}
@@ -27,7 +28,8 @@
   \item{BC0077_vein9.txt}{xy vein coordinates}
   \item{BC0077_vein10.txt}{xy vein coordinates}
   \item{BC0077_vein11.txt}{xy vein coordinates}
-}}
+}
+}
 \description{
 Raw image, landmark and cartoon data of Heliconius erato hydara wings.
 }

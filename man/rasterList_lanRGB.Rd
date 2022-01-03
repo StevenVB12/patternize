@@ -4,8 +4,10 @@
 \name{rasterList_lanRGB}
 \alias{rasterList_lanRGB}
 \title{rasterList_lanRGB}
-\format{A list of RasterLayers including the red color pattern extracted from 5 Heliconius
-    erato hydara dorsal forewings using \code{patLanRGB}.}
+\format{
+A list of RasterLayers including the red color pattern extracted from 5 Heliconius
+    erato hydara dorsal forewings using \code{patLanRGB}.
+}
 \usage{
 rasterList_lanRGB
 }

@@ -4,12 +4,24 @@
 \alias{alignLan}
 \title{Align images using landmarks}
 \usage{
-alignLan(imageList, landList, IDlist = NULL, adjustCoords = FALSE,
-  resampleFactor = NULL, res = c(300, 300),
-  transformRef = "meanshape", transformType = "tps",
-  maskOutline = NULL, removebg = NULL, removebgColOffset = 0.1,
-  inverse = FALSE, cartoonID = NULL, refImage = NULL,
-  plotTransformed = FALSE, format = "imageJ")
+alignLan(
+  imageList,
+  landList,
+  IDlist = NULL,
+  adjustCoords = FALSE,
+  resampleFactor = NULL,
+  res = c(300, 300),
+  transformRef = "meanshape",
+  transformType = "tps",
+  maskOutline = NULL,
+  removebg = NULL,
+  removebgColOffset = 0.1,
+  inverse = FALSE,
+  cartoonID = NULL,
+  refImage = NULL,
+  plotTransformed = FALSE,
+  format = "imageJ"
+)
 }
 \arguments{
 \item{imageList}{List of RasterStack objects.}

@@ -4,8 +4,10 @@
 \name{rasterList_lanK}
 \alias{rasterList_lanK}
 \title{rasterList_lanK}
-\format{A list of RasterLayers including the red color pattern extracted from 5 Heliconius
-   erato hydara dorsal forewings using \code{patLanK}.}
+\format{
+A list of RasterLayers including the red color pattern extracted from 5 Heliconius
+   erato hydara dorsal forewings using \code{patLanK}.
+}
 \usage{
 rasterList_lanK
 }

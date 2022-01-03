@@ -4,8 +4,7 @@
 \alias{lanArray}
 \title{Build landmark array for \code{\link[Morpho]{Morpho}}.}
 \usage{
-lanArray(sampleList, adjustCoords = FALSE, imageList = NULL,
-  imageIDs = NULL)
+lanArray(sampleList, adjustCoords = FALSE, imageList = NULL, imageIDs = NULL)
 }
 \arguments{
 \item{sampleList}{List of landmark matrices as returned by \code{\link{makeList}}.}
@@ -27,6 +26,8 @@ X x Y x n array, where X and Y define the coordinates of the landmark points and
 Build landmark array for \code{\link[Morpho]{Morpho}}.
 }
 \examples{
+
+\dontrun{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 
 prepath <- system.file("extdata",  package = 'patternize')
@@ -35,5 +36,6 @@ extension <- '_landmarks_LFW.txt'
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
 landmarkArray <- lanArray(landmarkList)
+}
 
 }

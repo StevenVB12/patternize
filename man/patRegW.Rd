@@ -7,13 +7,29 @@ and extracts color pattern using watershed segmentation. This function works int
 allowing to pick a starting pixel within each pattern element from which the watershed will
 extract the pattern. This function works best for patterns with sharp boundaries.}
 \usage{
-patRegW(sampleList, target, resampleFactor = NULL,
-  useBlockPercentage = 75, crop = c(0, 0, 0, 0), removebgR = NULL,
-  maskOutline = NULL, cartoonID = NULL, correct = FALSE,
-  blur = TRUE, sigma = 3, bucketfill = TRUE, cleanP = NULL,
-  splitC = NULL, plotTransformed = FALSE, plotCorrect = FALSE,
-  plotEdges = FALSE, plotPriority = FALSE, plotWS = FALSE,
-  plotBF = FALSE, plotFinal = FALSE)
+patRegW(
+  sampleList,
+  target,
+  resampleFactor = NULL,
+  useBlockPercentage = 75,
+  crop = c(0, 0, 0, 0),
+  removebgR = NULL,
+  maskOutline = NULL,
+  cartoonID = NULL,
+  correct = FALSE,
+  blur = TRUE,
+  sigma = 3,
+  bucketfill = TRUE,
+  cleanP = NULL,
+  splitC = NULL,
+  plotTransformed = FALSE,
+  plotCorrect = FALSE,
+  plotEdges = FALSE,
+  plotPriority = FALSE,
+  plotWS = FALSE,
+  plotBF = FALSE,
+  plotFinal = FALSE
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

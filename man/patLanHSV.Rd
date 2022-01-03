@@ -5,11 +5,25 @@
 \title{Aligns images usings transformations obtained from fixed landmarks and extracts colors
 using a predefined RGB values and cutoff value.}
 \usage{
-patLanHSV(sampleList, landList, HSV, resampleFactor = NULL,
-  colOffset = 0.1, crop = FALSE, cropOffset = c(0, 0, 0, 0),
-  res = 300, transformRef = "meanshape", transformType = "tps",
-  adjustCoords = FALSE, plot = NULL, focal = FALSE, sigma = 3,
-  iterations = 0, ignoreHSVvalue = FALSE, patternsToFile = NULL)
+patLanHSV(
+  sampleList,
+  landList,
+  HSV,
+  resampleFactor = NULL,
+  colOffset = 0.1,
+  crop = FALSE,
+  cropOffset = c(0, 0, 0, 0),
+  res = 300,
+  transformRef = "meanshape",
+  transformType = "tps",
+  adjustCoords = FALSE,
+  plot = NULL,
+  focal = FALSE,
+  sigma = 3,
+  iterations = 0,
+  ignoreHSVvalue = FALSE,
+  patternsToFile = NULL
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

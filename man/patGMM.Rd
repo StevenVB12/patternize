@@ -4,9 +4,17 @@
 \alias{patGMM}
 \title{Extract colors using GMM clustering (for pre-aligned images).}
 \usage{
-patGMM(sampleList, k = 3, resampleFactor = NULL, maskOutline = NULL,
-  plot = FALSE, focal = FALSE, sigma = 3, maskToNA = NULL,
-  kmeansOnAll = FALSE)
+patGMM(
+  sampleList,
+  k = 3,
+  resampleFactor = NULL,
+  maskOutline = NULL,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3,
+  maskToNA = NULL,
+  kmeansOnAll = FALSE
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

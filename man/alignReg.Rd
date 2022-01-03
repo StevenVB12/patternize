@@ -4,9 +4,16 @@
 \alias{alignReg}
 \title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration..}
 \usage{
-alignReg(sampleList, target, resampleFactor = NULL,
-  useBlockPercentage = 75, crop = c(0, 0, 0, 0), removebgR = NULL,
-  maskOutline = NULL, plotTransformed = FALSE)
+alignReg(
+  sampleList,
+  target,
+  resampleFactor = NULL,
+  useBlockPercentage = 75,
+  crop = c(0, 0, 0, 0),
+  removebgR = NULL,
+  maskOutline = NULL,
+  plotTransformed = FALSE
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

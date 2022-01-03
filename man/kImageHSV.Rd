@@ -5,8 +5,14 @@
 \title{\code{\link[stats]{kmeans}} clustering of image imported as a RasterStack. This function is
 used by \code{patLanK} and \code{patRegK}.}
 \usage{
-kImageHSV(image, k = 5, startCenter = NULL, maskToNA = NULL,
-  kmeansOnAll = FALSE, ignoreHSVvalue = FALSE)
+kImageHSV(
+  image,
+  k = 5,
+  startCenter = NULL,
+  maskToNA = NULL,
+  kmeansOnAll = FALSE,
+  ignoreHSVvalue = FALSE
+)
 }
 \arguments{
 \item{image}{HSV image imported as a RasterStack for k-means clustering.}

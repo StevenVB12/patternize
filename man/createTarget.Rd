@@ -4,8 +4,15 @@
 \alias{createTarget}
 \title{Create a target image (RasterStack) from a polygon.}
 \usage{
-createTarget(outline, image, res = 300, colorFill = "black",
-  colorBG = "white", sigma = 10, plot = FALSE)
+createTarget(
+  outline,
+  image,
+  res = 300,
+  colorFill = "black",
+  colorBG = "white",
+  sigma = 10,
+  plot = FALSE
+)
 }
 \arguments{
 \item{outline}{xy coordinates that define outline.}

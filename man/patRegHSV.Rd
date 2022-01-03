@@ -5,11 +5,23 @@
 \title{Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated image registration
 and extracts colors using a predefined HSV values and cutoff value.}
 \usage{
-patRegHSV(sampleList, target, HSV, resampleFactor = NULL,
-  useBlockPercentage = 75, colOffset = 0.1, crop = c(0, 0, 0, 0),
-  removebgR = NULL, maskOutline = NULL, plot = FALSE,
-  focal = FALSE, sigma = 3, iterations = 0, ignoreHSVvalue = FALSE,
-  patternsToFile = NULL)
+patRegHSV(
+  sampleList,
+  target,
+  HSV,
+  resampleFactor = NULL,
+  useBlockPercentage = 75,
+  colOffset = 0.1,
+  crop = c(0, 0, 0, 0),
+  removebgR = NULL,
+  maskOutline = NULL,
+  plot = FALSE,
+  focal = FALSE,
+  sigma = 3,
+  iterations = 0,
+  ignoreHSVvalue = FALSE,
+  patternsToFile = NULL
+)
 }
 \arguments{
 \item{sampleList}{List of RasterStack objects.}

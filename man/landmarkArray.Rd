@@ -4,7 +4,9 @@
 \name{landmarkArray}
 \alias{landmarkArray}
 \title{landmarkArray}
-\format{An array of landmarks for 5 Heliconius erato hydara dorsal forewings.}
+\format{
+An array of landmarks for 5 Heliconius erato hydara dorsal forewings.
+}
 \usage{
 landmarkArray
 }
