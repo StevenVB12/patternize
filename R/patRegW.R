@@ -302,7 +302,7 @@ patRegW <- function(sampleList,
       seed[as.numeric(xy[1]),as.numeric(xy[2]),1,1] <- 2
     }
 
-    print("Choose at leat one point to identify background. Click outside image area to stop.")
+    print("Choose at least one point to identify background. Click outside image area to stop.")
 
     while(1){
 
