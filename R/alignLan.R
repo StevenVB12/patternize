@@ -279,7 +279,7 @@ alignLan <- function(imageList,
 
     raster::extent(resampledRaster) <- raster::extent(imageTr)
 
-    resampled <- raster::resample(imageTr, resampledRaster)
+    resampled <- raster::resample(imageTr, resampledRaster, method = 'ngb')
 
     rasterList[[names(landList)[n]]] <- resampled
 
