@@ -215,10 +215,10 @@ patLanRGB <- function(sampleList,
 
       if(transformRef == 'meanshape' || is.matrix(transformRef)){
 
-        raster::extent(r) <- raster::extent(min(refShape[,2])-3*max(refShape[,1])*cropOffset[3]/100,
-                                            max(refShape[,2])+3*max(refShape[,1])*cropOffset[4]/100,
-                                            min(refShape[,1])-3*max(refShape[,2])*cropOffset[1]/100,
-                                            max(refShape[,1])+3*max(refShape[,2])*cropOffset[2]/100)
+        raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
+                                            max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
+                                            min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
+                                            max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
       }
 
       else{
