@@ -138,9 +138,9 @@ patLanRGB <- function(sampleList,
       landm <- lanArray[,,n]
 
       extRaster <- raster::extent(min(landm[,1])-min(landm[,1])*cropOffset[1]/100,
-                                  max(landm[,1])+max(landm[,1])*cropOffset[2]/100,
+                                  max(landm[,1])+(extRasterOr[2]-max(landm[,1]))*cropOffset[2]/100,
                                   min(landm[,2])-min(landm[,2])*cropOffset[3]/100,
-                                  max(landm[,2])+max(landm[,2])*cropOffset[4]/100)
+                                  max(landm[,2])+(extRasterOr[4]-max(landm[,2]))*cropOffset[4]/100)
 
       imageC <- raster::crop(image, extRaster)
 
@@ -215,10 +215,10 @@ patLanRGB <- function(sampleList,
 
       if(transformRef == 'meanshape' || is.matrix(transformRef)){
 
-        raster::extent(r) <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[1]/100,
-                                            max(refShape[,1])+3*max(refShape[,1])*cropOffset[2]/100,
-                                            min(refShape[,2])-3*max(refShape[,2])*cropOffset[3]/100,
-                                            max(refShape[,2])+3*max(refShape[,2])*cropOffset[4]/100)
+        raster::extent(r) <- raster::extent(min(refShape[,1])-min(refShape[,1])*cropOffset[1]/100,
+                                            max(refShape[,1])+max(refShape[,1])*cropOffset[2]/100,
+                                            min(refShape[,2])-min(refShape[,2])*cropOffset[3]/100,
+                                            max(refShape[,2])+max(refShape[,2])*cropOffset[4]/100)
       }
 
       else{
@@ -253,7 +253,7 @@ patLanRGB <- function(sampleList,
 
       if(transformRef == 'meanshape' || is.matrix(transformRef)){
 
-          patternRasterP <- raster::flip(t(patternRaster), 'y')
+          patternRasterP <- raster::flip(patternRaster, 'y')
       }
 
       else{
