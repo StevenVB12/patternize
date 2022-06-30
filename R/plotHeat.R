@@ -167,6 +167,9 @@ plotHeat <- function(summedRaster,
     else{
       imageEx <- raster::extent(imageList[[1]])
     }
+    if(!is.null(refImage)){
+      imageEx <- raster::extent(refImage)
+    }
   }
 
   # need to fix the outline for the shift that happens in the raster extent when flipping.
@@ -192,7 +195,7 @@ plotHeat <- function(summedRaster,
     for(e in 1:length(lineList)){
 
       lineList[[e]][[1]] <- lineList[[e]][[1]] + exDiff1
-      lineList[[e]][[2]] <- lineList[[e]][[2]] + exDiff2
+      # lineList[[e]][[2]] <- lineList[[e]][[2]] + exDiff2
     }
   }
 
@@ -467,9 +470,11 @@ plotHeat <- function(summedRaster,
 
     if(!is.null(flipRaster)){
 
-      y <- raster::raster(ncol = dim(refImage)[2], nrow = dim(refImage)[1])
-      raster::extent(y) <- raster::extent(refImage)
-      summedRaster <- raster::resample(summedRaster, y)
+      if(!is.null(refImage)){
+        y <- raster::raster(ncol = dim(refImage)[2], nrow = dim(refImage)[1])
+        raster::extent(y) <- raster::extent(refImage)
+        summedRaster <- raster::resample(summedRaster, y)
+      }
 
       if(flipRaster == 'x'){
         summedRaster <- raster::flip(summedRaster,'x')
@@ -636,6 +641,13 @@ plotHeat <- function(summedRaster,
     for(k in 1:length(summedRaster)){
 
       if(!is.null(flipRaster)){
+
+        if(!is.null(refImage)){
+          y <- raster::raster(ncol = dim(refImage)[2], nrow = dim(refImage)[1])
+          raster::extent(y) <- raster::extent(refImage)
+          summedRaster[[k]] <- raster::resample(summedRaster[[k]], y)
+        }
+
         if(flipRaster == 'x'){
           summedRaster[[k]] <- raster::flip(summedRaster[[k]],'x')
         }
