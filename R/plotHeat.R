@@ -172,13 +172,6 @@ plotHeat <- function(summedRaster,
     }
   }
 
-  # need to fix the outline for the shift that happens in the raster extent when flipping.
-  # Not an issue if crop wasn't used.
-  exDiff1 <- abs(rasterEx[2]-imageEx[2])-rasterEx[1]
-  outline[,1] <- outline[,1] + exDiff1
-
-  # exDiff2 <- abs(rasterEx[4]-imageEx[4])-rasterEx[3]
-  # outline[,2] <- outline[,2] + exDiff2
 
   if(!is.null(lines)){
 
@@ -191,11 +184,21 @@ plotHeat <- function(summedRaster,
     }
   }
 
-  if(!is.null(lines)){
-    for(e in 1:length(lineList)){
+  if(is.null(landList)){
+    # need to fix the outline for the shift that happens in the raster extent when flipping.
+    # Not an issue if crop wasn't used.
+    exDiff1 <- abs(rasterEx[2]-imageEx[2])-rasterEx[1]
+    outline[,1] <- outline[,1] + exDiff1
 
-      lineList[[e]][[1]] <- lineList[[e]][[1]] + exDiff1
-      # lineList[[e]][[2]] <- lineList[[e]][[2]] + exDiff2
+    # exDiff2 <- abs(rasterEx[4]-imageEx[4])-rasterEx[3]
+    # outline[,2] <- outline[,2] + exDiff2
+
+    if(!is.null(lines)){
+      for(e in 1:length(lineList)){
+
+        lineList[[e]][[1]] <- lineList[[e]][[1]] + exDiff1
+        # lineList[[e]][[2]] <- lineList[[e]][[2]] + exDiff2
+      }
     }
   }
 
