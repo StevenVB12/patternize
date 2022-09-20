@@ -38,7 +38,7 @@ lanArray <- function(sampleList,
     print(paste('sample', n,  names(sampleList)[n], 'added to array', sep=' '))
 
     # Read in landmark files and build array for Morpho
-    landmarks <- as.data.frame(sampleList[[n]])
+    landmarks <- sampleList[[n]]
 
 
     if(adjustCoords){
