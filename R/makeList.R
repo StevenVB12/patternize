@@ -70,11 +70,11 @@ makeList <- function(IDlist,
     if(type == 'image'){
 
       if(is.null(prepath)){
-        image <- raster::stack(paste(IDlist[n], extension, sep=''))
+        suppressWarnings(image <- raster::stack(paste(IDlist[n], extension, sep='')))
         crs(image) <- sp::CRS('+init=EPSG:4326')
       }
       else{
-        image <- raster::stack(paste(prepath,'/',IDlist[n], extension, sep=''))
+        suppressWarnings(image <- raster::stack(paste(prepath,'/',IDlist[n], extension, sep='')))
         crs(image) <- sp::CRS('+init=EPSG:4326')
       }
 
