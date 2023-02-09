@@ -434,7 +434,7 @@ colorChecker <- function(IDlist,
 
       }
 
-      print('Matching ColorCecker patches...')
+      print('Matching ColorChecker patches...')
 
       if(is.null(colorCheckerXY)){
         polygon(xy$x, xy$y, border = "green")
