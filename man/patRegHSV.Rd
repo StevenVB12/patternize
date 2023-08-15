@@ -73,6 +73,7 @@ Aligns images using \code{\link[RNiftyReg]{niftyreg}} utilities for automated im
 and extracts colors using a predefined HSV values and cutoff value.
 }
 \examples{
+\dontrun{
 IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 prepath <- system.file("extdata",  package = 'patternize')
 extension <- '.jpg'
@@ -87,5 +88,6 @@ HSV <- c(0.025,1,0.45)
 # remove [2] to run a full examples.
 rasterList_regHSV <- patRegRGB(imageList[2], target, HSV,
 colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = 'stack')
+}
 
 }

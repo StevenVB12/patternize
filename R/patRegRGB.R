@@ -30,6 +30,7 @@
 #' @return List of raster objects.
 #'
 #' @examples
+#' \dontrun{
 #' IDlist <- c('BC0077','BC0071','BC0050','BC0049','BC0004')
 #' prepath <- system.file("extdata",  package = 'patternize')
 #' extension <- '.jpg'
@@ -44,6 +45,7 @@
 #' # remove [2] to run a full examples.
 #' rasterList_regRGB <- patRegRGB(imageList[2], target, RGB,
 #' colOffset= 0.15, crop = c(100,400,40,250), removebgR = 100, plot = 'stack')
+#' }
 #'
 #' @export
 #' @import raster
