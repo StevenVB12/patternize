@@ -1,6 +1,6 @@
 Package: patternize
 Title: Quantification of Color Pattern Variation
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: person("Steven", "Van Belleghem", email = "vanbelleghemsteven@hotmail.com", role = c("aut", "cre"))
 Maintainer: Steven Van Belleghem <vanbelleghemsteven@hotmail.com>
 Description: Quantification of variation in organismal color patterns as
@@ -15,12 +15,13 @@ Depends:
 Imports:
     raster,
     sp,
-    rgdal,
+    sf,
     abind,
     Morpho,
     dplyr,
     imager,
     magrittr,
+    methods,
     purrr,
     vegan,
     RNiftyReg,
@@ -29,4 +30,4 @@ Imports:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

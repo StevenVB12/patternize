@@ -13,7 +13,8 @@ colorChecker(
   patchSize = 0.6,
   colorCheckerXY = NULL,
   fixedModel = NULL,
-  resampleFactor = NULL
+  resampleFactor = NULL,
+  adjustCoords = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ and B (the colorChecker function gives as output such a list obtained from the l
 in the analysis).}
 
 \item{resampleFactor}{Integer for downsampling used by \code{\link{redRes}}.}
+
+\item{adjustCoords}{Adjust landmark coordinates in case they are reversed compared to pixel
+coordinates (default = FALSE).}
 }
 \value{
 Calibrated image(s) ('filename_calibrated.jpg')

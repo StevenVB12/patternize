@@ -80,29 +80,31 @@ patArea <-function(rList,
 
   indx <- which(IDlist == cartoonID)
 
-  if(!is.null(flipOutline) || !is.null(flipRaster)){
+  if(any(c(!is.null(flipOutline), !is.null(flipRaster)))){
 
     imageEx <- raster::extent(imageList[[1]])
 
-    if(refShape[1] != 'mean' && !is.matrix(refShape)){
+    if(all(c(refShape[1] != 'mean', !is.matrix(refShape)))){
 
       outline[,2] <- outline[,2] - crop[3]
 
     }
   }
 
-  if(refShape[1] != 'mean' && !is.matrix(refShape)){
+  if(all(c(refShape[1] != 'mean', !is.matrix(refShape)))){
 
-    if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
-
+    if(all(c(!is.null(flipOutline), flipOutline == 'y'))){
       outline[,2] <- outline[,2] + crop[3]
-
+    }
+    if(all(c(!is.null(flipOutline) && flipOutline == 'xy'))){
+      outline[,2] <- outline[,2] + crop[3]
     }
 
-    if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
-
+    if(all(c(is.null(flipOutline), !is.null(flipRaster)))){
       outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
-
+    }
+    if(all(c(!is.null(flipOutline) && flipOutline == 'x'))){
+      outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
     }
 
     if(!is.null(flipOutline)){
@@ -128,7 +130,7 @@ patArea <-function(rList,
     }
   }
 
-  if(refShape[1] == 'mean' || is.matrix(refShape)){
+  if(any(c(refShape[1] == 'mean', is.matrix(refShape)))){
 
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList)))
 
@@ -172,7 +174,7 @@ patArea <-function(rList,
   }
 
 
-  if(refShape[1] == 'mean' || is.matrix(refShape)){
+  if(any(c(refShape[1] == 'mean', is.matrix(refShape)))){
 
     rasterEx <- raster::extent(min(outlineTrans[,1]),max(outlineTrans[,1]),min(outlineTrans[,2]),max(outlineTrans[,2]))
     rRe <- raster::raster(nrow=150,ncol=150)

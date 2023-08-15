@@ -17,9 +17,10 @@
 #' out <- kImage(image, 6)
 #'
 #' @export
-#' @import rgdal
+#' @import sf
 #' @importFrom stats kmeans
 #' @importFrom grDevices hsv rgb2hsv
+#' @importFrom methods is
 
 kImageHSV <- function(image,
                       k = 5,
@@ -30,7 +31,7 @@ kImageHSV <- function(image,
 
   if(kmeansOnAll == FALSE){
 
-    if(class(image) == "RasterStack"){
+    if(is(image)[1] == "RasterStack"){
       image <- raster::as.array(image)
     }
 

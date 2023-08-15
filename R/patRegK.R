@@ -133,7 +133,7 @@ patRegK <- function(sampleList,
 
     # k-means clustering of image
 
-    if(n==1 & is.null(fixedStartCenter)){
+    if(all(c(n==1, is.null(fixedStartCenter)))){
       startCenter = NULL
     }
 
@@ -177,7 +177,7 @@ patRegK <- function(sampleList,
     image.segmented <- imageKmeans[[1]]
     K <- imageKmeans[[2]]
 
-    if(n==1 & is.null(fixedStartCenter)){
+    if(all(c(n==1, is.null(fixedStartCenter)))){
       startCenter <- K$centers
       print('start centers of first image:')
       print(startCenter)

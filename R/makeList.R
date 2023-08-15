@@ -82,7 +82,7 @@ makeList <- function(IDlist,
     }
   }
 
-  if(type == 'landmark' & format == 'tps'){
+  if(all(c(type == 'landmark', format == 'tps'))){
 
     objectListX <- readland.tps(tpsFile, specID = 'imageID', warnmsg = FALSE)
     objectList <- lapply(1:dim(objectListX)[3],function(i) objectListX[,,i])

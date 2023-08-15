@@ -90,7 +90,7 @@ colorChecker_customGray <- function(IDlist,
           xy <- locator(n=4)
         }
 
-        if(fixedCorners == TRUE & n ==1 ){
+        if(all(c(fixedCorners == TRUE, n ==1))){
           xy <- locator(n=4)
         }
       }
@@ -427,7 +427,7 @@ colorChecker_customGray <- function(IDlist,
           xy <- locator(n=4)
         }
 
-        if(fixedCorners == TRUE & n ==1){
+        if(all(c(fixedCorners == TRUE, n ==1))){
           xy <- locator(n=4)
         }
       }
@@ -758,7 +758,7 @@ colorChecker_customGray <- function(IDlist,
         plot(imCal)
 
 
-        if(fixedCorners == FALSE & is.null(fixedModel)){
+        if(all(c(fixedCorners == FALSE, is.null(fixedModel)))){
           todo <- readline(prompt="Press [enter] to continue and save image >>> ")
         }
       }

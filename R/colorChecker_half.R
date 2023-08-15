@@ -1,10 +1,10 @@
-#' Calibrate images using ColorChecker.
+#' Calibrate images using (right) half of ColorChecker. Only works for X-Rite.
 #'
 #' @param IDlist List of sample IDs.
 #' @param prepath Prepath (default = NULL).
 #' @param extension Extension (default = NULL).
 #' @param colorCheckerType Type of colorChecker. Options are 'X-Rite ' and 'ColorGauge Micro
-#' Analyzer' (default = 'X-Rite ').
+#' Analyzer' (default = 'X-Rite').
 #' @param fixedCorners Specify whether to set the coordinates of the colorChecker corners
 #' for every image (default = FALSE).
 #' @param patchSize Proportion of ColorChecker patch that will be used for observed RGB values
@@ -27,7 +27,7 @@
 #' @importFrom imager load.image save.image as.cimg width R G B resize width height
 #' @importFrom sp Polygons SpatialPolygons SpatialPolygonsDataFrame
 
-colorChecker <- function(IDlist,
+colorChecker_half <- function(IDlist,
                          prepath = NULL,
                          extension = NULL,
                          colorCheckerType = 'X-Rite',
@@ -177,67 +177,67 @@ colorChecker <- function(IDlist,
       xySubDF_3Ba <- as.data.frame(xySubBa)
       xySubDF_3Bb <- as.data.frame(xySubBb)
 
-      xdiff <- (line2$x[2]-line2$x[1])/4
-      ydiff <- (line2$y[2]-line2$y[1])/4
+      xdiff <- (line2$x[2]-line2$x[1])/2
+      ydiff <- (line2$y[2]-line2$y[1])/2
 
       xmin <- line2$x[1]
       ymin <- line2$y[1]
 
-      xySubA <- list(x = c((xmin+xmin+xdiff)/2,(xmin+xdiff+xmin+xdiff*2)/2,(xmin+xdiff*2+xmin+xdiff*3)/2,(xmin+xdiff*3+xmin+xdiff*4)/2),y = c((ymin+ymin+ydiff)/2,(ymin+ydiff+ymin+ydiff*2)/2,(ymin+ydiff*2+ymin+ydiff*3)/2,(ymin+ydiff*3+ymin+ydiff*4)/2))
+      xySubA <- list(x = c((xmin+xmin+xdiff)/2,(xmin+xdiff+xmin+xdiff*2)/2),y = c((ymin+ymin+ydiff)/2,(ymin+ydiff+ymin+ydiff*2)/2))
 
       xySubDF_2A <- as.data.frame(xySubA)
 
-      xySubBa <- list(x = c(xmin+xdiff-(xdiff/2)*prop,xmin+xdiff*2-(xdiff/2)*prop,xmin+xdiff*3-(xdiff/2)*prop,xmin+xdiff*4-(xdiff/2)*prop),
-                      y = c(ymin+ydiff-(ydiff/2)*prop,ymin+ydiff*2-(ydiff/2)*prop,ymin+ydiff*3-(ydiff/2)*prop,ymin+ydiff*4-(ydiff/2)*prop))
-      xySubBb <- list(x = c(xmin+(xdiff/2)*prop,xmin+xdiff+(xdiff/2)*prop,xmin+xdiff*2+(xdiff/2)*prop,xmin+xdiff*3+(xdiff/2)*prop),
-                      y = c(ymin+(ydiff/2)*prop,ymin+ydiff+(ydiff/2)*prop,ymin+ydiff*2+(ydiff/2)*prop,ymin+ydiff*3+(ydiff/2)*prop))
+      xySubBa <- list(x = c(xmin+xdiff-(xdiff/2)*prop,xmin+xdiff*2-(xdiff/2)*prop),
+                      y = c(ymin+ydiff-(ydiff/2)*prop,ymin+ydiff*2-(ydiff/2)*prop))
+      xySubBb <- list(x = c(xmin+(xdiff/2)*prop,xmin+xdiff+(xdiff/2)*prop),
+                      y = c(ymin+(ydiff/2)*prop,ymin+ydiff+(ydiff/2)*prop))
 
       xySubDF_2Ba <- as.data.frame(xySubBa)
       xySubDF_2Bb <- as.data.frame(xySubBb)
 
-      xdiff <- (line4$x[2]-line4$x[1])/4
-      ydiff <- (line4$y[2]-line4$y[1])/4
+      xdiff <- (line4$x[2]-line4$x[1])/2
+      ydiff <- (line4$y[2]-line4$y[1])/2
 
       xmin <- line4$x[1]
       ymin <- line4$y[1]
 
-      xySubA <- list(x = c((xmin+xmin+xdiff)/2,(xmin+xdiff+xmin+xdiff*2)/2,(xmin+xdiff*2+xmin+xdiff*3)/2,(xmin+xdiff*3+xmin+xdiff*4)/2),
-                     y = c((ymin+ymin+ydiff)/2,(ymin+ydiff+ymin+ydiff*2)/2,(ymin+ydiff*2+ymin+ydiff*3)/2,(ymin+ydiff*3+ymin+ydiff*4)/2))
+      xySubA <- list(x = c((xmin+xmin+xdiff)/2,(xmin+xdiff+xmin+xdiff*2)/2),
+                     y = c((ymin+ymin+ydiff)/2,(ymin+ydiff+ymin+ydiff*2)/2))
 
       xySubDF_4A <- as.data.frame(xySubA)
 
-      xySubBa <- list(x = c(xmin+xdiff-(xdiff/2)*prop,xmin+xdiff*2-(xdiff/2)*prop,xmin+xdiff*3-(xdiff/2)*prop,xmin+xdiff*4-(xdiff/2)*prop),
-                      y = c(ymin+ydiff-(ydiff/2)*prop,ymin+ydiff*2-(ydiff/2)*prop,ymin+ydiff*3-(ydiff/2)*prop,ymin+ydiff*4-(ydiff/2)*prop))
-      xySubBb <- list(x = c(xmin+(xdiff/2)*prop,xmin+xdiff+(xdiff/2)*prop,xmin+xdiff*2+(xdiff/2)*prop,xmin+xdiff*3+(xdiff/2)*prop),
-                      y = c(ymin+(ydiff/2)*prop,ymin+ydiff+(ydiff/2)*prop,ymin+ydiff*2+(ydiff/2)*prop,ymin+ydiff*3+(ydiff/2)*prop))
+      xySubBa <- list(x = c(xmin+xdiff-(xdiff/2)*prop,xmin+xdiff*2-(xdiff/2)*prop),
+                      y = c(ymin+ydiff-(ydiff/2)*prop,ymin+ydiff*2-(ydiff/2)*prop))
+      xySubBb <- list(x = c(xmin+(xdiff/2)*prop,xmin+xdiff+(xdiff/2)*prop),
+                      y = c(ymin+(ydiff/2)*prop,ymin+ydiff+(ydiff/2)*prop))
 
       xySubDF_4Ba <- as.data.frame(xySubBa)
       xySubDF_4Bb <- as.data.frame(xySubBb)
 
       # if(is.null(colorCheckerXY)){
-        points(xySubDF_1A, pch=20, col = 'green')
-        points(xySubDF_1Ba, pch=20, col = 'red')
-        points(xySubDF_1Bb, pch=20, col = 'red')
+      points(xySubDF_1A, pch=20, col = 'green')
+      points(xySubDF_1Ba, pch=20, col = 'red')
+      points(xySubDF_1Bb, pch=20, col = 'red')
 
-        points(xySubDF_2A, pch=20, col = 'green')
-        points(xySubDF_2Ba, pch=20, col = 'red')
-        points(xySubDF_2Bb, pch=20, col = 'red')
+      points(xySubDF_2A, pch=20, col = 'green')
+      points(xySubDF_2Ba, pch=20, col = 'red')
+      points(xySubDF_2Bb, pch=20, col = 'red')
 
-        points(xySubDF_3A, pch=20, col = 'green')
-        points(xySubDF_3Ba, pch=20, col = 'red')
-        points(xySubDF_3Bb, pch=20, col = 'red')
+      points(xySubDF_3A, pch=20, col = 'green')
+      points(xySubDF_3Ba, pch=20, col = 'red')
+      points(xySubDF_3Bb, pch=20, col = 'red')
 
-        points(xySubDF_4A, pch=20, col = 'green')
-        points(xySubDF_4Ba, pch=20, col = 'red')
-        points(xySubDF_4Bb, pch=20, col = 'red')
+      points(xySubDF_4A, pch=20, col = 'green')
+      points(xySubDF_4Ba, pch=20, col = 'red')
+      points(xySubDF_4Bb, pch=20, col = 'red')
       # }
 
-      labels <- list(c(1,7,13,19),
-                     c(2,8,14,20),
-                     c(3,9,15,21),
-                     c(4,10,16,22),
-                     c(5,11,17,23),
-                     c(6,12,18,24))
+      labels <- list(c(1,7),
+                     c(2,8),
+                     c(3,9),
+                     c(4,10),
+                     c(5,11),
+                     c(6,12))
 
 
       xyTot <- c()
@@ -246,14 +246,14 @@ colorChecker <- function(IDlist,
         xyLine1 <- xySubDF_1A[e,]
         xyLine2 <- xySubDF_3A[6:1,][e,]
 
-        xdiff <- (xyLine2$x-xyLine1$x)/4
-        ydiff <- (xyLine2$y-xyLine1$y)/4
+        xdiff <- (xyLine2$x-xyLine1$x)/2
+        ydiff <- (xyLine2$y-xyLine1$y)/2
 
         xmin <- xyLine1$x
         ymin <- xyLine1$y
 
-        xySub <- list(x = c((xmin+xmin+xdiff)/2,(xmin+xdiff+xmin+xdiff*2)/2,(xmin+xdiff*2+xmin+xdiff*3)/2,(xmin+xdiff*3+xmin+xdiff*4)/2),
-                      y = c((ymin+ymin+ydiff)/2,(ymin+ydiff+ymin+ydiff*2)/2,(ymin+ydiff*2+ymin+ydiff*3)/2,(ymin+ydiff*3+ymin+ydiff*4)/2))
+        xySub <- list(x = c((xmin+xmin+xdiff)/2,(xmin+xdiff+xmin+xdiff*2)/2),
+                      y = c((ymin+ymin+ydiff)/2,(ymin+ydiff+ymin+ydiff*2)/2))
 
         xySubDF <- as.data.frame(xySub)
 
@@ -271,11 +271,11 @@ colorChecker <- function(IDlist,
         xyLine3a <- xySubDF_3Bb[6:1,][e,]
         xyLine3b <- xySubDF_3Ba[6:1,][e,]
 
-        xdiffa <- (xyLine3a$x-xyLine1a$x)/4
-        ydiffa <- (xyLine3a$y-xyLine1a$y)/4
+        xdiffa <- (xyLine3a$x-xyLine1a$x)/2
+        ydiffa <- (xyLine3a$y-xyLine1a$y)/2
 
-        xdiffb <- (xyLine3b$x-xyLine1b$x)/4
-        ydiffb <- (xyLine3b$y-xyLine1b$y)/4
+        xdiffb <- (xyLine3b$x-xyLine1b$x)/2
+        ydiffb <- (xyLine3b$y-xyLine1b$y)/2
 
         xmina <- xyLine1a$x
         ymina <- xyLine1a$y
@@ -284,15 +284,15 @@ colorChecker <- function(IDlist,
         yminb <- xyLine1b$y
 
 
-        xySubAa <- list(x = c(xmina+xdiffa-(xdiffa/2)*prop,xmina+xdiffa*2-(xdiffa/2)*prop,xmina+xdiffa*3-(xdiffa/2)*prop,xmina+xdiffa*4-(xdiffa/2)*prop),
-                        y = c(ymina+ydiffa-(ydiffa/2)*prop,ymina+ydiffa*2-(ydiffa/2)*prop,ymina+ydiffa*3-(ydiffa/2)*prop,ymina+ydiffa*4-(ydiffa/2)*prop))
-        xySubAb <- list(x = c(xmina+(xdiffa/2)*prop,xmina+xdiffa+(xdiffa/2)*prop,xmina+xdiffa*2+(xdiffa/2)*prop,xmina+xdiffa*3+(xdiffa/2)*prop),
-                        y = c(ymina+(ydiffa/2)*prop,ymina+ydiffa+(ydiffa/2)*prop,ymina+ydiffa*2+(ydiffa/2)*prop,ymina+ydiffa*3+(ydiffa/2)*prop))
+        xySubAa <- list(x = c(xmina+xdiffa-(xdiffa/2)*prop,xmina+xdiffa*2-(xdiffa/2)*prop),
+                        y = c(ymina+ydiffa-(ydiffa/2)*prop,ymina+ydiffa*2-(ydiffa/2)*prop))
+        xySubAb <- list(x = c(xmina+(xdiffa/2)*prop,xmina+xdiffa+(xdiffa/2)*prop),
+                        y = c(ymina+(ydiffa/2)*prop,ymina+ydiffa+(ydiffa/2)*prop))
 
-        xySubBa <- list(x = c(xminb+xdiffb-(xdiffb/2)*prop,xminb+xdiffb*2-(xdiffb/2)*prop,xminb+xdiffb*3-(xdiffb/2)*prop,xminb+xdiffb*4-(xdiffb/2)*prop),
-                        y = c(yminb+ydiffb-(ydiffb/2)*prop,yminb+ydiffb*2-(ydiffb/2)*prop,yminb+ydiffb*3-(ydiffb/2)*prop,yminb+ydiffb*4-(ydiffb/2)*prop))
-        xySubBb <- list(x = c(xminb+(xdiffb/2)*prop,xminb+xdiffb+(xdiffb/2)*prop,xminb+xdiffb*2+(xdiffb/2)*prop,xminb+xdiffb*3+(xdiffb/2)*prop),
-                        y = c(yminb+(ydiffb/2)*prop,yminb+ydiffb+(ydiffb/2)*prop,yminb+ydiffb*2+(ydiffb/2)*prop,yminb+ydiffb*3+(ydiffb/2)*prop))
+        xySubBa <- list(x = c(xminb+xdiffb-(xdiffb/2)*prop,xminb+xdiffb*2-(xdiffb/2)*prop),
+                        y = c(yminb+ydiffb-(ydiffb/2)*prop,yminb+ydiffb*2-(ydiffb/2)*prop))
+        xySubBb <- list(x = c(xminb+(xdiffb/2)*prop,xminb+xdiffb+(xdiffb/2)*prop),
+                        y = c(yminb+(ydiffb/2)*prop,yminb+ydiffb+(ydiffb/2)*prop))
 
         xySubAaDF <- as.data.frame(xySubAa)
         xySubAbDF <- as.data.frame(xySubAb)
@@ -317,8 +317,8 @@ colorChecker <- function(IDlist,
 
         print(paste('Calculating observed RGB values for patch', e, sep = ' '))
         # if(is.null(colorCheckerXY)){
-          polygon(c(xyTot$x1[e],xyTot$x2[e],xyTot$x4[e],xyTot$x3[e]),
-                  c(xyTot$y1[e],xyTot$y2[e],xyTot$y4[e],xyTot$y3[e]), border = 'red')
+        polygon(c(xyTot$x1[e],xyTot$x2[e],xyTot$x4[e],xyTot$x3[e]),
+                c(xyTot$y1[e],xyTot$y2[e],xyTot$y4[e],xyTot$y3[e]), border = 'red')
         # }
 
         outline <- rbind(c(xyTot$x1[e],xyTot$y1[e]),
@@ -344,32 +344,32 @@ colorChecker <- function(IDlist,
 
 
       # Colorimetric values for ColorCheker targets
-      l1 <- c(1, 115, 82, 68)
-      l2 <- c(2, 194, 150, 130)
-      l3 <- c(3, 98, 122, 157)
-      l4 <- c(4, 87, 108, 67)
-      l5 <- c(5, 133, 128, 177)
-      l6 <- c(6, 103, 189, 170)
-      l7 <- c(7, 214, 126, 44)
-      l8 <- c(8, 80, 91, 166)
-      l9 <- c(9, 193, 90, 99)
-      l10 <- c(10, 94, 60, 108)
-      l11 <- c(11, 157, 188, 64)
-      l12 <- c(12, 224, 163, 46)
-      l13 <- c(13, 56, 61, 150)
-      l14 <- c(14, 70, 148, 73)
-      l15 <- c(15, 175, 54, 60)
-      l16 <- c(16, 231, 199, 31)
-      l17 <- c(17, 187, 86, 149)
-      l18 <- c(18, 8, 133, 161)
-      l19 <- c(19, 243, 243, 242)
-      l20 <- c(20, 200, 200, 200)
-      l21 <- c(21, 160, 160, 160)
-      l22 <- c(22, 122, 122, 121)
-      l23 <- c(23, 85, 85, 85)
-      l24 <- c(24, 52, 52, 52)
+      # l1 <- c(1, 115, 82, 68)
+      # l2 <- c(2, 194, 150, 130)
+      # l3 <- c(3, 98, 122, 157)
+      # l4 <- c(4, 87, 108, 67)
+      # l5 <- c(5, 133, 128, 177)
+      # l6 <- c(6, 103, 189, 170)
+      # l7 <- c(7, 214, 126, 44)
+      # l8 <- c(8, 80, 91, 166)
+      # l9 <- c(9, 193, 90, 99)
+      # l10 <- c(10, 94, 60, 108)
+      # l11 <- c(11, 157, 188, 64)
+      # l12 <- c(1, 224, 163, 46)
+      l13 <- c(1, 56, 61, 150)
+      l14 <- c(2, 70, 148, 73)
+      l15 <- c(3, 175, 54, 60)
+      l16 <- c(4, 231, 199, 31)
+      l17 <- c(5, 187, 86, 149)
+      l18 <- c(6, 8, 133, 161)
+      l19 <- c(7, 243, 243, 242)
+      l20 <- c(8, 200, 200, 200)
+      l21 <- c(9, 160, 160, 160)
+      l22 <- c(10, 122, 122, 121)
+      l23 <- c(11, 85, 85, 85)
+      l24 <- c(12, 52, 52, 52)
 
-      ColorCheckerRGB <- as.data.frame(rbind(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,l20,l21,l22,l23,l24))
+      ColorCheckerRGB <- as.data.frame(rbind(l13,l14,l15,l16,l17,l18,l19,l20,l21,l22,l23,l24))
       colnames(ColorCheckerRGB) <- c('label', 'sR', 'sG', 'sB')
 
       dat <- merge(xyTot, ColorCheckerRGB, by = 'label')
@@ -416,17 +416,17 @@ colorChecker <- function(IDlist,
       imCal <- imager::as.cimg(imCal)
 
       # if(is.null(colorCheckerXY)){
-        layout(matrix(c(1,2), 2, 1, byrow = TRUE))
+      layout(matrix(c(1,2), 2, 1, byrow = TRUE))
 
-          plot(imRed)
-          plot(imCal)
-
-
+      plot(imRed)
+      plot(imCal)
 
 
-        if(all(c(fixedCorners == FALSE, is.null(fixedModel)))){
-          todo <- readline(prompt="Press [enter] to continue and save image >>> ")
-        }
+
+
+      if(all(c(fixedCorners == FALSE, is.null(fixedModel)))){
+        todo <- readline(prompt="Press [enter] to continue and save image >>> ")
+      }
       # }
     }
 
@@ -444,7 +444,7 @@ colorChecker <- function(IDlist,
           xy <- locator(n=4)
         }
 
-        if(all(c(fixedCorners == TRUE & n ==1))){
+        if(all(c(fixedCorners == TRUE, n ==1))){
           xy <- locator(n=4)
         }
       }

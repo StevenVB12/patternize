@@ -246,10 +246,10 @@ plotHeat <- function(summedRaster,
     divide <- length(IDlist)
   }
 
-  if(!is.null(flipOutline) || !is.null(flipRaster)){
+  if(any(c(!is.null(flipOutline), !is.null(flipRaster)))){
 
 
-    if(refShape[1] != 'mean' && !is.matrix(refShape)){
+    if(all(c(refShape[1] != 'mean', !is.matrix(refShape)))){
 
       outline[,2] <- outline[,2] - crop[3]
 
@@ -261,8 +261,8 @@ plotHeat <- function(summedRaster,
         }
       }
     }
-    if(refShape[1] != 'mean' && !is.matrix(refShape) && identical(crop, c(0,0,0,0))){
-      if(!is.null(flipOutline) && flipOutline == 'y'){
+    if(all(c(refShape[1] != 'mean', !is.matrix(refShape), identical(crop, c(0,0,0,0))))){
+      if(all(c(!is.null(flipOutline), flipOutline == 'y'))){
         outline[,2] <- imageEx[4] - outline[,2]
 
         if(!is.null(lines)){
@@ -277,24 +277,26 @@ plotHeat <- function(summedRaster,
   }
 
   if(!identical(crop, c(0,0,0,0))){
-    if(refShape[1] != 'mean' && !is.matrix(refShape)){
+    if(all(c(refShape[1] != 'mean', !is.matrix(refShape)))){
 
-      if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
-
+      if(all(c(!is.null(flipOutline), flipOutline == 'y'))){
         outline[,2] <- outline[,2] + crop[3]
-
         if(!is.null(lines)){
-
           for(e in 1:length(lineList)){
-
             lineList[[e]][[2]] <- lineList[[e]][[2]] + crop[3]
           }
         }
-
       }
-
+      if(all(c(!is.null(flipOutline), flipOutline == 'xy'))){
+        outline[,2] <- outline[,2] + crop[3]
+        if(!is.null(lines)){
+          for(e in 1:length(lineList)){
+            lineList[[e]][[2]] <- lineList[[e]][[2]] + crop[3]
+          }
+        }
+      }
       # if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
-      if(!is.null(flipOutline) && flipOutline == 'x'){
+      if(all(c(!is.null(flipOutline), flipOutline == 'x'))){
         outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
 
         if(!is.null(lines)){
@@ -356,7 +358,7 @@ plotHeat <- function(summedRaster,
     }
   }
 
-  if(plotCartoon && refShape[1] != 'target'){
+  if(all(c(plotCartoon, refShape[1] != 'target'))){
 
     indx <- which(names(imageList) == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList, imageIDs = imageIDs)))
@@ -465,7 +467,7 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(refShape[1] == 'target' || is.matrix(refShape)){
+      if(any(c(refShape[1] == 'target', is.matrix(refShape)))){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -498,13 +500,13 @@ plotHeat <- function(summedRaster,
       par(mar=c(4,4,2,2))
     }
 
-    if(is.null(refShape) || refShape[1] == 'target'){
+    if(any(c(is.null(refShape), refShape[1] == 'target'))){
       plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=1)
     }
 
     if(plotCartoon){
 
-      if(is.null(refShape) || is.null(outline)){
+      if(any(c(is.null(refShape), is.null(outline)))){
 
         stop('Not all paramters are set to plot the cartoon.')
 
@@ -521,7 +523,7 @@ plotHeat <- function(summedRaster,
 
       }
 
-      if(refShape[1] == 'mean' || is.matrix(refShape)){
+      if(any(c(refShape[1] == 'mean', is.matrix(refShape)))){
 
         plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=1)
 
@@ -530,7 +532,7 @@ plotHeat <- function(summedRaster,
       }
     }
 
-    if(plotCartoon && lineOrder == 'under'){
+    if(all(c(plotCartoon, lineOrder == 'under'))){
 
       if(refShape[1] == 'target'){
 
@@ -544,7 +546,7 @@ plotHeat <- function(summedRaster,
         }
       }
 
-      if(refShape[1] =='mean' || is.matrix(refShape)){
+      if(any(c(refShape[1] =='mean', is.matrix(refShape)))){
 
         if(!is.null(lines)){
 
@@ -575,7 +577,7 @@ plotHeat <- function(summedRaster,
     mtext(side = 1, text = xlab, line = 0)
     mtext(side = 2, text = ylab, line = 0)
 
-    if(plotCartoon && cartoonOrder == 'above'){
+    if(all(c(plotCartoon, cartoonOrder == 'above'))){
 
       if(refShape[1] == 'target'){
 
@@ -583,14 +585,14 @@ plotHeat <- function(summedRaster,
 
       }
 
-      if(refShape[1] == 'mean' || is.matrix(refShape)){
+      if(any(c(refShape[1] == 'mean', is.matrix(refShape)))){
 
         polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
       }
     }
 
-    if(plotCartoon && lineOrder == 'above'){
+    if(all(c(plotCartoon, lineOrder == 'above'))){
 
       if(refShape[1] == 'target'){
 
@@ -603,7 +605,7 @@ plotHeat <- function(summedRaster,
           }
         }
       }
-      if(refShape[1] =='mean' || is.matrix(refShape)){
+      if(any(c(refShape[1] =='mean', is.matrix(refShape)))){
 
         if(!is.null(lines)){
 
@@ -619,7 +621,7 @@ plotHeat <- function(summedRaster,
       if(refShape[1] == 'target'){
         points(as.matrix(landArray[,,indx]), pch = 19, col = landCol)
       }
-      if(refShape[1] =='mean' || is.matrix(refShape)){
+      if(any(c(refShape[1] =='mean', is.matrix(refShape)))){
         points(transformed$mshape, pch = 19, col = landCol)
       }
     }
@@ -632,7 +634,7 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(refShape[1] == 'target' || is.matrix(refShape)){
+      if(any(c(refShape[1] == 'target', is.matrix(refShape)))){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
@@ -663,14 +665,14 @@ plotHeat <- function(summedRaster,
         }
       }
 
-      if(is.null(refShape) || refShape[1] == 'target'){
+      if(any(c(is.null(refShape), refShape[1] == 'target'))){
         plot(NULL, type="n", axes=F, xlab="", ylab="", xlim = XLIM, ylim= YLIM, main= main, asp=1)
 
       }
 
       if(plotCartoon){
 
-        if(is.null(refShape) || is.null(outline)){
+        if(any(c(is.null(refShape), is.null(outline)))){
 
           stop('Not all paramters are set to plot the cartoon.')
 
@@ -687,7 +689,7 @@ plotHeat <- function(summedRaster,
 
         }
 
-        if(refShape[1] == 'mean' || is.matrix(refShape)){
+        if(any(c(refShape[1] == 'mean', is.matrix(refShape)))){
 
           plot(NULL, type="n", axes=F, xlim = XLIM, ylim= YLIM, main=main, xlab = '', ylab='', asp=1)
 
@@ -696,7 +698,7 @@ plotHeat <- function(summedRaster,
         }
       }
 
-      if(plotCartoon && lineOrder == 'under'){
+      if(all(c(plotCartoon, lineOrder == 'under'))){
 
         if(refShape[1] == 'target'){
 
@@ -710,7 +712,7 @@ plotHeat <- function(summedRaster,
           }
         }
 
-        if(refShape[1] =='mean' || is.matrix(refShape)){
+        if(any(c(refShape[1] =='mean', is.matrix(refShape)))){
 
           if(!is.null(lineList)){
 
@@ -729,7 +731,7 @@ plotHeat <- function(summedRaster,
       mtext(side = 1, text = xlab, line = 0)
       mtext(side = 2, text = ylab, line = 0)
 
-      if(plotCartoon && cartoonOrder == 'above'){
+      if(all(c(plotCartoon, cartoonOrder == 'above'))){
 
         if(refShape[1] == 'target'){
 
@@ -737,14 +739,14 @@ plotHeat <- function(summedRaster,
 
         }
 
-        if(refShape[1] == 'mean' || is.matrix(refShape)){
+        if(any(c(refShape[1] == 'mean', is.matrix(refShape)))){
 
           polygon(outlineTrans,col=cartoonFill, border=cartoonCol, xlim = XLIM, ylim= YLIM, asp=1)
 
         }
       }
 
-      if(plotCartoon && lineOrder == 'above'){
+      if(all(c(plotCartoon, lineOrder == 'above'))){
 
         if(refShape[1] == 'target'){
 
@@ -758,7 +760,7 @@ plotHeat <- function(summedRaster,
           }
         }
 
-        if(refShape[1] =='mean' || is.matrix(refShape)){
+        if(any(c(refShape[1] =='mean', is.matrix(refShape)))){
 
           if(!is.null(lines)){
 
@@ -779,7 +781,7 @@ plotHeat <- function(summedRaster,
         if(refShape[1] == 'target'){
           points(as.matrix(landArray[,,indx]), pch = 19, col = landCol)
         }
-        if(refShape[1] =='mean' || is.matrix(refShape)){
+        if(any(c(refShape[1] =='mean', is.matrix(refShape)))){
           points(transformed$mshape, pch = 19, col = landCol)
         }
       }

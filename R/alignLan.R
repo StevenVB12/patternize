@@ -124,17 +124,19 @@ alignLan <- function(imageList,
   }
 
   # Transform the outline for masking if 'meanShape'
-  if(!is.null(cartoonID) && (!is.null(maskOutline) || transformRef == 'meanshape')){
+  if(!is.null(cartoonID)){
+    if(any(c(!is.null(maskOutline), transformRef == 'meanshape'))){
 
     maskOutlineNew <- maskOutline
     maskOutlineNew[,2] <- imageEx[4]-maskOutlineNew[,2]
+    }
   }
 
   if(is.null(cartoonID)){
     maskOutlineNew <- maskOutline
   }
 
-  if(!is.null(maskOutline) && transformRef == 'meanshape'){
+  if(all(c(!is.null(maskOutline), transformRef == 'meanshape'))){
 
     if(is.character(transformRef)){
       indx <- which(names(landList) == cartoonID)
@@ -150,7 +152,7 @@ alignLan <- function(imageList,
     maskOutlineMean <- Morpho::applyTransform(as.matrix(maskOutlineNew), cartoonLandTrans)
   }
 
-  if(!is.null(maskOutline) && transformRef[1] != 'meanshape' & !is.null(cartoonID)){
+  if(all(c(!is.null(maskOutline), transformRef[1] != 'meanshape', !is.null(cartoonID)))){
 
     maskOutlineNew[,2] <- imageEx[4] - maskOutlineNew[,2]
   }

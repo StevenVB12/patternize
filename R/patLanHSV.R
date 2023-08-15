@@ -203,7 +203,7 @@ patLanHSV <- function(sampleList,
 
       r <- raster::raster(ncol = res, nrow = res)
 
-      if(transformRef == 'meanshape' || is.matrix(transformRef)){
+      if(any(c(transformRef == 'meanshape', is.matrix(transformRef)))){
 
         raster::extent(r) <- raster::extent(min(refShape[,2])-3*max(refShape[,1])*cropOffset[3]/100,
                                             max(refShape[,2])+3*max(refShape[,1])*cropOffset[4]/100,
@@ -225,7 +225,7 @@ patLanHSV <- function(sampleList,
 
     else{
 
-      if(transformRef == 'meanshape' || is.matrix(transformRef)){
+      if(any(c(transformRef == 'meanshape', is.matrix(transformRef)))){
 
         patternRaster <- raster::extent(min(refShape[,1])-3*max(refShape[,1])*cropOffset[3]/100,
                                         max(refShape[,1])+3*max(refShape[,1])*cropOffset[4]/100,
@@ -252,7 +252,7 @@ patLanHSV <- function(sampleList,
 
       par(new = TRUE)
 
-      if(transformRef == 'meanshape' || is.matrix(transformRef)){
+      if(any(c(transformRef == 'meanshape', is.matrix(transformRef)))){
 
         patternRasterP <- raster::flip(t(patternRaster), 'y')
       }

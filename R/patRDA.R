@@ -410,7 +410,7 @@ patRDA <- function(rList,
     }
 
     if(length(popList) > 2){
-      if(plotType == 'points' && is.null(symbolList)){
+      if(all(c(plotType == 'points', is.null(symbolList)))){
 
         plot(pcdata[,c(PCx,PCy)], col=groupCol$col, pch=20, cex=3,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
@@ -422,7 +422,7 @@ patRDA <- function(rList,
         }
       }
 
-      if(plotType == 'points' && !is.null(symbolList)){
+      if(all(c(plotType == 'points', !is.null(symbolList)))){
 
         plot(pcdata[,c(PCx,PCy)], col=groupCol$col, pch=as.numeric(groupCol$symbol), cex=3,
              xlim = c(xmin, xmax), ylim = c(ymin, ymax),
@@ -455,7 +455,7 @@ patRDA <- function(rList,
       d1 <- density(pcdata[,1][grp == 1])
       d2 <- density(pcdata[,1][grp == 2])
 
-      if(plotType == 'points' && is.null(symbolList)){
+      if(all(c(plotType == 'points', is.null(symbolList)))){
 
         plot(pcdata[,1], rep(0, nrow(pcdata)), col=groupCol$col, pch=20, cex=3,
              xlim = c(xmin, xmax), ylim = c(0, max(1, d1$y,d2$y)),
@@ -469,7 +469,7 @@ patRDA <- function(rList,
         }
       }
 
-      if(plotType == 'points' && !is.null(symbolList)){
+      if(all(c(plotType == 'points', !is.null(symbolList)))){
 
         plot(pcdata[,1], rep(0, nrow(pcdata)), col=groupCol$col, pch=as.numeric(groupCol$symbol), cex=3,
              xlim = c(xmin, xmax), ylim = c(0, max(1, d1$y,d2$y)),

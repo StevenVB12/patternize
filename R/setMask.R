@@ -31,7 +31,10 @@ setMask <- function(summedRaster,
 
     n <- n + 1
 
-    if(as.numeric(xy)[1] < raster::extent(summedRaster)[1] || as.numeric(xy)[1] > raster::extent(summedRaster)[2] || as.numeric(xy)[2] < raster::extent(summedRaster)[3] || as.numeric(xy)[2] > raster::extent(summedRaster)[4]){
+    if(any(c(as.numeric(xy)[1] < raster::extent(summedRaster)[1],
+             as.numeric(xy)[1] > raster::extent(summedRaster)[2],
+             as.numeric(xy)[2] < raster::extent(summedRaster)[3],
+             as.numeric(xy)[2] > raster::extent(summedRaster)[4]))){
       print("done")
       break
     }

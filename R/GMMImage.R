@@ -10,9 +10,10 @@
 #'    of class "\code{GMM}".
 #'
 #' @export
-#' @import rgdal
+#' @import sf
 #' @importFrom stats kmeans
 #' @importFrom ClusterR GMM predict_GMM
+#' @importFrom methods is
 
 GMMImage <- function(image,
                    k = 5,
@@ -21,7 +22,7 @@ GMMImage <- function(image,
 
   if(kmeansOnAll == FALSE){
 
-    if(class(image) == "RasterStack"){
+    if(is(image)[1] == "RasterStack"){
       image <- raster::as.array(image)
     }
 

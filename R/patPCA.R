@@ -320,7 +320,7 @@ patPCA <- function(rList,
       layout(mat, widths=c(1,1,1), heights=c(1,1,1))
     }
 
-    if(plotType == 'points' && is.null(symbolList)){
+    if(all(c(plotType == 'points', is.null(symbolList)))){
 
       plot(comp$x[,c(PCx,PCy)], col=groupCol$col, pch=20,
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),
@@ -332,7 +332,7 @@ patPCA <- function(rList,
       }
     }
 
-    if(plotType == 'points' && !is.null(symbolList)){
+    if(all(c(plotType == 'points', !is.null(symbolList)))){
 
       plot(comp$x[,c(PCx,PCy)], col=groupCol$col, pch=as.numeric(groupCol$symbol),
            xlim = c(xmin, xmax), ylim = c(ymin, ymax),

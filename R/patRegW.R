@@ -308,7 +308,7 @@ patRegW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
+      if(any(c(as.numeric(xy)[1] > dim(im)[1], as.numeric(xy)[1] < 0, as.numeric(xy)[2] > dim(im)[2], as.numeric(xy)[2] < 0))){
         break
       }
 

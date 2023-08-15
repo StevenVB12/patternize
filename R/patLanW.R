@@ -133,19 +133,21 @@ patLanW <- function(sampleList,
   }
 
   # Transform the outline for masking if 'meanShape'
-  if(!is.null(cartoonID) && (!is.null(maskOutline) || transformRef == 'meanshape')){
+  if(!is.null(cartoonID)){
+    if(any(c(!is.null(maskOutline), transformRef == 'meanshape'))){
 
     indx <- which(names(sampleList) == cartoonID)
     maskOutlineNew <- maskOutline
     extPicture <- raster::extent(sampleList[[indx]])
     maskOutlineNew[,2] <- extPicture[4]-maskOutlineNew[,2]
+    }
   }
 
   if(is.null(cartoonID)){
     maskOutlineNew <- maskOutline
   }
 
-  if(!is.null(maskOutline) && transformRef == 'meanshape'){
+  if(all(c(!is.null(maskOutline), transformRef == 'meanshape'))){
 
     invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
                                                                           as.matrix(lanArray[,,indx]),
@@ -322,7 +324,7 @@ patLanW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
+      if(any(c(as.numeric(xy)[1] > dim(im)[1], as.numeric(xy)[1] < 0, as.numeric(xy)[2] > dim(im)[2], as.numeric(xy)[2] < 0))){
         break
       }
 
@@ -337,7 +339,7 @@ patLanW <- function(sampleList,
 
       xy <- locator(n=1)
 
-      if(as.numeric(xy)[1] > dim(im)[1] || as.numeric(xy)[1] < 0 || as.numeric(xy)[2] > dim(im)[2] || as.numeric(xy)[2] < 0){
+      if(any(c(as.numeric(xy)[1] > dim(im)[1], as.numeric(xy)[1] < 0, as.numeric(xy)[2] > dim(im)[2], as.numeric(xy)[2] < 0))){
         break
       }
 

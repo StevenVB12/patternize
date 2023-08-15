@@ -16,8 +16,9 @@
 #' out <- kImage(image, 6)
 #'
 #' @export
-#' @import rgdal
+#' @import sf
 #' @importFrom stats kmeans
+#' @importFrom methods is
 
 kImage <- function(image,
                    k = 5,
@@ -27,7 +28,7 @@ kImage <- function(image,
 
   if(kmeansOnAll == FALSE){
 
-    if(class(image) == "RasterStack"){
+    if(is(image)[1] == "RasterStack"){
       image <- raster::as.array(image)
     }
 

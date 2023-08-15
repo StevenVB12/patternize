@@ -61,7 +61,7 @@ maskOutline <-function(RasterStack,
     imageEx <- raster::extent(imageList[[cartoonID]])
   }
 
-  if(!is.null(flipOutline) || !is.null(flipRaster)){
+  if(any(c(!is.null(flipOutline), !is.null(flipRaster)))){
 
     if(refShape != 'mean'){
 
@@ -73,16 +73,18 @@ maskOutline <-function(RasterStack,
   if(refShape != 'mean'){
 
 
-    if(!is.null(flipOutline) && flipOutline == 'y' || !is.null(flipOutline) && flipOutline == 'xy'){
-
+    if(all(c(!is.null(flipOutline), flipOutline == 'y'))){
       outline[,2] <- outline[,2] + crop[3]
-
+    }
+    if(all(c(!is.null(flipOutline), flipOutline == 'xy'))){
+      outline[,2] <- outline[,2] + crop[3]
     }
 
-    if(is.null(flipOutline) && !is.null(flipRaster) || !is.null(flipOutline) && flipOutline == 'x'){
-
+    if(all(c(is.null(flipOutline), !is.null(flipRaster)))){
       outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
-
+    }
+    if(all(c(!is.null(flipOutline), flipOutline == 'x'))){
+      outline[,2] <- outline[,2] + ((crop[3] - imageEx[3]) - (imageEx[4] - crop[4])) + crop[3]
     }
 
     if(!is.null(flipOutline)){
