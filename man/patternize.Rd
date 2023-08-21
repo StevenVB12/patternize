@@ -3,6 +3,7 @@
 \docType{package}
 \name{patternize}
 \alias{patternize}
+\alias{patternize-package}
 \title{patternize - An R package for quantifying color pattern variation.}
 \description{
 Quantifying variation in color patterns to study and compare the consistency of their expression

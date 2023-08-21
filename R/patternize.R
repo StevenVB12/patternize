@@ -129,4 +129,5 @@
 #'
 #' @docType package
 #' @name patternize
+#' @aliases patternize-package
 NULL
