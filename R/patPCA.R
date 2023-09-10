@@ -171,6 +171,9 @@ patPCA <- function(rList,
     colnames(groupCol) <- c('sampleID', 'col')
   }
 
+  #srt colors based on original order of samples
+  groupCol <- groupCol[match(names(t(rasDF)[,1]), groupCol$sampleID),]
+
   # PCA
   print("calculating prcomp")
 
