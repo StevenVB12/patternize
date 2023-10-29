@@ -363,15 +363,13 @@ plotHeat <- function(summedRaster,
     indx <- which(names(imageList) == cartoonID)
     invisible(capture.output(landArray <- lanArray(landList, adjustCoords, imageList, imageIDs = imageIDs)))
 
-    if(is.character(refShape)){
-      indx <- which(names(landList) == cartoonID)
-      transRefLan <- as.matrix(lanArray[,,indx])
-    }
-    else{
-      transRefLan <- refShape
-    }
+
+    indx <- which(names(landList) == cartoonID)
+    transRefLan <- as.matrix(landArray[,,indx])
+
 
     if(is.matrix(refShape)){
+
       invisible(capture.output(cartoonLandTrans <- Morpho::computeTransform(refShape,
                                                                             as.matrix(transRefLan),
                                                                             type="tps")))
@@ -467,7 +465,7 @@ plotHeat <- function(summedRaster,
       YLIM <- c(rasterEx[3],rasterEx[4])
     }
     else{
-      if(any(c(refShape[1] == 'target', is.matrix(refShape)))){
+      if(any(c(refShape[1] == 'target'))){
         XLIM <- c(min(outline[,1]),max(outline[,1]))
         YLIM <- c(min(outline[,2]),max(outline[,2]))
       }
