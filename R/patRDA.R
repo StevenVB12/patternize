@@ -99,6 +99,7 @@ patRDA <- function(rList,
                    flipOutline = NULL,
                    imageList = NULL,
                    cartoonID = NULL,
+                   refImage = NULL,
                    colpalette = NULL,
                    normalized = NULL,
                    cartoonOrder = 'above',
@@ -116,6 +117,7 @@ patRDA <- function(rList,
   # data for DFA
   # make dataframe of rasters
   print("making dataframe from rasters")
+
   for(r in 1:length(rList)){
 
     rList[[r]][is.na(rList[[r]])] <- 0
@@ -210,6 +212,8 @@ patRDA <- function(rList,
     colnames(groupCol) <- c('sampleID', 'col')
   }
 
+  #srt colors based on original order of samples
+  groupCol <- groupCol[match(names(t(rasDF)[,1]), groupCol$sampleID),]
 
   print("calculating rda")
   # suppressWarnings(ldaOut <- lda(t(pcaInVar), grp))
@@ -521,7 +525,7 @@ patRDA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotType = 'PCA')
+               ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
       mtext(paste('min DF', PCx, sep=' '), 1)
 
@@ -530,7 +534,7 @@ patRDA <- function(rList,
                flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-               ylab=ylab, main=main, plotType = 'PCA')
+               ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
       mtext(paste('max DF', PCx, sep=' '), 1)
 
@@ -540,7 +544,7 @@ patRDA <- function(rList,
                  flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                  normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                  cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-                 ylab=ylab, main=main, plotType = 'PCA')
+                 ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
         mtext(paste('max DF', PCy, sep=' '), 2)
 
@@ -549,7 +553,7 @@ patRDA <- function(rList,
                  flipOutline = flipOutline, imageList = imageList, cartoonID = cartoonID, colpalette = colpalette,
                  normalized = normalized, cartoonOrder = cartoonOrder, lineOrder = lineOrder, cartoonCol = cartoonCol,
                  cartoonFill = cartoonFill, plotLandmarks = plotLandmarks, landCol = landCol, zlim = zlim, xlab=xlab,
-                 ylab=ylab, main=main, plotType = 'PCA')
+                 ylab=ylab, main=main, plotType = 'PCA', refImage = refImage)
 
         mtext(paste('min DF', PCy, sep=' '), 2)
       }
